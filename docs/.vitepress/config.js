@@ -1,14 +1,18 @@
 export default {
-  title: "Picstome.com",
-  description: "Documentation for Picstome",
+  title: "Picstome - Free Open Source Photography Tools",
+  description:
+    "Picstome is a self-hosted photography service for photographers.",
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
-      { text: "Guide", link: "/guide" },
+      { text: "Install", link: "/install" },
+      { text: "About", link: "/about" },
     ],
     sidebar: [
-      { text: "Introduction", link: "/" },
-      { text: "Getting Started", link: "/guide" },
+      { text: "Home", link: "/" },
+      { text: "Install", link: "/install" },
+      { text: "About", link: "/about" },
     ],
+    head: [["link", { rel: "stylesheet", href: "/assets/styles.css" }]],
   },
 };

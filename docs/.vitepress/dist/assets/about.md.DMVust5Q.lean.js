@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a,ae as i}from"./chunks/framework.BHrE6nLq.js";const h=JSON.parse('{"title":"About Picstome","description":"","frontmatter":{},"headers":[],"relativePath":"about.md","filePath":"about.md"}'),r={name:"about.md"};function s(l,o,n,u,p,c){return a(),t("div",null,o[0]||(o[0]=[i("",7)]))}const m=e(r,[["render",s]]);export{h as __pageData,m as default};
