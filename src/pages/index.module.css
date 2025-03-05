@@ -1,0 +1,44 @@
+.heroBanner {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.heroImage {
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero__title {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero__subtitle {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.buttons {
+    margin-top: 1.5rem;
+}
+
+.features {
+    padding: 4rem 0;
+    background-color: #f9f9f9;
+}
+
+.card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card__header h3 {
+    font-size: 1.4rem;
+    color: #333;
+}
