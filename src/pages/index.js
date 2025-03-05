@@ -59,9 +59,9 @@ const features = [
       "Generate contracts, handle online signatures, and manage the complete contract lifecycle with ease.",
   },
   {
-    title: "👥 Client Relationship (Coming Soon)",
+    title: "👥 Client Relationship",
     description:
-      "Comprehensive CRM with client profiles, activity tracking, and third-party integrations.",
+      "Coming Soon! - Comprehensive CRM with client profiles, activity tracking, and third-party integrations.",
   },
   {
     title: "🚀 Easy Deployment",
