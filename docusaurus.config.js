@@ -33,7 +33,17 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "es"],
+    localeConfigs: {
+      en: {
+        label: "English",
+        htmlLang: "en-US",
+      },
+      es: {
+        label: "Español",
+        htmlLang: "es-ES",
+      },
+    },
   },
 
   presets: [
@@ -89,8 +99,12 @@ const config = {
             label: "Docs",
           },
           {
-            href: "https://github.com/picstome/",
+            href: "https://github.com/picstome/picstome",
             label: "GitHub",
+            position: "right",
+          },
+          {
+            type: "localeDropdown",
             position: "right",
           },
         ],
@@ -104,6 +118,24 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
+      plugins: [
+        [
+          "@docusaurus/plugin-client-redirects",
+          {
+            fromExtensions: ["html"],
+            createRedirects: function (toPath) {
+              // Redirect to corresponding locale if it exists in Docusaurus config
+              if (toPath.includes("/")) {
+                const locale = toPath.split("/")[1];
+                if (locale && toPath === `/${locale}`) {
+                  return ["/"];
+                }
+              }
+              return [];
+            },
+          },
+        ],
+      ],
     }),
 };
 
