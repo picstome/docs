@@ -7,13 +7,13 @@ export default function Home() {
   return (
     <Layout
       title="Picstome"
-      description="Herramientas de código abierto gratuitas para fotógrafos"
+      description="Crea galerías y contratos para tus clientes GRATIS"
     >
       <header className={clsx("hero hero--primary", styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">Picstome</h1>
           <p className="hero__subtitle">
-            Herramientas de código abierto gratuitas para fotógrafos
+            Crea galerías y contratos para tus clientes GRATIS
           </p>
           <div className={styles.buttons}>
             <a
