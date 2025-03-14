@@ -24,7 +24,7 @@ export default function Home() {
             </a>
             <a
               className="button button--secondary button--lg"
-              href="https://github.com/picstome"
+              href="https://github.com/picstome/picstome"
             >
               ⭐ View on GitHub
             </a>
@@ -33,8 +33,9 @@ export default function Home() {
       </header>
 
       <main>
-        <section className={styles.features}>
+        <section className={styles.featuresSection}>
           <div className="container">
+            <h2 className={styles.featuresTitle}>Features</h2>
             <div className="row">
               {features.map((feature, idx) => (
                 <Feature key={idx} {...feature} />
@@ -83,11 +84,11 @@ const features = [
 function Feature({ title, description }) {
   return (
     <div className="col col--4">
-      <div className="card">
-        <div className="card__header">
+      <div className={styles.featureCard}>
+        <div className={styles.featureHeader}>
           <h3>{title}</h3>
         </div>
-        <div className="card__body">
+        <div className={styles.featureBody}>
           <p>{description}</p>
         </div>
       </div>
