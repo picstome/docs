@@ -50,6 +50,14 @@ apt update && apt upgrade -y
 apt install -y nginx php-fpm php-sqlite3 php-cli php-mbstring php-xml php-curl php-zip \
     php-gd unzip curl git certbot python3-certbot-nginx supervisor
 
+# Determine PHP version and configure upload limits
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+PHP_INI="/etc/php/${PHP_VERSION}/fpm/php.ini"
+echo "⚙️ Setting PHP upload limit to 12MB..."
+sed -i "s/upload_max_filesize = .*/upload_max_filesize = 12M/" "$PHP_INI"
+sed -i "s/post_max_size = .*/post_max_size = 12M/" "$PHP_INI"
+systemctl restart php${PHP_VERSION}-fpm
+
 # Install Node.js (using NodeSource for latest LTS)
 echo "🟢 Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
