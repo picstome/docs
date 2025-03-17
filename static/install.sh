@@ -103,12 +103,13 @@ php artisan key:generate
 echo "🗄️ Setting up SQLite database..."
 mkdir -p database
 touch database/database.sqlite
-php artisan migrate --force --seed
+php artisan migrate --force
+php artisan create-admin-user
 php artisan storage:link
 
 # Build assets
 echo "🏗️ Building frontend assets..."
-npm run build
+npm install && npm run build
 
 # Set correct permissions
 echo "🔒 Setting permissions..."
