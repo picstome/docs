@@ -6,7 +6,7 @@ This guide will help you install Picstome on your own server, even if you're not
 
 ## Step 1: Get a Server (VPS)
 
-You need a server to host Picstome. We recommend Contabo for its excellent price/value.
+You need a server to host Picstome. We recommend [Contabo](https://www.dpbolvw.net/click-101387264-15239531) for its excellent price/value.
 
 1. Go to [Contabo](https://www.dpbolvw.net/click-101387264-15239531) and sign up
 2. Select **Storage VPS 1** (this includes 600GB SSD - perfect for storing photos)
