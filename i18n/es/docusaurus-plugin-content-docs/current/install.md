@@ -8,7 +8,7 @@ Esta guía te ayudará a instalar Picstome en tu propio servidor, incluso si no 
 
 Necesitas un servidor para alojar Picstome. Recomendamos Contabo por su excelente relación calidad/precio.
 
-1. Ve a [Contabo](https://contabo.com/) y regístrate
+1. Ve a [Contabo](https://www.dpbolvw.net/click-101387264-15239531) y regístrate
 2. Selecciona **Storage VPS 1** (esto incluye 600GB SSD - perfecto para almacenar fotos)
 3. Importante: Elige **Ubuntu 24.04** como tu sistema operativo
 4. Completa tu compra
