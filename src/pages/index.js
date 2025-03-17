@@ -20,7 +20,7 @@ export default function Home() {
               className="button button--primary button--lg"
               href="/docs/install"
             >
-              🚀 Install (Coming Soon)
+              🚀 Install
             </a>
             <a
               className="button button--secondary button--lg"
