@@ -48,7 +48,7 @@ fi
 echo "📦 Updating system and installing dependencies..."
 apt update && apt upgrade -y
 apt install -y nginx php-fpm php-sqlite3 php-cli php-mbstring php-xml php-curl php-zip \
-    php-gd unzip curl git certbot python3-certbot-nginx supervisor
+    php-gd unzip curl git certbot python3-certbot-nginx supervisor imagemagick php-imagick
 
 # Determine PHP version and configure upload limits
 PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
