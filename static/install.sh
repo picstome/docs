@@ -63,13 +63,6 @@ echo "🟢 Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt install -y nodejs
 
-# Install Puppeteer and its dependencies
-echo "🌐 Installing Puppeteer and its dependencies..."
-apt install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
-    libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 \
-    libpangocairo-1.0-0 libcairo2 libpango-1.0-0 fonts-liberation \
-    libappindicator3-1 xdg-utils
-
 # Download and set up Picstome
 echo "📥 Downloading and setting up Picstome..."
 cd /var/www
@@ -92,10 +85,6 @@ fi
 echo "🔧 Installing Composer and NPM dependencies..."
 composer install --no-dev --optimize-autoloader
 npm ci --production
-
-# Install Puppeteer globally
-npm install -g puppeteer
-npx puppeteer browsers install chrome
 
 # Configure Laravel
 echo "⚙️ Configuring Laravel environment..."
