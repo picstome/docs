@@ -48,19 +48,20 @@ fi
 echo "📦 Updating system and installing dependencies..."
 apt update && apt upgrade -y
 apt install -y nginx php-fpm php-sqlite3 php-cli php-mbstring php-xml php-curl php-zip \
-    php-gd unzip curl git certbot python3-certbot-nginx supervisor
+    php-gd unzip curl git certbot python3-certbot-nginx supervisor imagemagick php-imagick
+
+# Determine PHP version and configure upload limits
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+PHP_INI="/etc/php/${PHP_VERSION}/fpm/php.ini"
+echo "⚙️ Setting PHP upload limit to 12MB..."
+sed -i "s/upload_max_filesize = .*/upload_max_filesize = 12M/" "$PHP_INI"
+sed -i "s/post_max_size = .*/post_max_size = 12M/" "$PHP_INI"
+systemctl restart php${PHP_VERSION}-fpm
 
 # Install Node.js (using NodeSource for latest LTS)
 echo "🟢 Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt install -y nodejs
-
-# Install Puppeteer and its dependencies
-echo "🌐 Installing Puppeteer and its dependencies..."
-apt install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
-    libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 \
-    libpangocairo-1.0-0 libcairo2 libpango-1.0-0 fonts-liberation \
-    libappindicator3-1 xdg-utils
 
 # Download and set up Picstome
 echo "📥 Downloading and setting up Picstome..."
@@ -80,14 +81,13 @@ if [ ! -f "/usr/local/bin/composer" ]; then
     mv composer.phar /usr/local/bin/composer
 fi
 
+# Set Composer to allow superuser
+export COMPOSER_ALLOW_SUPERUSER=1
+
 # Install dependencies
 echo "🔧 Installing Composer and NPM dependencies..."
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader --no-interaction
 npm ci --production
-
-# Install Puppeteer globally
-npm install -g puppeteer
-npx puppeteer browsers install chrome
 
 # Configure Laravel
 echo "⚙️ Configuring Laravel environment..."
@@ -103,12 +103,13 @@ php artisan key:generate
 echo "🗄️ Setting up SQLite database..."
 mkdir -p database
 touch database/database.sqlite
-php artisan migrate --force --seed
+php artisan migrate --force
+php artisan create-admin-user
 php artisan storage:link
 
 # Build assets
 echo "🏗️ Building frontend assets..."
-npm run build
+npm install && npm run build
 
 # Set correct permissions
 echo "🔒 Setting permissions..."
@@ -186,7 +187,6 @@ server {
     add_header X-Content-Type-Options "nosniff";
     add_header X-XSS-Protection "1; mode=block";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'";
 }
 EOL
 
@@ -213,7 +213,7 @@ echo "🌐 Visit https://$DOMAIN_NAME to access your Picstome application."
 echo ""
 echo "🔑 Default login credentials:"
 echo "  Username: admin@example.com"
-echo "  Password: password"
+echo "  Password: picstome"
 echo ""
 echo "⚠️ IMPORTANT: Log in and change your default password immediately."
 echo ""
