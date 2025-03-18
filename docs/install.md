@@ -95,7 +95,7 @@ Once installation completes:
 
 2. Log in with these temporary credentials:
    - **Email**: `admin@example.com`
-   - **Password**: `password`
+   - **Password**: `picstome`
 
 3. **Immediately** change your password:
    - Go to Settings → Profile

@@ -95,7 +95,7 @@ Una vez completada la instalación:
 
 2. Inicia sesión con estas credenciales temporales:
    - **Email**: `admin@example.com`
-   - **Contraseña**: `password`
+   - **Contraseña**: `picstome`
 
 3. Cambia tu contraseña **inmediatamente**:
    - Ve a Ajustes → Perfil
