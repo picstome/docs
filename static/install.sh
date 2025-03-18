@@ -83,7 +83,7 @@ fi
 
 # Install dependencies
 echo "🔧 Installing Composer and NPM dependencies..."
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader --no-interaction -y
 npm ci --production
 
 # Configure Laravel
