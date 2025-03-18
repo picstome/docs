@@ -81,9 +81,12 @@ if [ ! -f "/usr/local/bin/composer" ]; then
     mv composer.phar /usr/local/bin/composer
 fi
 
+# Set Composer to allow superuser
+export COMPOSER_ALLOW_SUPERUSER=1
+
 # Install dependencies
 echo "🔧 Installing Composer and NPM dependencies..."
-composer install --no-dev --optimize-autoloader --no-interaction -y
+composer install --no-dev --optimize-autoloader --no-interaction
 npm ci --production
 
 # Configure Laravel
