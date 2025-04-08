@@ -61,7 +61,7 @@ Join us and start improving your photography business today!
 
 ### Technical Specifications
 - Built with PHP & Laravel 12
-- SQLite database
+- MySQL database
 - Single file installation
 - Minimal VPS requirements
 - Local or S3 storage options

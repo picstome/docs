@@ -61,7 +61,7 @@ Facilita tu vida con un flujo de trabajo de entrega fotográfica mejorado. Nuest
 
 ### Especificaciones Técnicas
 - Construido con PHP y Laravel 12
-- Base de datos SQLite
+- Base de datos MySQL
 - Instalación en un solo archivo
 - Requisitos mínimos de VPS
 - Opciones de almacenamiento local o S3
