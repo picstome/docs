@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
 import styles from "./index.module.css";
 
 export default function Home() {
+  useEffect(() => {
+    // Language detection logic
+    const detectAndRedirect = () => {
+      const userLang = navigator.language || navigator.userLanguage;
+      const isSpanish = userLang.toLowerCase().startsWith("es");
+
+      // Check if we should redirect and haven't redirected before
+      const hasRedirected = sessionStorage.getItem("languageRedirectDone");
+
+      if (isSpanish && !hasRedirected) {
+        // Set flag in session storage to prevent redirect loops
+        sessionStorage.setItem("languageRedirectDone", "true");
+
+        // Use window.location for a full page navigation instead of React Router
+        window.location.href = "/es/";
+      }
+    };
+
+    detectAndRedirect();
+  }, []);
+
   return (
     <Layout
       title="Picstome"
@@ -20,13 +41,13 @@ export default function Home() {
               className="button button--primary button--lg"
               href="/docs/install"
             >
-              🚀 Install (Coming Soon)
+              🚀 Install
             </a>
             <a
               className="button button--secondary button--lg"
-              href="https://github.com/picstome/picstome"
+              href="/docs/support"
             >
-              ⭐ View on GitHub
+              🛟 Support
             </a>
           </div>
         </div>

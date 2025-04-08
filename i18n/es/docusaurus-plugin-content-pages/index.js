@@ -18,15 +18,15 @@ export default function Home() {
           <div className={styles.buttons}>
             <a
               className="button button--primary button--lg"
-              href="/docs/install"
+              href="/es/docs/install"
             >
-              🚀 Instalación (Próximamente)
+              🚀 Instalación
             </a>
             <a
               className="button button--secondary button--lg"
-              href="https://github.com/picstome/picstome"
+              href="/es/docs/support"
             >
-              ⭐ Ver en GitHub
+              🛟 Soporte
             </a>
           </div>
         </div>
