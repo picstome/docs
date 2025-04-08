@@ -51,13 +51,16 @@ apt install -y nginx php-fpm php-mysql php-cli php-mbstring php-xml php-curl php
     php-gd unzip curl git certbot python3-certbot-nginx supervisor imagemagick php-imagick \
     mysql-server
 
+# Generate random MySQL root password
+MYSQL_ROOT_PASS=$(openssl rand -base64 16)
+
 # Secure MySQL installation
 echo "🔒 Securing MySQL installation..."
 mysql_secure_installation <<EOF
 
 y
-picstome_root_pass
-picstome_root_pass
+$MYSQL_ROOT_PASS
+$MYSQL_ROOT_PASS
 y
 y
 y
@@ -70,7 +73,7 @@ DB_NAME="picstome_db"
 DB_USER="picstome_user"
 DB_PASS=$(openssl rand -base64 12)  # Generate random password
 
-mysql -u root -ppicstome_root_pass <<EOF
+mysql -u root -p"$MYSQL_ROOT_PASS" <<EOF
 CREATE DATABASE $DB_NAME;
 CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';
@@ -249,7 +252,7 @@ echo "📋 MySQL Database Credentials:"
 echo "  Database: $DB_NAME"
 echo "  Username: $DB_USER"
 echo "  Password: $DB_PASS"
-echo "  Root Password: picstome_root_pass"
+echo "  Root Password: $MYSQL_ROOT_PASS"
 echo ""
 echo "📖 For more information and documentation, visit https://picstome.com/docs"
 echo ""
