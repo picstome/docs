@@ -47,8 +47,38 @@ fi
 
 echo "📦 Updating system and installing dependencies..."
 apt update && apt upgrade -y
-apt install -y nginx php-fpm php-sqlite3 php-cli php-mbstring php-xml php-curl php-zip \
-    php-gd unzip curl git certbot python3-certbot-nginx supervisor imagemagick php-imagick
+apt install -y nginx php-fpm php-mysql php-cli php-mbstring php-xml php-curl php-zip \
+    php-gd unzip curl git certbot python3-certbot-nginx supervisor imagemagick php-imagick \
+    mysql-server
+
+# Generate random MySQL root password
+MYSQL_ROOT_PASS=$(openssl rand -base64 16)
+
+# Secure MySQL installation
+echo "🔒 Securing MySQL installation..."
+mysql_secure_installation <<EOF
+
+y
+$MYSQL_ROOT_PASS
+$MYSQL_ROOT_PASS
+y
+y
+y
+y
+EOF
+
+# Create MySQL database and user
+echo "🗄️ Setting up MySQL database..."
+DB_NAME="picstome_db"
+DB_USER="picstome_user"
+DB_PASS=$(openssl rand -base64 12)  # Generate random password
+
+mysql -u root -p"$MYSQL_ROOT_PASS" <<EOF
+CREATE DATABASE $DB_NAME;
+CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';
+FLUSH PRIVILEGES;
+EOF
 
 # Determine PHP version and configure upload limits
 PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
@@ -93,16 +123,18 @@ npm ci --production
 echo "⚙️ Configuring Laravel environment..."
 cp .env.example .env
 sed -i "s|APP_URL=.*|APP_URL=https://$DOMAIN_NAME|g" .env
-sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=sqlite|g" .env
-sed -i "s|DB_DATABASE=.*|DB_DATABASE=/var/www/picstome/database/database.sqlite|g" .env
+sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=mysql|g" .env
+sed -i "s|^# DB_HOST=.*|DB_HOST=127.0.0.1|g" .env
+sed -i "s|^# DB_PORT=.*|DB_PORT=3306|g" .env
+sed -i "s|^# DB_DATABASE=.*|DB_DATABASE=$DB_NAME|g" .env
+sed -i "s|^# DB_USERNAME=.*|DB_USERNAME=$DB_USER|g" .env
+sed -i "s|^# DB_PASSWORD=.*|DB_PASSWORD=$DB_PASS|g" .env
 
 # Generate unique app key
 php artisan key:generate
 
-# Set up SQLite database
-echo "🗄️ Setting up SQLite database..."
-mkdir -p database
-touch database/database.sqlite
+# Run migrations and set up admin user
+echo "🗄️ Running database migrations..."
 php artisan migrate --force
 php artisan create-admin-user
 php artisan storage:link
@@ -115,7 +147,6 @@ npm install && npm run build
 echo "🔒 Setting permissions..."
 chown -R www-data:www-data /var/www/picstome
 chmod -R 775 /var/www/picstome/storage /var/www/picstome/bootstrap/cache
-chmod -R 775 /var/www/picstome/database
 
 # Configure Supervisor for Laravel Queue
 echo "⏱️ Setting up background job processing..."
@@ -216,6 +247,12 @@ echo "  Username: admin@example.com"
 echo "  Password: picstome"
 echo ""
 echo "⚠️ IMPORTANT: Log in and change your default password immediately."
+echo ""
+echo "📋 MySQL Database Credentials:"
+echo "  Database: $DB_NAME"
+echo "  Username: $DB_USER"
+echo "  Password: $DB_PASS"
+echo "  Root Password: $MYSQL_ROOT_PASS"
 echo ""
 echo "📖 For more information and documentation, visit https://picstome.com/docs"
 echo ""
