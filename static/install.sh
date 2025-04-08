@@ -121,11 +121,11 @@ echo "⚙️ Configuring Laravel environment..."
 cp .env.example .env
 sed -i "s|APP_URL=.*|APP_URL=https://$DOMAIN_NAME|g" .env
 sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=mysql|g" .env
-sed -i "s|DB_HOST=.*|DB_HOST=127.0.0.1|g" .env
-sed -i "s|DB_PORT=.*|DB_PORT=3306|g" .env
-sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_NAME|g" .env
-sed -i "s|DB_USERNAME=.*|DB_USERNAME=$DB_USER|g" .env
-sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=$DB_PASS|g" .env
+sed -i "s|^#DB_HOST=.*|DB_HOST=127.0.0.1|g" .env
+sed -i "s|^#DB_PORT=.*|DB_PORT=3306|g" .env
+sed -i "s|^#DB_DATABASE=.*|DB_DATABASE=$DB_NAME|g" .env
+sed -i "s|^#DB_USERNAME=.*|DB_USERNAME=$DB_USER|g" .env
+sed -i "s|^#DB_PASSWORD=.*|DB_PASSWORD=$DB_PASS|g" .env
 
 # Generate unique app key
 php artisan key:generate
