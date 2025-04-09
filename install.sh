@@ -198,6 +198,15 @@ server {
 
     client_max_body_size 50M;
 
+    # Hotlinking protection
+    location ~* .(jpg|jpeg|png|gif|webp|svg|mp4|avi|mov|webm|css|js)$  {
+        valid_referers none blocked server_names
+            *.$DOMAIN_NAME $DOMAIN_NAME;
+        if (\$invalid_referer) {
+            return 403;
+        }
+    }
+
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
