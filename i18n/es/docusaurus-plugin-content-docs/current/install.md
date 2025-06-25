@@ -66,7 +66,7 @@ Una vez conectado a tu servidor, la instalación es sencilla:
 
 1. Copia y pega este comando exactamente como se muestra:
    ```bash
-   curl -fsSL https://picstome.com/install.sh | sh
+   curl -fsSL https://picstome.com/install.sh | bash
    ```
 
 2. Cuando se te pregunte, escribe `y` para confirmar la instalación
