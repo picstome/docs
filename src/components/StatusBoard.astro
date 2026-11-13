@@ -8,74 +8,76 @@
  * network dependency — and the board hydrates itself in the browser, retrying a
  * few times and refreshing every minute while the tab stays open.
  *
+ * The feed URL is deliberately not exposed in the UI: the reader wants to know if
+ * Picstome works, not which monitoring vendor is behind it.
+ *
  * The copy is resolved from `Astro.currentLocale` at build time.
  */
-// Starlight keeps the configured `lang` here (`es-ES`, `en-US`), not the locale key.
-const isSpanish = (Astro.currentLocale ?? 'en').startsWith('es');
+// Starlight reports the configured BCP-47 tag (`es-ES`, `en-US`), not the
+// locale key, so the comparison has to be a prefix check.
+const isSpanish = (Astro.currentLocale ?? 'en').toLowerCase().startsWith('es');
 
 const copy = isSpanish
   ? {
-      name: 'picstome',
       loading: 'Consultando el estado…',
-      up: 'Todo funciona con normalidad',
-      down: 'Un servicio no está respondiendo',
-      unknown: 'No hemos podido leer el estado ahora mismo',
-      working: 'Operativo',
+      up: 'Picstome funciona con normalidad',
+      down: 'Picstome está caído ahora mismo',
+      unknown: 'No hemos podido consultar el estado',
+      working: 'Funciona',
       broken: 'Caído',
-      degraded: 'Degradado',
-      uptime: 'de disponibilidad',
+      degraded: 'Sin datos',
+      uptime: 'de disponibilidad en 30 días',
       missing: 'Sin datos para este servicio',
       incident: 'Último incidente',
       minutes: 'min',
       checked: 'Actualizado a las',
-      feedDown: 'No se pudo consultar el estado.',
-      official: 'Consulta la página oficial de monitorización',
-      refresh: 'Se actualiza solo cada minuto.',
+      feedDown: 'No hemos podido consultar el estado desde tu navegador.',
+      retry: 'Reintentar',
       services: [
-        { name: 'app.picstome.com', description: 'Galerías, clientes, contratos, facturas y pagos.' },
-        { name: 'picstome.com', description: 'La web pública, las descargas y este centro de ayuda.' },
+        { name: 'app.picstome.com', label: 'La app', description: 'Galerías, clientes, contratos, facturas y pagos.' },
+        { name: 'picstome.com', label: 'La web', description: 'Páginas de producto, descargas y este centro de ayuda.' },
       ],
     }
   : {
-      name: 'picstome',
       loading: 'Checking the status…',
-      up: 'Everything is working normally',
-      down: 'One service is not responding',
-      unknown: 'We could not read the status right now',
-      working: 'Operational',
+      up: 'Picstome is working normally',
+      down: 'Picstome is down right now',
+      unknown: 'We could not read the status',
+      working: 'Working',
       broken: 'Down',
-      degraded: 'Degraded',
-      uptime: 'uptime',
+      degraded: 'No data',
+      uptime: 'uptime over 30 days',
       missing: 'No data for this service',
       incident: 'Last incident',
       minutes: 'min',
       checked: 'Updated at',
-      feedDown: 'Could not read the status.',
-      official: 'Check the official monitor page',
-      refresh: 'Refreshes every minute.',
+      feedDown: 'We could not read the status from your browser.',
+      retry: 'Try again',
       services: [
-        { name: 'app.picstome.com', description: 'Galleries, clients, contracts, invoices and payments.' },
-        { name: 'picstome.com', description: 'The public website, the downloads and this help center.' },
+        { name: 'app.picstome.com', label: 'The app', description: 'Galleries, clients, contracts, invoices and payments.' },
+        { name: 'picstome.com', label: 'The website', description: 'Product pages, downloads and this help center.' },
       ],
     };
 ---
 
 <div class="not-content my-6" data-status-board data-locale={isSpanish ? 'es' : 'en'}>
-  <div class="ps-status-card" style="border-left: 4px solid var(--sl-color-accent); margin-bottom: 1.25rem;">
-    <span class="ps-dot" data-state="degraded" data-overall></span>
-    <div>
+  <div class="ps-status-hero" data-state="loading">
+    <span class="ps-status-hero-dot" data-overall></span>
+    <div class="ps-status-hero-text">
       <strong data-headline>{copy.loading}</strong>
-      <p class="mt-1 text-sm opacity-70" data-updated>{copy.refresh}</p>
+      <p data-updated>{copy.loading}</p>
     </div>
   </div>
 
   <div class="ps-status-grid">
     {
       copy.services.map((service) => (
-        <div class="ps-status-card">
+        <div class="ps-status-card" data-card={service.name}>
           <span class="ps-dot" data-state="degraded" data-dot={service.name}></span>
           <div>
-            <strong>{service.name}</strong>
+            <strong>
+              {service.label} <span class="ps-status-host">{service.name}</span>
+            </strong>
             <p class="mt-1 text-sm opacity-80">{service.description}</p>
             <p class="mt-1 text-sm opacity-70" data-summary={service.name}>
               {copy.loading}
@@ -86,6 +88,11 @@ const copy = isSpanish
       ))
     }
   </div>
+
+  <p class="mt-4 text-sm" data-fallback hidden>
+    {copy.feedDown}{' '}
+    <button type="button" class="ps-status-retry" data-retry>{copy.retry}</button>
+  </p>
 </div>
 
 <script define:vars={{ copy, isSpanish }}>
@@ -121,6 +128,10 @@ const copy = isSpanish
         if (dot) {
           dot.dataset.state = state;
         }
+        const card = board.querySelector(`[data-card="${name}"]`);
+        if (card) {
+          card.dataset.state = state;
+        }
         setText(
           `[data-summary="${name}"]`,
           monitor
@@ -145,20 +156,41 @@ const copy = isSpanish
 
       const anyDown = states.includes('down');
       const allUp = states.every((state) => state === 'up');
+      const hero = board.querySelector('.ps-status-hero');
       const overall = board.querySelector('[data-overall]');
-      if (overall) {
-        overall.dataset.state = anyDown ? 'down' : allUp ? 'up' : 'degraded';
+      const overallState = anyDown ? 'down' : allUp ? 'up' : 'degraded';
+
+      if (hero) {
+        hero.dataset.state = overallState;
       }
+      if (overall) {
+        overall.dataset.state = overallState;
+      }
+
       setText('[data-headline]', anyDown ? copy.down : allUp ? copy.up : copy.unknown);
       setText('[data-updated]', `${copy.checked} ${new Date().toLocaleTimeString(isSpanish ? 'es-ES' : 'en-US')}`);
     };
 
     const fail = () => {
+      const hero = board.querySelector('.ps-status-hero');
+      if (hero) {
+        hero.dataset.state = 'degraded';
+      }
       setText('[data-headline]', copy.unknown);
-      setText('[data-updated]', copy.feedDown);
+      setText('[data-updated]', copy.loading);
+
+      const fallback = board.querySelector('[data-fallback]');
+      if (fallback) {
+        fallback.hidden = false;
+      }
     };
 
     const load = async (attempt = 1) => {
+      const fallback = board.querySelector('[data-fallback]');
+      if (fallback) {
+        fallback.hidden = true;
+      }
+
       try {
         const response = await fetch(FEED, { headers: { accept: 'application/json' }, cache: 'no-store' });
         const body = await response.text();
@@ -174,6 +206,11 @@ const copy = isSpanish
         fail();
       }
     };
+
+    const retry = board.querySelector('[data-retry]');
+    if (retry) {
+      retry.addEventListener('click', () => load());
+    }
 
     load();
     setInterval(() => load(), 60_000);

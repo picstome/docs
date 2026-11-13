@@ -29,7 +29,7 @@ A server running **Ubuntu 22.04 or 24.04**, with root access. The realistic mini
 | CPU | 2 vCPU | 4 vCPU |
 | RAM | 2 GB | 4 GB |
 | Disk | 40 GB | 100 GB or more |
-| Software | PHP 8.3+, MySQL 8 / MariaDB 10.6+, Nginx, Node 20+ | same |
+| Software | PHP 8.5, MySQL 8 / MariaDB 10.6+, Nginx, Node 22+ | same |
 
 Photo processing is the expensive part: RAW files and large videos need CPU and RAM while they are converted. If you plan to ingest thousands of photos per session, get more than the minimum.
 
@@ -37,20 +37,11 @@ Photo processing is the expensive part: RAW files and large videos need CPU and 
 The disk of your VPS is where the galleries live unless you use S3. A 40 GB disk fills up fast with weddings. Either size the disk for a year of work or [use S3-compatible storage](#using-s3-storage) from day one.
 :::
 
-## The quick path
+## Before you start
 
-There is an installer script that does everything on a fresh Ubuntu server: packages, database, Nginx, HTTPS and the app.
+Self-hosting means you own the server, the database and the backups. Nobody else has a copy of your photos, and nobody else can restore them if the disk fails. Read the [backups](#backups) section before you upload a real client gallery.
 
-```bash
-ssh root@your-server-ip
-curl -fsSL https://raw.githubusercontent.com/picstome/picstome/main/scripts/install.sh | bash
-```
-
-It asks for the domain, configures Let's Encrypt and prints the admin credentials at the end. Use it if you want a working install in ten minutes and you are comfortable letting a script touch the server.
-
-If you prefer to know exactly what is happening on the machine, follow the manual steps below. They do the same thing, one command at a time.
-
-## Manual installation
+## Installation
 
 <Steps>
 
@@ -61,11 +52,16 @@ If you prefer to know exactly what is happening on the machine, follow the manua
    ```bash
    apt update && apt upgrade -y
    apt install -y nginx mysql-server unzip git supervisor \
-     php8.3-fpm php8.3-cli php8.3-mysql php8.3-mbstring php8.3-xml \
-     php8.3-curl php8.3-zip php8.3-gd php8.3-intl php8.3-imagick
+     php8.5-fpm php8.5-cli php8.5-mysql php8.5-mbstring php8.5-xml \
+     php8.5-curl php8.5-zip php8.5-gd php8.5-intl php8.5-imagick
    ```
 
-   Check with `php -v` that you are on 8.3 or newer.
+   Check with `php -v` that you are on 8.5. If your distribution does not ship it yet, add the `ondrej/php` PPA first:
+
+   ```bash
+   add-apt-repository ppa:ondrej/php
+   apt update
+   ```
 
 3. **Create the database.**
 
@@ -138,7 +134,7 @@ If you prefer to know exactly what is happening on the machine, follow the manua
 
        location ~ \.php$ {
            include snippets/fastcgi-php.conf;
-           fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+           fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
            fastcgi_read_timeout 3600;
        }
 
@@ -201,7 +197,7 @@ If you prefer to know exactly what is happening on the machine, follow the manua
 
 ## PHP settings that matter
 
-Two INI values cause most self-hosting support requests. Edit `/etc/php/8.3/fpm/php.ini` and restart the service:
+Two INI values cause most self-hosting support requests. Edit `/etc/php/8.5/fpm/php.ini` and restart the service:
 
 ```ini
 upload_max_filesize = 5120M

@@ -195,3 +195,90 @@
     display: none;
   }
 }
+
+/* Status board: the headline answer must be impossible to miss. */
+.ps-status-hero {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-left: 6px solid var(--sl-color-gray-4);
+  background-color: var(--sl-color-bg-inline-code);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.ps-status-hero[data-state='up'] {
+  border-left-color: #46b17b;
+  background-color: color-mix(in oklab, #46b17b 10%, var(--sl-color-bg));
+}
+
+.ps-status-hero[data-state='down'] {
+  border-left-color: #d95746;
+  background-color: color-mix(in oklab, #d95746 12%, var(--sl-color-bg));
+}
+
+.ps-status-hero[data-state='degraded'] {
+  border-left-color: #e8b44a;
+  background-color: color-mix(in oklab, #e8b44a 12%, var(--sl-color-bg));
+}
+
+.ps-status-hero-text strong {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: var(--sl-color-gray-1);
+}
+
+.ps-status-hero-text p {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  opacity: 0.75;
+}
+
+.ps-status-hero-dot {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  flex: none;
+  background-color: var(--sl-color-gray-4);
+}
+
+.ps-status-hero-dot[data-state='up'] {
+  background-color: #46b17b;
+  box-shadow: 0 0 0 5px color-mix(in oklab, #46b17b 22%, transparent);
+}
+
+.ps-status-hero-dot[data-state='down'] {
+  background-color: #d95746;
+  box-shadow: 0 0 0 5px color-mix(in oklab, #d95746 22%, transparent);
+}
+
+.ps-status-hero-dot[data-state='degraded'] {
+  background-color: #e8b44a;
+  box-shadow: 0 0 0 5px color-mix(in oklab, #e8b44a 22%, transparent);
+}
+
+.ps-status-host {
+  font-weight: 400;
+  font-size: 0.8125rem;
+  opacity: 0.6;
+}
+
+.ps-status-retry {
+  font-weight: 600;
+  color: var(--sl-color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.ps-status-card[data-state='up'] {
+  border-left: 3px solid #46b17b;
+}
+
+.ps-status-card {
+  border-left: 3px solid var(--sl-color-hairline-light);
+}

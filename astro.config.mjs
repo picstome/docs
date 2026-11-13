@@ -148,9 +148,12 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Service status',
-          translations: { 'es-ES': 'Estado del servicio' },
-          items: [{ label: 'Is Picstome up?', translations: { 'es-ES': '¿Picstome está funcionando?' }, slug: 'status' }],
+          label: 'Help and status',
+          translations: { 'es-ES': 'Ayuda y estado' },
+          items: [
+            { label: 'Is Picstome up?', translations: { 'es-ES': '¿Picstome está funcionando?' }, slug: 'status' },
+            { label: 'Contact and bug reports', translations: { 'es-ES': 'Contacto e incidencias' }, slug: 'support' },
+          ],
         },
       ],
     }),

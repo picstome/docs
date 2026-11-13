@@ -1,0 +1,78 @@
+---
+title: "Contacto e incidencias"
+description: "Un email, una lista corta y lo podemos arreglar. Cómo reportar un problema en Picstome con los datos que de verdad ayudan."
+template: splash
+hero:
+  tagline: Escribe a info@picstome.com. Tres datos marcan la diferencia entre arreglarlo esta semana o pasar una semana preguntando.
+  actions:
+    - text: Escribir a info@picstome.com
+      link: "mailto:info@picstome.com?subject=Incidencia%20en%20Picstome&body=Qu%C3%A9%20ha%20pasado%3A%0A%0AQu%C3%A9%20esperaba%20que%20pasara%3A%0A%0APasos%20para%20reproducirlo%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AURL%3A%0A%0ACu%C3%A1ndo%20ha%20pasado%3A%0A%0ANavegador%20y%20dispositivo%3A%0A%0ADetalles%20extra%3A%0A"
+      icon: email
+      variant: primary
+    - text: Ver el estado del servicio
+      link: /es/status/
+      icon: information
+      variant: minimal
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+## Antes de escribir
+
+Dos minutos de comprobaciones ahorran un día de dudas:
+
+1. **Mira el [estado del servicio](/es/status/).** Si la app está en rojo, ya lo sabemos y estamos en ello.
+2. **Recarga la página** o pruébala en una ventana privada. Una sesión en caché explica más problemas de los que parece.
+3. **Busca en esta web.** El botón **?** dentro del panel abre los mismos artículos, y puede que la respuesta esté a un clic.
+
+Si nada de eso ayuda, escríbenos. Contestamos todos los mensajes.
+
+## Qué incluir
+
+Cuantos más datos mandes, menos preguntas te llegarán de vuelta:
+
+| | |
+| --- | --- |
+| **Qué ha pasado** | Una o dos frases. "La descarga del ZIP se queda en preparando para siempre", no "no funciona". |
+| **Qué esperabas** | El comportamiento que creías que iba a tener. |
+| **Pasos para reproducirlo** | Numerados. Empieza por la página donde arranca, no por la mitad. |
+| **La URL exacta** | La de la barra del navegador, con el identificador de galería o factura si lo hay. |
+| **Cuándo ha pasado** | Fecha y hora aproximada, con tu zona horaria. |
+| **Capturas o un vídeo corto** | Es la forma más rápida de enseñar un problema de diseño. |
+| **Navegador y dispositivo** | Por ejemplo "Safari en iPhone 14" o "Chrome en Windows 11". |
+| **Tu plan** | Gratuito o suscripción, solo si el problema tiene que ver con límites, almacenamiento o pagos. |
+
+<Aside type="tip">
+No hace falta que sepas nada técnico. Una descripción clara de lo que hiciste vale más que un mensaje de error copiado.
+</Aside>
+
+## Cómo reportarlo, paso a paso
+
+<Steps>
+
+1. **Haz una captura.** En el móvil, con la combinación de botones de siempre; en el ordenador, el menú del navegador tiene "Hacer captura" o usa la herramienta del sistema. Incluye la ventana entera si el problema es de diseño: la barra lateral y la cabecera importan.
+
+2. **Copia la URL exacta.** Selecciona la dirección en la barra del navegador y cópiala. Si la página es una galería, un contrato o una factura, conserva el identificador del final: nos dice exactamente qué registro hay que mirar.
+
+3. **Escribe los pasos.** Imagina que se lo explicas a un compañero que nunca ha visto tu pantalla:
+
+   ```text
+   1. Abro Galerías y pulso "Boda de Lucía y Marc".
+   2. Voy a la pestaña Compartir y activo el límite de selección.
+   3. Lo pongo en 5 y guardo.
+   4. El cliente abre el enlace y el contador dice 40/40 en vez de 0/5.
+   ```
+
+4. **Manda el email.** Usa el botón de arriba de esta página: abre tu programa de correo con la estructura ya escrita. Adjunta la captura y pega la URL y los pasos.
+
+</Steps>
+
+## Qué hacemos con el mensaje
+
+Leemos el email, reproducimos el problema y contestamos con una solución, un apaño temporal o un "esto funciona así y este es el motivo" honesto. Si el problema afecta a más fotógrafos, lo documentamos para que la siguiente persona no tenga que preguntarlo.
+
+## Otros canales
+
+- **Email:** [info@picstome.com](mailto:info@picstome.com). Es la vía más rápida y la única que garantizamos.
+- **GitHub:** [picstome/picstome/issues](https://github.com/picstome/picstome/issues) si prefieres un hilo público, o si te autoalojas y quieres seguir la corrección.
+- **Servicio de instalación:** si quieres que instalemos Picstome en tu servidor, dilo en el email y lee antes [instalación propia](/es/self-hosting/).

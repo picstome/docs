@@ -1,0 +1,78 @@
+---
+title: "Contact and bug reports"
+description: "One email, a short checklist and we can fix it. How to report a problem in Picstome with the details that actually help."
+template: splash
+hero:
+  tagline: Write to info@picstome.com. Three things make the difference between a fix this week and a week of questions.
+  actions:
+    - text: Email info@picstome.com
+      link: "mailto:info@picstome.com?subject=Picstome%20issue&body=What%20happened%3A%0A%0AWhat%20I%20expected%3A%0A%0ASteps%20to%20reproduce%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AURL%3A%0A%0AWhen%20it%20happened%3A%0A%0ABrowser%20and%20device%3A%0A%0AExtra%20details%3A%0A"
+      icon: email
+      variant: primary
+    - text: Check service status
+      link: /status/
+      icon: information
+      variant: minimal
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+## Before you write
+
+Two minutes of checks save a day of guessing:
+
+1. **Look at the [service status](/status/).** If the app is red, we already know and we are on it.
+2. **Reload the page** or try a private window. A cached session explains more problems than you would expect.
+3. **Search this site.** The **?** button inside the panel opens the same articles, and the answer may be one click away.
+
+If nothing helps, write to us. We answer every message.
+
+## What to include
+
+The more of this you send, the fewer questions come back:
+
+| | |
+| --- | --- |
+| **What happened** | One or two sentences. "The ZIP download stays at preparing forever", not "it does not work". |
+| **What you expected** | The behaviour you thought you would get. |
+| **Steps to reproduce** | Numbered. Start from the page where it begins, not from the middle. |
+| **The exact URL** | From the browser bar, including the gallery or invoice id. |
+| **When it happened** | Date and approximate time, with your time zone. |
+| **Screenshots or a short video** | The fastest way to show a layout problem. |
+| **Browser and device** | For example "Safari on iPhone 14" or "Chrome on Windows 11". |
+| **Your plan** | Free or subscription, only if the problem involves limits, storage or payments. |
+
+<Aside type="tip">
+You do not need to be technical. A clear description of what you did is worth more than a stack trace.
+</Aside>
+
+## How to report it, step by step
+
+<Steps>
+
+1. **Take a screenshot.** On a phone, the usual button combination takes one; on a computer, the browser menu has "Take screenshot" or you can use your system tool. Include the whole window if the problem is a layout: the sidebar and the header matter.
+
+2. **Copy the exact URL.** Select the address in the browser bar and copy it. If the page is a gallery, contract or invoice, keep the id at the end: it tells us exactly which record to look at.
+
+3. **Write the steps.** Imagine you are explaining the problem to a colleague who has never seen your screen:
+
+   ```text
+   1. Open Galleries and click "Boda de Lucía y Marc".
+   2. Go to the Share tab and enable the selection limit.
+   3. Set it to 5 and save.
+   4. The client opens the link and the counter says 40/40 instead of 0/5.
+   ```
+
+4. **Send the email.** Use the button at the top of this page: it opens your mail client with the structure already written. Attach the screenshot and paste the URL and the steps.
+
+</Steps>
+
+## What we do with it
+
+We read the email, reproduce the problem and answer with either a fix, a workaround or an honest "this is how it works and here is why". If the problem affects other photographers, we document it so the next person does not have to ask.
+
+## Other channels
+
+- **Email:** [info@picstome.com](mailto:info@picstome.com). It is the fastest way and the only one we guarantee.
+- **GitHub:** [picstome/picstome/issues](https://github.com/picstome/picstome/issues) if you prefer a public thread, or you are self-hosting and want to track the fix.
+- **Installation service:** if you want us to set up Picstome on your server, mention it in the email and read [self-hosting](/self-hosting/) first.
