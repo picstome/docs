@@ -88,9 +88,9 @@ export default defineConfig({
         },
         {
           label: 'Culling',
-          translations: { 'es-ES': 'Criba' },
+          translations: { 'es-ES': 'Selección (culling)' },
           items: [
-            { label: 'How a culling pass works', translations: { 'es-ES': 'Cómo funciona la criba' }, slug: 'culling' },
+            { label: 'How a culling pass works', translations: { 'es-ES': 'Cómo funciona la selección' }, slug: 'culling' },
             { label: 'Rate and heart', translations: { 'es-ES': 'Valorar y marcar' }, slug: 'culling/rating' },
             { label: 'Archive a photo', translations: { 'es-ES': 'Archivar una foto' }, slug: 'culling/archiving' },
           ],

@@ -1,9 +1,9 @@
 ---
-title: "Culling (selección)"
+title: "Selección (culling)"
 description: "De 800 fotos entregadas a las que importan. Valora, filtra y archiva dentro de tu galería sin salir de Picstome."
 help:
   section: culling.overview
-  summary: La criba es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver.
+  summary: La selección es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver.
   appRoutes: [galleries.show]
 ---
 
@@ -11,7 +11,7 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="culling.overview"
-  summary="La criba es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver."
+  summary="La selección es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver."
   routes={['galleries.show']}
 />
 
@@ -19,11 +19,11 @@ import screenshot from '@assets/screens/culling-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="Una galería del panel con seis fotos de boda, las estrellas de valoración en la esquina de cada miniatura y las pestañas Fotos, Favoritos y Comentarios" caption="La cuadrícula de la galería es donde empieza la criba: desde aquí se abre, valora y filtra cada foto." />
+<Screenshot src={screenshot} alt="Una galería del panel con seis fotos de boda, las estrellas de valoración en la esquina de cada miniatura y las pestañas Fotos, Favoritos y Comentarios" caption="La cuadrícula de la galería es donde empieza la selección: desde aquí se abre, valora y filtra cada foto." />
 {/* media:end */}
 
 
-La **criba** es la pasada que haces antes de que el cliente vea nada: miras cada foto, decides cuáles merecen quedarse y quitas de la vista el resto. En Picstome todo ocurre dentro de la galería, con el teclado, y nada de lo que hagas aquí lo ve el cliente.
+La **selección** (culling) es la pasada que haces antes de que el cliente vea nada: miras cada foto, decides cuáles merecen quedarse y quitas de la vista el resto. En Picstome todo ocurre dentro de la galería, con el teclado, y nada de lo que hagas aquí lo ve el cliente.
 
 ## Lo que ve el cliente
 
@@ -60,7 +60,7 @@ Para el cliente, las estrellas y los corazones son la misma escala, y eso se exp
 
 ## Cuando la galería es enorme
 
-Una boda de 3.000 fotos no se criba de una sentada. Filtra por valoración, ordena por nombre o por fecha, cierra el navegador y vuelve: las estrellas se guardan en el momento en que pulsas la tecla, no cuando terminas.
+Una boda de 3.000 fotos no se selecciona de una sentada. Filtra por valoración, ordena por nombre o por fecha, cierra el navegador y vuelve: las estrellas se guardan en el momento en que pulsas la tecla, no cuando terminas.
 
 El orden del visor siempre coincide con el orden de la pantalla. Si ordenaste por valoración, las flechas siguen ese orden; si filtraste a cuatro estrellas, pulsar `→` solo recorre fotos de cuatro estrellas.
 
