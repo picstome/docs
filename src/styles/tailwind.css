@@ -1,0 +1,65 @@
+/*
+ * Tailwind entry point for the docs site.
+ *
+ * Preflight is deliberately NOT imported: Starlight already ships its own
+ * reset, and Tailwind's preflight would strip list markers, table borders and
+ * heading defaults from the documentation styles. Only theme tokens and
+ * utilities are loaded.
+ */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/*
+ * Tailwind entry point for the docs site.
+ *
+ * Only the brand tokens are re-declared here: the Picstome palette lives in the
+ * app repo (`resources/css/app.css`) and is copied verbatim so the documentation
+ * never drifts from the product. `@source` below picks up the Starlight
+ * components that are overridden in `src/components`.
+ */
+@theme {
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+  --color-brand-green: #316d61;
+  --color-brand-green-deep: #27564c;
+  --color-brand-ink: #322f30;
+  --color-brand-ink-strong: #2a2625;
+  --color-brand-coral: #ee6958;
+  --color-brand-coral-deep: #d95746;
+  --color-brand-sage: #c6d8af;
+  --color-brand-sage-soft: #eef4e6;
+  --color-brand-cream: #fff9ec;
+  --color-brand-paper: #fbfcf9;
+  --color-brand-night: #1b2320;
+  --color-brand-night-deep: #161e1b;
+  --color-brand-star: #e8b44a;
+  --color-brand-star-soft: #f7e3b5;
+
+  --color-primary-50: #eef6f3;
+  --color-primary-100: #d7eae4;
+  --color-primary-200: #b1d5ca;
+  --color-primary-300: #84baac;
+  --color-primary-400: #579b8b;
+  --color-primary-500: #316d61;
+  --color-primary-600: #2a5d53;
+  --color-primary-700: #244d45;
+  --color-primary-800: #1e3e37;
+  --color-primary-900: #182f2a;
+  --color-primary-950: #10201c;
+
+  --color-accent-50: #fdf1ef;
+  --color-accent-100: #fbded9;
+  --color-accent-200: #f6bdb3;
+  --color-accent-300: #f19486;
+  --color-accent-400: #ee6958;
+  --color-accent-500: #d95746;
+  --color-accent-600: #b84638;
+  --color-accent-700: #96382d;
+  --color-accent-800: #742b22;
+  --color-accent-900: #521e18;
+  --color-accent-950: #30110d;
+}
+
+@source '../**/*.{astro,md,mdx}';

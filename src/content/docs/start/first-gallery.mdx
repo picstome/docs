@@ -1,0 +1,57 @@
+---
+title: "Your first gallery"
+description: "The shortest path from an empty panel to a client opening their photos. Create the gallery, upload, share, done."
+help:
+  section: start.first-gallery
+  summary: Create a gallery, upload the photos and share the link. The client opens it without an account.
+  appRoutes: [galleries, galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="start.first-gallery"
+  summary="Create a gallery, upload the photos and share the link. The client opens it without an account."
+  routes={['galleries', 'galleries.show']}
+/>
+
+## The whole flow
+
+<Steps>
+
+1. **Create the gallery.** In *Galleries*, press the create button, give it a name and, if you want, link it to a photoshoot and pick an expiration date.
+
+2. **Upload the photos.** Drag the files onto the gallery. Uploading happens in the background: you can leave the page and come back.
+
+3. **Share it.** Open the *Share* tab, switch sharing on, and copy the link. That link is what your client opens.
+
+4. **Let the client work.** They open the link in any browser, no account and no app. They can favorite photos, comment, or download, depending on the switches you enabled.
+
+5. **Read the result.** Favorites appear in the *Favorites* tab of the gallery. From there you can export the list of file names.
+
+</Steps>
+
+## The three decisions that matter
+
+Most of the confusion on the first gallery comes from three switches. Everything else has a sensible default.
+
+| Switch | What it changes |
+| --- | --- |
+| **[Original size](/galleries/original-size/)** | Whether the gallery keeps the full files or web-sized versions. |
+| **[Selection limit](/sharing/selection/)** | Whether the client can favorite a maximum number of photos. |
+| **[Download](/sharing/downloads/)** | Whether the client can download individual photos or a ZIP of the whole gallery. |
+
+## What the client receives
+
+Nothing like a login form. The link opens a page with your logo, the gallery name and the photos. If you protected it with a password, they type it once and the browser remembers it for that gallery.
+
+There is no sign-up, no email confirmation and no app to install. A client who loses the link can get it again from you at any time: sharing the gallery again reuses the same link.
+
+## Common first-time questions
+
+**Do I have to upload the RAW files?** No. Upload the JPEG/PNG/TIFF you want to show, or let the camera upload send the JPEG over FTP. RAW files are accepted, but they are heavy and the client never downloads them from a shared gallery.
+
+**Can I change the photos after sending the link?** Yes. Adding, replacing or archiving photos updates the gallery the client sees. A photo you archive disappears from their view immediately.
+
+**What happens when the gallery expires?** The client can no longer open it and the files are removed. The [plans article](/start/plans-and-storage/) explains the windows.

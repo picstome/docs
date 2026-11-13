@@ -1,0 +1,55 @@
+---
+title: "Tamaño original u optimizado"
+description: "Qué cambia de verdad cuando una galería conserva los archivos originales, por qué gasta más almacenamiento y qué opción elegir."
+help:
+  section: galleries.original-size
+  summary: Optimizado guarda una copia web de unos 2048 px. Tamaño original conserva tus archivos completos, gasta más y permite subidas mayores.
+  appRoutes: [galleries, galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="galleries.original-size"
+  summary="Optimizado guarda una copia web de unos 2048 px. Tamaño original conserva tus archivos completos, gasta más y permite subidas mayores."
+  routes={['galleries', 'galleries.show']}
+/>
+
+import screenshot from '@assets/screens/galleries-original-size-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## El interruptor
+
+Cada galería tiene la opción **Tamaño original**, que se elige al crearla y se puede cambiar después. Responde a una pregunta: ¿qué guardo en el servidor?
+
+| | Optimizado (por defecto) | Tamaño original |
+| --- | --- | --- |
+| Qué se guarda | Una copia web de unos 2048 px en el lado largo | Tu archivo, tal cual |
+| Almacenamiento | Poco | Mucho |
+| Calidad de descarga del cliente | La copia web | El archivo completo |
+| Tratamiento del RAW | Se guarda el JPEG extraído, no el RAW | Se conserva el RAW |
+| Subida máxima | Normal | Limitada por un máximo de píxeles |
+
+## Por qué el defecto es optimizado
+
+Porque el cliente está mirando fotos en una pantalla. Un TIFF de 60 MB y un JPEG de 1 MB se ven igual en un navegador a 1400 px de ancho, y el JPEG carga al instante mientras que el TIFF no.
+
+Optimizado también protege tu trabajo: la versión que entregas tiene un tamaño razonable y el original se queda en tu disco.
+
+## Cuándo activarlo
+
+- El cliente necesita expresamente los archivos completos tal y como salen de la cámara.
+- Usas la galería como copia de trabajo entre tú y tu retocador.
+- Vendes los negativos digitales y la galería es el canal de entrega.
+
+No lo actives solo porque suene más seguro. Multiplica el almacenamiento y el plan gratuito tiene 1 GB.
+
+## Lo que "original" no significa
+
+No significa que el cliente pueda ver o descargar el RAW en una galería compartida. Los RAW son para tu flujo de trabajo y para las apps de escritorio; la página compartida muestra imágenes, vídeos y PDF.
+
+## Cambiarlo después
+
+Puedes cambiar la opción por galería desde el diálogo de edición. El cambio se aplica a las subidas nuevas. Los archivos ya procesados en el otro modo no se reprocesan solos, así que una galería puede contener una mezcla temporalmente. Si necesitas todas las fotos en el modo nuevo, vuelve a subir las que te importen.
+
+El interruptor es por galería, y tu última elección pasa a ser el valor por defecto de la siguiente que crees.

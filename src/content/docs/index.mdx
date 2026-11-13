@@ -1,0 +1,72 @@
+---
+title: "Picstome Help Center"
+description: "Practical guides for photographers using Picstome. Galleries, client sharing, contracts, invoices, payments and branding, explained in plain language."
+template: splash
+hero:
+  tagline: How Picstome works, in plain language. Only the parts that are not obvious, with screenshots and short videos.
+  actions:
+    - text: Start here
+      link: /start/what-picstome-does/
+      icon: rocket
+      variant: primary
+    - text: Is Picstome up?
+      link: /status/
+      icon: information
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## The essentials
+
+<CardGrid>
+  <LinkCard
+    title="Your first gallery"
+    description="Create a gallery, upload photos and send the link to your client."
+    href="/start/first-gallery/"
+  />
+  <LinkCard
+    title="Favorites and the selection limit"
+    description="How your client marks photos and what the limit really blocks."
+    href="/sharing/selection/"
+  />
+  <LinkCard
+    title="Original size or optimized"
+    description="What changes when a gallery keeps the original files, and when it does not."
+    href="/galleries/original-size/"
+  />
+  <LinkCard
+    title="Invoices in a nutshell"
+    description="Series, numbering, VAT and the public link your client receives."
+    href="/money/invoices/"
+  />
+</CardGrid>
+
+## Every section
+
+<CardGrid>
+  <Card title="Galleries" icon="pencil">
+    Uploading, versions, archiving and downloads.
+  </Card>
+  <Card title="Sharing" icon="heart">
+    Passwords, expiry, favorites, comments and annotations.
+  </Card>
+  <Card title="Camera" icon="laptop">
+    Shoot straight to a gallery, plus the desktop apps.
+  </Card>
+  <Card title="Business" icon="document">
+    Clients, contract templates and signatures.
+  </Card>
+  <Card title="Money" icon="approve-check">
+    Invoices, VAT, corrective invoices and Stripe.
+  </Card>
+  <Card title="Brand" icon="star">
+    Public profile, portfolio, watermark and tools.
+  </Card>
+</CardGrid>
+
+## Need help right now?
+
+The same articles open inside the panel: look for the **?** next to a section title.
+If something looks broken, check [service status](/status/) first, then open an issue in
+[GitHub](https://github.com/picstome/picstome/issues).

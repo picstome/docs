@@ -1,0 +1,59 @@
+---
+title: "Uploading photos"
+description: "Which formats are accepted, how large a file can be, and what happens while an upload is processing."
+help:
+  section: galleries.uploading
+  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running if you close the tab.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="galleries.uploading"
+  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running if you close the tab."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/galleries-uploading.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## What you can upload
+
+| Type | Formats |
+| --- | --- |
+| Images | JPG, JPEG, PNG, TIFF |
+| RAW | CR2, CR3, NEF, ARW, DNG, ORF, RW2, PEF, SRW, MOS, MRW, 3FR |
+| Video | MP4, WEBM, OGG |
+| Documents | PDF |
+
+The limit is **5 GB per file**. Anything above it is skipped with a message listing which files were left out; the rest of the batch still uploads.
+
+## What happens after the upload
+
+Uploading and processing are two different steps, and this is where the confusion starts:
+
+1. The file lands in storage.
+2. It is processed: resized, a small grid thumbnail generated, and RAW files are converted to JPEG.
+3. The photo becomes visible in the gallery.
+
+While this runs, the photo shows as *processing*. If you reload the page the list is correct, but a photo may take a few seconds to appear with its thumbnail. A large video takes longer than a photo.
+
+## Duplicates become versions
+
+If you upload a file whose name already exists in the gallery, Picstome does **not** silently replace the old one. It asks. You can [save it as a new version](/galleries/file-versions/), replace the current one or skip it.
+
+For RAW files, the versioning is automatic: `IMG_0001.CR2` and a later `IMG_0001.JPG` share the same identity.
+
+## Upload does not depend on the tab
+
+You can navigate away from the gallery while files are uploading. The transfer continues on the server side and the gallery shows the result when you come back. Closing the whole browser is different: the upload queue lives in the page, so an unfinished batch stops.
+
+For very large shoots, [camera upload](/camera/direct-upload/) is a better path than dragging files into the browser.
+
+## When an upload is rejected
+
+- **Files too large:** over the 5 GB per-file limit.
+- **Unsupported file type:** the extension is not in the list above.
+- **Not enough storage:** the plan has no room left. Free space or upgrade; nothing is partially stored.
+- **Pixel limit:** with *original size* enabled, a gallery rejects images above the maximum pixel count. Disable it for that gallery if you need to keep huge files.

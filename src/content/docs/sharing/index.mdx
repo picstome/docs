@@ -1,0 +1,73 @@
+---
+title: Sharing with clients
+description: One link, no accounts. What your client sees, what they can do, and which switch controls each thing.
+help:
+  section: sharing.overview
+  summary: Sharing is one link per gallery. The client opens it without an account and every switch decides what they can do there.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="sharing.overview"
+  summary="Sharing is one link per gallery. The client opens it without an account and every switch decides what they can do there."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Share tab of a gallery with the password, selection limit, download and watermark switches" caption="Each switch in the Share tab controls one thing the client can do." />
+{/* media:end */}
+
+
+Sharing is the moment the gallery becomes something a client can open. It is a single link, no account and no app, and the switches in the *Share* tab decide exactly what happens when somebody clicks it.
+
+## The pieces
+
+<CardGrid>
+  <LinkCard
+    title="The client link"
+    description="What the page looks like, why the link never changes, and how to turn it off."
+    href="/sharing/client-link/"
+  />
+  <LinkCard
+    title="Favorites and the selection limit"
+    description="How the client marks photos and what the limit really blocks."
+    href="/sharing/selection/"
+  />
+  <LinkCard
+    title="Comments and annotations"
+    description="Feedback attached to the photo, with or without pins."
+    href="/sharing/comments/"
+  />
+  <LinkCard
+    title="Downloads"
+    description="Individual files, the gallery ZIP, and what is never included."
+    href="/sharing/downloads/"
+  />
+</CardGrid>
+
+## What sharing is not
+
+- **It is not a login.** The client does not create an account. Whoever has the link can open the gallery, which is why there is a password switch.
+- **It is not publishing.** A shared gallery is still private by default: it is not indexed, not in your portfolio, and not visible to anyone without the link.
+- **It is not permanent.** You can turn sharing off at any time and the link stops working immediately, while the gallery and the client's selection stay in your panel.
+
+## Before you send it
+
+1. **Look at the gallery as the client will see it.** The client page is reachable from the preview before you share it.
+2. **Decide the switches once.** Password, selection, downloads, watermark and comments each have a sensible default, and your last choice is remembered for the next gallery.
+3. **Check the count.** If the gallery has photos still processing they appear a few seconds later, so wait before sending a link to a client who is waiting.
+
+## After you send it
+
+Your panel shows the client's activity as it happens: favourites, comments and the selection limit notification. Nothing is sent by email unless you enable it, so a quiet gallery means a client who has not opened the link yet, not a broken link.
+
+## Related
+
+- [Culling](/culling/): what you do on your side before sharing.
+- [Public profile and portfolio](/brand/public-pages/): sharing with the whole internet instead of one client.

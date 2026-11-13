@@ -1,0 +1,38 @@
+---
+title: "¿Picstome está funcionando?"
+description: "Estado del servicio en directo. Comprueba si la app y la web funcionan antes de abrir una incidencia."
+template: splash
+hero:
+  tagline: Dos comprobaciones y nada más. Si la app y la web están en verde, el problema probablemente esté en tu conexión.
+  actions:
+    - text: Abrir la app
+      link: https://app.picstome.com
+      icon: rocket
+      variant: primary
+    - text: Página oficial de monitorización
+      link: https://stats.uptimerobot.com/fblMSj5psA
+      icon: external
+      variant: minimal
+---
+
+import StatusBoard from '@components/StatusBoard.astro';
+
+<StatusBoard />
+
+## Qué significa cada comprobación
+
+- **app.picstome.com** es el panel donde subes galerías, envías contratos y facturas. Si esto falla, no funciona nada.
+- **picstome.com** es la web pública: las páginas de producto, los enlaces de descarga y este centro de ayuda. Un fallo aquí no impide que tus galerías funcionen.
+
+El panel refresca los datos cada minuto en el servidor que genera esta página. UptimeRobot comprueba los servicios cada 5 minutos en el plan gratuito, así que una caída muy corta puede aparecer aquí unos minutos tarde.
+
+## Si algo está en rojo
+
+1. Abre el sitio afectado en una ventana privada para descartar una sesión en caché o una extensión.
+2. Comprueba que no estás detrás de una red bloqueada o una VPN.
+3. Espera 5 minutos y recarga esta página: el estado se actualiza solo.
+4. Si sigue en rojo, abre una incidencia en [GitHub](https://github.com/picstome/picstome/issues) con la hora y la URL exacta.
+
+## Si los dos están en verde y sigues sin poder trabajar
+
+La página de estado solo dice si los servidores responden. Si falla una galería, un contrato o una factura concreta, la respuesta suele estar en el artículo de esa sección: usa el buscador o el botón **?** dentro del panel.

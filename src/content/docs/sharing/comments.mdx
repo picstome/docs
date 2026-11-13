@@ -1,0 +1,60 @@
+---
+title: "Comments and annotations"
+description: "How client comments work, when to enable pinned annotations, and why annotations need comments switched on."
+help:
+  section: sharing.comments
+  summary: Clients leave comments on photos. Annotations pin a comment to a spot on the image and require comments to be on.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="sharing.comments"
+  summary="Clients leave comments on photos. Annotations pin a comment to a spot on the image and require comments to be on."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-comments.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Comments tab of a gallery with a client comment and a pin on the photo" caption="A comment stays next to the photo, and the pin points at the exact spot." />
+{/* media:end */}
+
+## Two related features
+
+**Comments** are text attached to a photo. The client writes something like "can we crop this one?" and you read it in the panel next to the gallery.
+
+**Annotations** are comments pinned to a point or a rectangle on the image. Instead of "the sky in the third photo", the client draws a box around the sky.
+
+Comments come first, annotations on top. Enabling annotations turns comments on automatically; disabling comments turns annotations off. They cannot be inverted.
+
+## Where you read them
+
+- The gallery gets a **Comments** tab with everything the client wrote.
+- Each photo shows its comments and pins in the viewer.
+- New comments generate a notification, so you do not have to poll the gallery.
+
+## What the client can do
+
+- Write a comment on a photo.
+- See their own comments and the ones you reply with.
+- Draw a pin or a box on the image when annotations are on.
+- Delete their own comment (yours, only you).
+
+They cannot see your internal notes, your ratings, other clients' comments or the email trail you keep in the customer record.
+
+## Annotations and versions
+
+A pin is drawn on a specific version of the photo. If you upload a corrected version, the old pin stays attached to the old version and the panel tells you which version it belongs to. That is what makes "move the crop two centimetres" understandable after a re-edit instead of a mystery.
+
+## When to enable them
+
+- **Comments on** for any gallery where the client may want to talk about a photo. It replaces a long email thread.
+- **Annotations on** for retouching, cropping or cleanup work, where "here" is faster than a description.
+- **Both off** for a pure delivery gallery. You still get the favorites, which is usually all you need.
+
+## Practical advice
+
+Ask the client to comment instead of sending a separate email with a screenshot: the comment lives next to the photo and never gets lost. For a selection session, annotations plus the [selection limit](/sharing/selection/) give you a precise brief without a single call.

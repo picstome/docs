@@ -1,0 +1,63 @@
+---
+title: "The client link"
+description: "What your client sees when they open a shared gallery, why there is no account, and how to control the page from the Share tab."
+help:
+  section: sharing.client-link
+  summary: One link per gallery. The client opens it without an account; every switch in the Share tab changes what that page lets them do.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="sharing.client-link"
+  summary="One link per gallery. The client opens it without an account; every switch in the Share tab changes what that page lets them do."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-client-link.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="A shared gallery opened as a client sees it, with the studio logo, the gallery name and the photos" caption="No account, no app: the link opens a page with your branding and the photos." />
+{/* media:end */}
+
+## Sharing is a switch with options
+
+Turning sharing on publishes the gallery to a link. It does not mean "the client can do everything": the other switches decide.
+
+| Switch | What it adds to the client page |
+| --- | --- |
+| Password | The client types it once to enter |
+| Expiry date | The link stops working on that date |
+| Select photos | Hearts appear, and the selection is saved for you |
+| Selection limit | Selection stops at N photos |
+| Download | Individual downloads and the gallery ZIP |
+| Watermark | The photos are shown with your watermark |
+| Comments | The client can leave comments, with or without pins |
+| Description | A text block above the photos |
+| Versions | The client can compare file versions |
+
+Every switch remembers your last choice for the next gallery. Passwords and the description are never remembered.
+
+## One link, always the same
+
+The link is built from the gallery identifier, so it does not change when you rename the gallery or edit its photos. You can send it once and keep working.
+
+Renaming a gallery changes the readable part of the URL, but the old address redirects to the new one, so nobody lands on a 404.
+
+## No account, no app
+
+The client does not sign up. They open the link, and that is it. There is no email collection, no password reset and no app store.
+
+The trade-off: whoever has the link can open the gallery. That is why there is a password switch, and why the link should be sent to the client, not published.
+
+## The client portal
+
+If you link a customer to the gallery, the client gets a page listing **all** their shared galleries, not just one. The same password protection applies per gallery: the portal shows only the ones already unlocked.
+
+## Turning it off
+
+Disabling sharing makes the link invalid immediately. The gallery, the photos and the client's favorites stay in your panel; only the public page disappears. Re-enabling it reuses the same link.
+
+Every switch is per gallery; only the boolean defaults are remembered for the next one.

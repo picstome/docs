@@ -1,0 +1,72 @@
+---
+title: "Centro de ayuda de Picstome"
+description: "Guías prácticas para fotógrafos que usan Picstome. Galerías, compartir con clientes, contratos, facturas, pagos y marca, explicado en lenguaje claro."
+template: splash
+hero:
+  tagline: Cómo funciona Picstome, explicado claro. Solo lo que no es evidente, con capturas y vídeos cortos.
+  actions:
+    - text: Empieza aquí
+      link: /es/start/what-picstome-does/
+      icon: rocket
+      variant: primary
+    - text: ¿Picstome está funcionando?
+      link: /status/
+      icon: information
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Lo esencial
+
+<CardGrid>
+  <LinkCard
+    title="Tu primera galería"
+    description="Crea una galería, sube fotos y manda el enlace a tu cliente."
+    href="/es/start/first-gallery/"
+  />
+  <LinkCard
+    title="Favoritos y el límite de selección"
+    description="Cómo marca fotos tu cliente y qué bloquea realmente el límite."
+    href="/es/sharing/selection/"
+  />
+  <LinkCard
+    title="Tamaño original u optimizado"
+    description="Qué cambia cuando una galería conserva los archivos originales."
+    href="/es/galleries/original-size/"
+  />
+  <LinkCard
+    title="Facturas en resumen"
+    description="Series, numeración, IVA y el enlace público que recibe tu cliente."
+    href="/es/money/invoices/"
+  />
+</CardGrid>
+
+## Todas las secciones
+
+<CardGrid>
+  <Card title="Galerías" icon="pencil">
+    Subidas, versiones, archivado y descargas.
+  </Card>
+  <Card title="Compartir" icon="heart">
+    Contraseñas, caducidad, favoritos, comentarios y anotaciones.
+  </Card>
+  <Card title="Cámara" icon="laptop">
+    Disparar directo a una galería y las apps de escritorio.
+  </Card>
+  <Card title="Negocio" icon="document">
+    Clientes, plantillas de contrato y firmas.
+  </Card>
+  <Card title="Dinero" icon="approve-check">
+    Facturas, IVA, rectificativas y Stripe.
+  </Card>
+  <Card title="Marca" icon="star">
+    Perfil público, porfolio, marca de agua y herramientas.
+  </Card>
+</CardGrid>
+
+## ¿Necesitas ayuda ahora?
+
+Los mismos artículos se abren dentro del panel: busca el **?** junto al título de cada sección.
+Si algo parece roto, mira antes el [estado del servicio](/status/) y luego abre una incidencia en
+[GitHub](https://github.com/picstome/picstome/issues).

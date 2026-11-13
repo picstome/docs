@@ -1,0 +1,66 @@
+---
+title: "Picstome Sync, Rater and Photo Stats"
+description: "What the desktop apps do, which one to install and how they connect to your panel."
+help:
+  section: camera.desktop-apps
+  summary: Sync downloads and uploads galleries without ZIPs, Rater culls with keyboard, Photo Stats reads your metadata.
+  appRoutes: [settings.apps, galleries, tools.calculator]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="camera.desktop-apps"
+  summary="Sync downloads and uploads galleries without ZIPs, Rater culls with keyboard, Photo Stats reads your metadata."
+  routes={['settings.apps', 'galleries', 'tools.calculator']}
+/>
+
+## Three apps, three jobs
+
+| App | What it does | Where to get it |
+| --- | --- | --- |
+| **Picstome Sync** | Keeps a gallery synchronized with a folder on your computer: download, edit, upload without ZIPs | GitHub releases |
+| **Picstome Rater** | Opens your favorites and lets you rate them with the keyboard | GitHub releases |
+| **Photo Stats** | Reads the metadata of a set of photos and shows what gear and settings you actually used | picstome.com |
+
+None of them replaces the panel. They remove the boring part: unpacking a ZIP, opening a folder, uploading one file at a time.
+
+## Connecting them
+
+The desktop apps use a **personal access token**, not your password.
+
+1. Open *Settings → Connected apps* in the panel.
+2. Create a token and copy it once (it is never shown again).
+3. Paste it into the app when it asks for the server and the token.
+
+You can revoke a token at any time from the same page. Revoking it disconnects the app immediately; nothing is deleted.
+
+## Picstome Sync
+
+It maps a gallery to a local folder:
+
+- **Download:** the current version of every photo comes down, skipping the ones you already have.
+- **Upload:** drop a corrected file with the same name and it becomes a [new version](/galleries/file-versions/), not a duplicate.
+- **No ZIP:** the app fetches files one by one, so a 40 GB gallery can be resumed after an interruption.
+
+This is the recommended path for a retoucher or for a delivery you will edit over several days.
+
+## Rater
+
+A culling window: your favorites on one side, the keyboard on the other. It writes the same 1–5 [rating](/culling/rating/) the panel writes, so results show up in the gallery immediately.
+
+It is faster than the browser for long sessions because it preloads the images and does not render the rest of the panel.
+
+## Photo Stats
+
+Point it at a folder and it produces a summary of your metadata: focal lengths, apertures, ISO, camera and lens distribution. Useful for a portfolio review or to answer "what lens do I actually use".
+
+It reads files locally; it does not upload your photos anywhere.
+
+## Which do I need?
+
+- You deliver galleries and edit later: **Sync**.
+- You cull client selections every week: **Rater**.
+- You are curious about your own shooting habits: **Photo Stats**.
+
+Installing all three is fine; they share the same token and none of them modifies your photos without asking.

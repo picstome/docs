@@ -1,0 +1,53 @@
+---
+title: "Versiones de archivo"
+description: "Qué pasa cuando subes un archivo corregido con el mismo nombre y cómo compara tu cliente las versiones."
+help:
+  section: galleries.file-versions
+  summary: Si vuelves a subir un archivo con el mismo nombre, el anterior se guarda como versión. No se pierde nada y el cliente puede comparar.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="galleries.file-versions"
+  summary="Si vuelves a subir un archivo con el mismo nombre, el anterior se guarda como versión. No se pierde nada y el cliente puede comparar."
+  routes={['galleries.show']}
+/>
+
+## El problema que resuelve
+
+Entregas una galería, el cliente pide una foto con un revelado más cálido y vuelves a subir `IMG_2043.jpg`. Sin versiones, el original se pierde y no puedes enseñar qué ha cambiado.
+
+Con versiones, el archivo que ya tenías pasa a ser una versión histórica y la subida nueva es la actual. La galería guarda una pila por foto.
+
+## Cómo se reconoce la misma foto
+
+El versionado usa el **nombre del archivo**, no la carpeta:
+
+- Las mayúsculas dan igual: `IMG_0001.JPG` e `img_0001.jpeg` son la misma foto.
+- La extensión da igual en imágenes: `IMG_0001.JPG`, `IMG_0001.jpeg` e `IMG_0001.CR3` coinciden.
+- Los vídeos y los PDF usan sus propias familias, así que un vídeo y una foto con el mismo nombre quedan separados.
+
+Todo lo demás se trata como foto nueva.
+
+## Qué ve el cliente
+
+Si activaste *Los visitantes pueden ver y comparar versiones* al compartir, la página compartida muestra el número de versión y una vista de comparación. El cliente puede mirar la antigua y la nueva lado a lado sin descargar nada.
+
+Si el interruptor está apagado, el cliente solo ve la versión actual. Las anteriores siguen existiendo para ti.
+
+## Lo que una versión no es
+
+- **No es una copia de seguridad de tu disco.** Las versiones viven en el almacenamiento de Picstome y cuentan en tu plan.
+- **No es un historial de cada edición.** Se crea una versión cuando subes un archivo con un nombre que coincide. Si renombras un archivo y lo vuelves a subir, se crea una foto nueva.
+
+## Borrar versiones
+
+Desde el detalle de la foto puedes borrar una versión concreta de forma permanente. La versión actual no se puede borrar así; borra la foto si quieres eliminarla.
+
+Cuando [archivas una foto](/es/galleries/archiving/), todas sus versiones se ocultan al cliente a la vez.
+
+## Buena práctica
+
+Mantén el mismo nombre de archivo cuando mandes una edición corregida. Ese es el truco completo: le dice a Picstome "esta es la misma foto, mejor". Si tu programa de edición renombra las exportaciones, renómbralas de vuelta antes de subirlas.

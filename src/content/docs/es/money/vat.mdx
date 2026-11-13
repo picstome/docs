@@ -1,0 +1,67 @@
+---
+title: "IVA, exenciones y rectificativas"
+description: "Cuándo aplicar IVA, cuándo una factura puede ir exenta y cómo funciona una rectificativa sin borrar la original."
+help:
+  section: money.vat
+  summary: Aplica el IVA por línea, explica cualquier exención con palabras claras y corrige un error con una factura nueva, nunca editando la vieja.
+  appRoutes: [invoices, invoices.create, invoices.settings]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="money.vat"
+  summary="Aplica el IVA por línea, explica cualquier exención con palabras claras y corrige un error con una factura nueva, nunca editando la vieja."
+  routes={['invoices', 'invoices.create', 'invoices.settings']}
+/>
+
+import screenshot from '@assets/screens/money-vat-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## El IVA en la factura
+
+Cada línea lleva su tipo de IVA, y la factura muestra el tipo, el importe en euros y el total con IVA incluido. En *Ajustes de facturación* fijas el tipo por defecto, así que una factura normal no necesita trabajo línea a línea.
+
+Si facturas a una empresa o a un profesional de tu país, la retención de IRPF se aplica sobre la base y se imprime en la factura. No es dinero que recibes: es un impuesto que liquidas más tarde.
+
+## Cuándo una factura no lleva IVA
+
+Una factura exenta es legítima, pero debe decir **por qué**. Picstome no te deja emitirla sin un motivo. Un texto típico es:
+
+> Operación exenta por el artículo 20 de la LIVA
+
+Ese campo no es decorativo: un documento sin IVA y sin motivo es lo primero que te va a preguntar un asesor o una inspección.
+
+Los casos habituales son servicios intracomunitarios con un NIF válido y actividades exentas concretas. Si dudas de si tu caso está exento, esa pregunta es para tu asesor, no para el programa.
+
+## Corregir una factura
+
+Nunca editas una factura emitida. Si algo está mal, emites una **factura rectificativa**:
+
+1. Abre la factura original.
+2. Elige **Crear factura rectificativa**.
+3. El documento nuevo se crea con el mismo cliente y las mismas líneas, referenciando el número original.
+4. Corrige lo que estaba mal, añade el motivo y emítela.
+
+La original conserva su número y su PDF intactos. La rectificativa toma un número de la serie de rectificativas. Las dos aparecen enlazadas y el cliente puede abrir cualquiera.
+
+Ese es el comportamiento que espera la ley: un rastro auditable, no una historia reescrita.
+
+## Lo que una rectificativa no hace
+
+- No borra la original.
+- No modifica el PDF original.
+- No devuelve dinero automáticamente. Si hubo un movimiento, gestionas la devolución aparte (o con Stripe).
+
+Puedes emitir una rectificativa con importe negativo (un abono) o con el importe positivo corregido, según cómo quieras que se lea el par. Lo importante es que el par cuente la historia completa.
+
+## Lista de comprobación
+
+- Tipo de IVA fijado una vez en *Ajustes de facturación*.
+- Motivo de exención escrito antes de emitir, nunca después.
+- Errores corregidos con una factura nueva, nunca con una edición.
+- El PDF original archivado por ti, porque es el documento que se envió.
+
+## Aviso legal
+
+Picstome produce facturas correctas, pero no es un sistema de facturación homologado y no imprime VERI*FACTU ni el QR de la AEAT. Los requisitos varían según el país y la actividad; confirma los tuyos con tu asesor.

@@ -1,0 +1,66 @@
+---
+title: "Dispara directo a una galería"
+description: "Cómo suben las cámaras y el software de tethering por FTP o SFTP, qué hace el modo de sesión en directo y qué pasa si se llena el almacenamiento."
+help:
+  section: camera.direct-upload
+  summary: Tu cámara sube por FTP/SFTP a una galería que se actualiza en directo. Si se llena el almacenamiento, las subidas se pausan y te llega un email.
+  appRoutes: [galleries, galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="camera.direct-upload"
+  summary="Tu cámara sube por FTP/SFTP a una galería que se actualiza en directo. Si se llena el almacenamiento, las subidas se pausan y te llega un email."
+  routes={['galleries', 'galleries.show']}
+/>
+
+## Por qué subir desde la cámara
+
+Arrastrar 3.000 fotos al navegador después de una boda es lento y frágil. Con la subida directa, la cámara (o el software de tethering) empuja los archivos mientras disparas, y la galería ya está completa cuando terminas.
+
+Funciona con cualquier cámara o programa que pueda enviar archivos por **FTP o SFTP**. En una Canon, por ejemplo, es la transferencia FTP integrada; en una Sony, la app de transferencia; en un ordenador, el software de tethering.
+
+## Se configura una vez
+
+<Steps>
+
+1. En *Galerías*, abre el diálogo de subida desde cámara y pulsa **Conectar cámara**. Picstome crea la cuenta FTP/SFTP y muestra el host, el usuario y la contraseña.
+
+2. Copia esos valores en la cámara o en la app de tethering. La carpeta de destino es el único dato que hay que conservar.
+
+3. Haz una foto de prueba. La foto aparece en la galería en segundos, marcada como procesando hasta que termina la conversión.
+
+</Steps>
+
+## El modo de sesión en directo
+
+**Iniciar sesión en directo** reutiliza la galería vacía de hoy, o crea una numerada para el día, y apunta la cámara ahí. Está pensado para la boda o el evento en el que quieres una galería por sesión sin nombrar carpetas a mano.
+
+La página de la galería se actualiza sola mientras disparas, así que un ayudante puede ver llegar las fotos desde otro dispositivo.
+
+## RAW o JPEG
+
+Dispara en **RAW+JPEG y envía solo el JPEG**. El JPEG sube en una fracción del tiempo y el cliente puede abrirlo. El RAW se queda en tu tarjeta para editar.
+
+Picstome también acepta RAW por FTP, y conserva el RAW cuando la galería está en modo [tamaño original](/es/galleries/original-size/). Para una entrega en directo, el JPEG es casi siempre la elección correcta.
+
+## Cuando se llena el almacenamiento
+
+Esta es la red de seguridad importante. Si el estudio llega a su límite de almacenamiento durante un reportaje:
+
+1. Picstome **pausa la cuenta de cámara** y deja de importar.
+2. Los archivos que ya estaban en la bandeja se borran, así no queda nada guardado sin facturar.
+3. Recibes un email diciéndote cuántas fotos se han descartado.
+4. La galería muestra un aviso mientras la pestaña abierta está en directo.
+
+Las subidas se reanudan automáticamente cuando vuelve a haber espacio. Nada se reanuda en silencio por detrás: primero tienes que liberar espacio o mejorar el plan.
+
+Algunos montajes de tethering borran la tarjeta después de una subida correcta. Por eso el email dice cuántas fotos se han descartado: es la única forma de saber que esas fotos solo existen en la tarjeta.
+
+## Cuando no funciona
+
+- **La foto nunca aparece:** comprueba que la cámara escribe en la carpeta de entrada y que la cuenta no está pausada. El diálogo muestra el último estado de conexión.
+- **La galería se llena de fotos movidas:** la cámara lo está enviando todo. Limita la transferencia en la cámara a las fotos que quieras entregar.
+- **Nombres duplicados:** el segundo archivo se convierte en una [versión](/es/galleries/file-versions/) del primero, no en una foto nueva.

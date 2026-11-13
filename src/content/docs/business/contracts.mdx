@@ -1,0 +1,66 @@
+---
+title: "Templates and signatures"
+description: "The difference between a template and a sent contract, how the client signs and what happens to the PDF."
+help:
+  section: business.contracts
+  summary: A template is reusable text. A contract is a copy sent to one client, signed in the browser and stored as a PDF.
+  appRoutes: [contracts, contracts.show, contract-templates]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="business.contracts"
+  summary="A template is reusable text. A contract is a copy sent to one client, signed in the browser and stored as a PDF."
+  routes={['contracts', 'contracts.show', 'contract-templates']}
+/>
+
+import screenshot from '@assets/screens/business-contracts.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Template vs. contract
+
+This is the concept that trips people up:
+
+| | Template | Contract |
+| --- | --- | --- |
+| What it is | Reusable wording, no client attached | A copy of a template for one client |
+| Editable after sending | Yes, and it changes nothing already sent | No, it is frozen |
+| Has a signature | No | Yes |
+| Has a PDF | No | Yes |
+
+Edit the template whenever you want; new contracts pick up the new text. Contracts already sent keep the text they had.
+
+## Sending one
+
+<Steps>
+
+1. **Create the contract** and pick a template. The text is copied into the contract.
+2. **Fill the details:** client, photoshoot, price and whatever the template expects you to complete.
+3. **Send the signing link.** The client opens it in the browser, reads, signs with the mouse or a finger and confirms.
+4. **The PDF is generated** with both signatures and stored in the contract. You can download it at any time.
+
+</Steps>
+
+## What the client experiments
+
+A clean page with the contract text, your branding, the price and a signature area. No account. When they sign, they immediately get the signed document.
+
+There is a second signature path for two signers: you sign first, then the client. The order is recorded in the PDF.
+
+## The PDF is the document
+
+The PDF is generated when the contract is signed, not when it is created, and it stays attached to the contract. Downloading it later gives the same file, so you can archive it or attach it to an email without regenerating anything.
+
+If you edit the contract before it is signed, the PDF is not generated yet and the client sees the updated text. Once signed, editing is disabled.
+
+## Monthly limit
+
+The free plan includes one contract per month. The limit counts contracts **sent**, not templates, and it resets with the calendar month. Templates are unlimited on every plan.
+
+## Where to find things
+
+- *Contracts* lists everything you sent, with its state (draft, sent, signed).
+- *Contract templates* is where the reusable text lives.
+- The customer page shows the contracts linked to that client.

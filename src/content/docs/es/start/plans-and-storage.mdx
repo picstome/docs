@@ -1,0 +1,64 @@
+---
+title: "Planes y almacenamiento"
+description: "Qué incluye el plan gratuito, qué cambia la suscripción y por qué las galerías caducan al año si no mejoras el plan."
+help:
+  section: start.plans-and-storage
+  summary: El plan cambia el almacenamiento, los límites mensuales y si las galerías caducan. Todas las funciones están en todos los planes.
+  appRoutes: [subscribe, dashboard, payments]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="start.plans-and-storage"
+  summary="El plan cambia el almacenamiento, los límites mensuales y si las galerías caducan. Todas las funciones están en todos los planes."
+  routes={['subscribe', 'dashboard', 'payments']}
+/>
+
+## Las funciones nunca están bloqueadas
+
+Esta es la parte que más se malinterpreta. **Todas las funciones están en todos los planes.** Compartir, contraseñas, comentarios, anotaciones, límite de selección, versiones de archivo, Stripe, subida desde cámara y contratos no son extras de pago.
+
+El plan solo cambia la capacidad:
+
+| | Gratuito | Suscripción |
+| --- | --- | --- |
+| Almacenamiento | 1 GB | De 100 GB a 1 TB |
+| Facturas al mes | 1 | Sin límite |
+| Contratos al mes | 1 | Sin límite |
+| Pagos al mes | 1 | Sin límite |
+| Galerías privadas caducan | 1 año desde su creación | Nunca |
+| Galerías públicas (porfolio) caducan | Nunca | Nunca |
+| Marca blanca (`Powered by Picstome`) | No | Sí |
+
+## Qué significa "1 GB" en la práctica
+
+El almacenamiento cuenta los archivos que guarda Picstome: las imágenes procesadas, los vídeos, los PDF y los ZIP temporales que generas para descargar.
+
+**No** cuenta el RAW si mantienes la galería optimizada: en ese caso Picstome guarda el JPEG extraído, no el RAW. Si activas *tamaño original*, sí cuentan los archivos completos.
+
+Una entrega de boda típica de 600 JPEG para web ronda 1–2 GB, así que el plan gratuito es, en la práctica, un plan de pruebas. El panel muestra el uso exacto y avisa al llegar al 95 %.
+
+## Por qué caducan las galerías
+
+En el plan gratuito, una galería privada caduca **un año después de crearse**, no después de la última visita. La fecha es un techo: puedes moverla antes o después, pero nunca más allá de un año desde la creación.
+
+Cuando la fecha se acerca, recibes un email tres días antes. Cuando pasa, la galería y sus archivos se eliminan. Las galerías públicas del porfolio nunca caducan.
+
+Al suscribirte desaparece la fecha de caducidad desde ese momento: las galerías ya creadas se quedan sin fecha y las nuevas nacen sin ella. Si la suscripción termina, las galerías vuelven a tener fecha en lugar de desaparecer de golpe.
+
+## Los límites mensuales
+
+El plan gratuito incluye una factura, un contrato y un pago al mes. Los contadores se reinician con el mes natural.
+
+Solo cuentan los pagos **completados**. Si un cliente abre la página de pago y la abandona, no consume nada. Cuando se alcanza un límite, el botón se desactiva para ti y el cliente ve un mensaje neutro, nunca tu estado de facturación.
+
+## Mejorar y bajar de plan
+
+- **Mejorar:** desde *Suscribirse*. Stripe gestiona el pago y el plan se aplica al momento.
+- **Bajar o cancelar:** desde el portal de facturación. Mantienes la suscripción hasta el final del periodo pagado.
+- **Almacenamiento por encima del nuevo límite:** las subidas se bloquean hasta que liberes espacio o vuelvas a mejorar. No se borra nada automáticamente.
+
+## Dónde consultarlo
+
+El pie de la barra lateral muestra siempre tu barra de almacenamiento. El panel principal muestra el mismo número con el nombre del plan. Si cerraste el aviso de almacenamiento y lo quieres de vuelta, reaparece la próxima vez que cruces el umbral.

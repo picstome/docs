@@ -1,0 +1,181 @@
+---
+/**
+ * Service status board.
+ *
+ * The UptimeRobot public feed answers with JSON *and* allows cross-origin
+ * requests, but it occasionally returns the status page HTML instead (and it is
+ * rate limited). So the page is rendered static — indexable, no build-time
+ * network dependency — and the board hydrates itself in the browser, retrying a
+ * few times and refreshing every minute while the tab stays open.
+ *
+ * The copy is resolved from `Astro.currentLocale` at build time.
+ */
+// Starlight keeps the configured `lang` here (`es-ES`, `en-US`), not the locale key.
+const isSpanish = (Astro.currentLocale ?? 'en').startsWith('es');
+
+const copy = isSpanish
+  ? {
+      name: 'picstome',
+      loading: 'Consultando el estado…',
+      up: 'Todo funciona con normalidad',
+      down: 'Un servicio no está respondiendo',
+      unknown: 'No hemos podido leer el estado ahora mismo',
+      working: 'Operativo',
+      broken: 'Caído',
+      degraded: 'Degradado',
+      uptime: 'de disponibilidad',
+      missing: 'Sin datos para este servicio',
+      incident: 'Último incidente',
+      minutes: 'min',
+      checked: 'Actualizado a las',
+      feedDown: 'No se pudo consultar el estado.',
+      official: 'Consulta la página oficial de monitorización',
+      refresh: 'Se actualiza solo cada minuto.',
+      services: [
+        { name: 'app.picstome.com', description: 'Galerías, clientes, contratos, facturas y pagos.' },
+        { name: 'picstome.com', description: 'La web pública, las descargas y este centro de ayuda.' },
+      ],
+    }
+  : {
+      name: 'picstome',
+      loading: 'Checking the status…',
+      up: 'Everything is working normally',
+      down: 'One service is not responding',
+      unknown: 'We could not read the status right now',
+      working: 'Operational',
+      broken: 'Down',
+      degraded: 'Degraded',
+      uptime: 'uptime',
+      missing: 'No data for this service',
+      incident: 'Last incident',
+      minutes: 'min',
+      checked: 'Updated at',
+      feedDown: 'Could not read the status.',
+      official: 'Check the official monitor page',
+      refresh: 'Refreshes every minute.',
+      services: [
+        { name: 'app.picstome.com', description: 'Galleries, clients, contracts, invoices and payments.' },
+        { name: 'picstome.com', description: 'The public website, the downloads and this help center.' },
+      ],
+    };
+---
+
+<div class="not-content my-6" data-status-board data-locale={isSpanish ? 'es' : 'en'}>
+  <div class="ps-status-card" style="border-left: 4px solid var(--sl-color-accent); margin-bottom: 1.25rem;">
+    <span class="ps-dot" data-state="degraded" data-overall></span>
+    <div>
+      <strong data-headline>{copy.loading}</strong>
+      <p class="mt-1 text-sm opacity-70" data-updated>{copy.refresh}</p>
+    </div>
+  </div>
+
+  <div class="ps-status-grid">
+    {
+      copy.services.map((service) => (
+        <div class="ps-status-card">
+          <span class="ps-dot" data-state="degraded" data-dot={service.name}></span>
+          <div>
+            <strong>{service.name}</strong>
+            <p class="mt-1 text-sm opacity-80">{service.description}</p>
+            <p class="mt-1 text-sm opacity-70" data-summary={service.name}>
+              {copy.loading}
+            </p>
+            <p class="mt-1 text-sm opacity-60" data-incident={service.name} hidden></p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script define:vars={{ copy, isSpanish }}>
+  (() => {
+    const board = document.querySelector('[data-status-board]');
+    if (!board) {
+      return;
+    }
+
+    const FEED = 'https://stats.uptimerobot.com/api/getMonitorList/fblMSj5psA';
+    const SERVICES = copy.services.map((service) => service.name);
+    const stateFor = (statusClass) => (statusClass === 'success' ? 'up' : statusClass === 'danger' ? 'down' : 'degraded');
+    const labelFor = (state) => (state === 'up' ? copy.working : state === 'down' ? copy.broken : copy.degraded);
+    const dateFor = (value) =>
+      new Date(value.trim().replace(' ', 'T') + 'Z').toLocaleString(isSpanish ? 'es-ES' : 'en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: 'UTC',
+      });
+
+    const setText = (selector, text) => {
+      const node = board.querySelector(selector);
+      if (node) {
+        node.textContent = text;
+      }
+    };
+
+    const paint = (monitors) => {
+      const states = SERVICES.map((name) => {
+        const monitor = monitors.find((entry) => entry.name === name);
+        const state = monitor ? stateFor(monitor.statusClass) : 'degraded';
+        const dot = board.querySelector(`[data-dot="${name}"]`);
+        if (dot) {
+          dot.dataset.state = state;
+        }
+        setText(
+          `[data-summary="${name}"]`,
+          monitor
+            ? `${labelFor(state)}${monitor.ratio?.ratio ? ` · ${monitor.ratio.ratio}% ${copy.uptime}` : ''}`
+            : copy.missing
+        );
+
+        const incident = board.querySelector(`[data-incident="${name}"]`);
+        if (incident) {
+          if (monitor?.lastDowntime) {
+            incident.hidden = false;
+            incident.textContent = `${copy.incident}: ${dateFor(monitor.lastDowntime.date)} (${Math.round(
+              monitor.lastDowntime.duration / 60
+            )} ${copy.minutes})`;
+          } else {
+            incident.hidden = true;
+          }
+        }
+
+        return state;
+      });
+
+      const anyDown = states.includes('down');
+      const allUp = states.every((state) => state === 'up');
+      const overall = board.querySelector('[data-overall]');
+      if (overall) {
+        overall.dataset.state = anyDown ? 'down' : allUp ? 'up' : 'degraded';
+      }
+      setText('[data-headline]', anyDown ? copy.down : allUp ? copy.up : copy.unknown);
+      setText('[data-updated]', `${copy.checked} ${new Date().toLocaleTimeString(isSpanish ? 'es-ES' : 'en-US')}`);
+    };
+
+    const fail = () => {
+      setText('[data-headline]', copy.unknown);
+      setText('[data-updated]', copy.feedDown);
+    };
+
+    const load = async (attempt = 1) => {
+      try {
+        const response = await fetch(FEED, { headers: { accept: 'application/json' }, cache: 'no-store' });
+        const body = await response.text();
+        if (!response.ok || body.trimStart().startsWith('<')) {
+          throw new Error(`unexpected response (${response.status})`);
+        }
+        paint(JSON.parse(body).data ?? []);
+      } catch (error) {
+        if (attempt < 3) {
+          setTimeout(() => load(attempt + 1), 600 * attempt);
+          return;
+        }
+        fail();
+      }
+    };
+
+    load();
+    setInterval(() => load(), 60_000);
+  })();
+</script>

@@ -1,0 +1,104 @@
+---
+title: "Rate and heart"
+description: "The 1–5 stars, the `F` key and the difference between your rating and the client's heart. With filters and sorting built for culling."
+help:
+  section: culling.rating
+  summary: Stars are yours only. 1–5 rates and moves on, 0 clears, F hearts, and the filters let you shape the pass.
+  appRoutes: [galleries.show, galleries.photos.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Aside } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="culling.rating"
+  summary="Stars are yours only. 1–5 rates and moves on, 0 clears, F hearts, and the filters let you shape the pass."
+  routes={['galleries.show', 'galleries.photos.show']}
+/>
+
+import screenshot from '@assets/screens/culling-rating.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="Gallery grid with photos rated from one to five stars and a rating filter next to the sort control" caption="Stars live on the thumbnail, and the filter on the right shows only the rating you pick." />
+{/* media:end */}
+
+:::caution[Your rating is private]
+Nothing in this page is visible to your client. Stars, filters and sorting live in your panel only. The client only has the heart, and it never reveals a number.
+:::
+
+## The five stars, in practice
+
+Each photo has a rating from 1 to 5, or none. A rating is a **decision about the photo**, not a score out of ten: most culling systems work with three levels, and five stars exists so you can mark the exceptional ones.
+
+A scale that works:
+
+| Stars | Meaning |
+| --- | --- |
+| 5 | Client's pick, or my favourite |
+| 4 | Delivers, keep it |
+| 3 | Doubt: worth a second look |
+| 1–2 | Reject |
+| None | Not reviewed yet |
+
+The important part is the *none*: photos you have not opened stay unrated, so the filter "no rating" is your to-do list.
+
+## Keyboard first
+
+Open any photo in the viewer and work without the mouse:
+
+- `1` to `5` set the rating, flash a short confirmation and **jump to the next photo**. Culling is a rhythm, not a form.
+- `0` clears both the rating and the heart, and stays on the photo.
+- `F` hearts or un-hearts the current photo.
+- `→` and `←` walk the gallery in the order shown on screen.
+
+Re-pressing the star you already have does nothing on purpose, so a double tap while culling cannot un-heart a photo by accident. `0` is the only clear gesture.
+
+<Aside>
+The viewer ignores the shortcuts while you are typing in a comment or an annotation field, so writing "can we crop this?" never rates the photo by mistake.
+</Aside>
+
+## Heart and stars are the same field
+
+This surprises everyone, so it is worth saying clearly:
+
+| You do | Rating | Heart |
+| --- | --- | --- |
+| Press `1`–`4` | Set | Untouched |
+| Press `5` | Set to 5 | Turns on |
+| Press `0` | Cleared | Turns off |
+| Heart on (`F`) | Set to 5 | On |
+| Heart off | Cleared | Off |
+
+Four stars and a heart can coexist: "good, but not the chosen one". Five stars and a heart cannot be separated, because they are literally the same value in the database.
+
+That is also why the client's heart shows as five stars for you: their selection is the strongest signal, and it should sit at the top of your scale.
+
+## Filters and sorting
+
+The filter bar sits next to the tabs, on the same sticky row. It works on the whole gallery, and the viewer follows exactly the list you built.
+
+**By rating.** The filter is exact: three stars shows only three-star photos. Comparisons ("three or more") were removed because they were hard to read at a glance.
+
+**By favourites.** The Favorites tab is a shortcut that applies the favourites filter to the same grid, so you can jump between "everything" and "the client's picks" without losing the sort.
+
+**Sort by** name, date added, rating, favourites, file size or number of versions. Unrated and un-hearted photos always sort last, whatever the direction: an empty value is never at the top of a culling pass.
+
+## Archiving versus rating
+
+They look similar and are not:
+
+- **Rating** is a note to yourself. The photo stays visible to the client.
+- **[Archiving](/culling/archiving/)** hides the photo from the client, the ZIP and the portfolio. The file stays on disk.
+
+A usual pass: rate everything, filter to your three stars or lower, archive the rejects, and leave the four and five stars visible for the client.
+
+## What the client receives
+
+Nothing about this. The shared page has hearts and only hearts: no stars, no rating filter, and no rating value in the API payload. If the client hearts a photo, it lands as five stars for you, and that is the only direction the two systems touch.
+
+## Keep going
+
+- [Culling overview](/culling/): the four-step pass.
+- [Archive a photo](/culling/archiving/): hiding without deleting.
+- [Favorites and the selection limit](/sharing/selection/): the client's side of the same idea.

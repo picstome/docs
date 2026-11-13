@@ -1,0 +1,70 @@
+---
+title: "Invoices in a nutshell"
+description: "How numbering works, when an invoice becomes official, and what the client gets when you send it."
+help:
+  section: money.invoices
+  summary: An invoice is a draft until you issue it. Issue it to get a number and a PDF; the client gets a public link.
+  appRoutes: [invoices, invoices.create, invoices.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="money.invoices"
+  summary="An invoice is a draft until you issue it. Issue it to get a number and a PDF; the client gets a public link."
+  routes={['invoices', 'invoices.create', 'invoices.show']}
+/>
+
+import screenshot from '@assets/screens/money-invoices.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Draft, issued, paid
+
+Three states, and only one of them is final:
+
+| State | What it means |
+| --- | --- |
+| **Draft** | You are preparing it. No number, no PDF, editable, deletable. |
+| **Issued** | It has a full number and a PDF. It is a document: editing is limited to the notes and the payment state. |
+| **Paid** | The same document with the payment recorded. |
+
+Issuing is the moment that matters. A draft consumes no number, so you can prepare ten drafts and only the ones you issue take a number.
+
+## Numbering
+
+Numbers follow **series + year + consecutive**, for example `F-2026-0001`. You configure the series in *Invoice settings*.
+
+- Drafts do not consume numbers.
+- The number is assigned when you issue, in order, with no gaps.
+- You can edit the printed number once, at issue time, to match a format you already use (`INV-0042`, `2026/0042`). The internal series/year/consecutive and the verification chain are not affected.
+- Two series are normal: `F` for invoices and `R` for [corrective invoices](/money/vat/).
+
+## What the client receives
+
+An email with a link to a public page, in your branding, with the invoice and a PDF download. No account and no login.
+
+The page can be deactivated. Deactivating it makes the link useless while the invoice stays in your panel.
+
+## The legal part
+
+Every invoice keeps a **snapshot** of your fiscal data and the client's at the moment of issue. Changing your address or the client's data later never rewrites an invoice already issued.
+
+The PDF carries a verification link to a public page with a fingerprint, so anyone can confirm the document has not been altered.
+
+Picstome is not a certified invoicing system (it does not print VERI*FACTU or the AEAT QR). It produces correct invoices; it is not a substitute for a homologated program if the law requires one in your case.
+
+## Sending and reminders
+
+- The invoice can be sent by email from the invoice page.
+- The client download is a PDF regardless of the device.
+- The payment state is manual unless the invoice is paid through Stripe, in which case it is marked automatically.
+
+## Monthly limit
+
+The free plan includes one invoice per month. Drafts count when they are issued, so a month with only drafts consumes nothing.
+
+## Related
+
+- [VAT, exemptions and corrective invoices](/money/vat/)
+- [Getting paid with Stripe](/money/stripe/)

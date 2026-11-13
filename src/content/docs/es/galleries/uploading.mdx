@@ -1,0 +1,59 @@
+---
+title: "Subir fotos"
+description: "Qué formatos se aceptan, cuánto puede pesar un archivo y qué ocurre mientras una subida se está procesando."
+help:
+  section: galleries.uploading
+  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue si cierras la pestaña.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="galleries.uploading"
+  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue si cierras la pestaña."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/galleries-uploading-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Qué puedes subir
+
+| Tipo | Formatos |
+| --- | --- |
+| Imágenes | JPG, JPEG, PNG, TIFF |
+| RAW | CR2, CR3, NEF, ARW, DNG, ORF, RW2, PEF, SRW, MOS, MRW, 3FR |
+| Vídeo | MP4, WEBM, OGG |
+| Documentos | PDF |
+
+El límite es de **5 GB por archivo**. Lo que lo supere se omite con un aviso que dice qué archivos se han quedado fuera; el resto del lote se sube igual.
+
+## Qué pasa después de subir
+
+Subir y procesar son dos pasos distintos, y aquí empieza el lío:
+
+1. El archivo llega al almacenamiento.
+2. Se procesa: se redimensiona, se genera una miniatura pequeña para la cuadrícula y los RAW se convierten a JPEG.
+3. La foto aparece en la galería.
+
+Mientras ocurre, la foto se muestra como *procesando*. Si recargas la página la lista es correcta, pero una foto puede tardar unos segundos en aparecer con su miniatura. Un vídeo grande tarda más que una foto.
+
+## Los duplicados se convierten en versiones
+
+Si subes un archivo cuyo nombre ya existe en la galería, Picstome **no** sustituye el anterior en silencio. Te pregunta. Puedes [guardarlo como versión nueva](/es/galleries/file-versions/), reemplazar la actual u omitirlo.
+
+En los RAW el versionado es automático: `IMG_0001.CR2` y un `IMG_0001.JPG` posterior comparten la misma identidad.
+
+## La subida no depende de la pestaña
+
+Puedes irte a otra sección mientras se suben archivos. La transferencia continúa en el servidor y la galería muestra el resultado cuando vuelves. Cerrar el navegador entero es distinto: la cola de subida vive en la página, así que un lote a medias se detiene.
+
+Para reportajes muy grandes, [la subida desde cámara](/es/camera/direct-upload/) es mejor camino que arrastrar archivos al navegador.
+
+## Cuando se rechaza una subida
+
+- **Archivos demasiado grandes:** superan el límite de 5 GB por archivo.
+- **Tipo no compatible:** la extensión no está en la lista de arriba.
+- **Sin almacenamiento:** al plan no le queda espacio. Libera o mejora; no se guarda nada a medias.
+- **Límite de píxeles:** con *tamaño original* activo, la galería rechaza imágenes por encima del máximo de píxeles. Desactívalo en esa galería si necesitas conservar archivos enormes.

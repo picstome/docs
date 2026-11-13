@@ -1,0 +1,71 @@
+---
+title: "Culling (selección)"
+description: "De 800 fotos entregadas a las que importan. Valora, filtra y archiva dentro de tu galería sin salir de Picstome."
+help:
+  section: culling.overview
+  summary: La criba es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="culling.overview"
+  summary="La criba es tu revisión privada de una galería. Valoras con el teclado, filtras y archivas lo que el cliente no debe ver."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/culling-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="Una galería del panel con seis fotos de boda, las estrellas de valoración en la esquina de cada miniatura y las pestañas Fotos, Favoritos y Comentarios" caption="La cuadrícula de la galería es donde empieza la criba: desde aquí se abre, valora y filtra cada foto." />
+{/* media:end */}
+
+
+La **criba** es la pasada que haces antes de que el cliente vea nada: miras cada foto, decides cuáles merecen quedarse y quitas de la vista el resto. En Picstome todo ocurre dentro de la galería, con el teclado, y nada de lo que hagas aquí lo ve el cliente.
+
+## Lo que ve el cliente
+
+Nada, salvo que tú quieras. Tus estrellas, tus valoraciones y tus filtros existen solo en tu panel. El cliente ve las fotos que hayas dejado visibles y los corazones que él mismo marcó.
+
+| Tus herramientas | Las ve el cliente |
+| --- | --- |
+| Estrellas del 1 al 5 | Nunca |
+| Filtro por valoración y orden | Nunca |
+| Archivar | No: la foto desaparece de su galería |
+| Corazón | Sí, es el mismo campo que su selección |
+
+## La pasada, en cuatro pasos
+
+1. **Abre la galería y pulsa la primera foto.** El visor ocupa la pantalla y las flechas recorren la galería en el mismo orden que ves en la cuadrícula.
+2. **Valora mientras miras.** Del `1` al `5` puntúan y saltan a la siguiente foto. `0` borra. No tocas el ratón.
+3. **Filtra lo que queda.** Muestra solo tus cuatro y cinco estrellas, o solo las favoritas del cliente, o solo lo que aún no está archivado.
+4. **Archiva el resto.** Las fotos archivadas salen de la galería del cliente y del ZIP de descarga, pero los archivos se quedan en disco.
+
+## La chuleta de atajos
+
+Funcionan en el visor de fotos, estés donde estés de la galería.
+
+| Tecla | Qué hace |
+| --- | --- |
+| `→` / `←` | Siguiente / anterior foto del filtro actual |
+| `1`–`5` | Pone la valoración y pasa a la siguiente |
+| `0` | Borra la valoración y el corazón |
+| `F` | Marca o desmarca la foto como favorita |
+| `A` | Archiva o restaura la foto |
+| `Supr` | Pide borrar la foto para siempre |
+
+Para el cliente, las estrellas y los corazones son la misma escala, y eso se explica en [Valorar y marcar](/es/culling/rating/). Si quieres el detalle de cada gesto, esa es la página.
+
+## Cuando la galería es enorme
+
+Una boda de 3.000 fotos no se criba de una sentada. Filtra por valoración, ordena por nombre o por fecha, cierra el navegador y vuelve: las estrellas se guardan en el momento en que pulsas la tecla, no cuando terminas.
+
+El orden del visor siempre coincide con el orden de la pantalla. Si ordenaste por valoración, las flechas siguen ese orden; si filtraste a cuatro estrellas, pulsar `→` solo recorre fotos de cuatro estrellas.
+
+## Qué viene después
+
+- [Valorar y marcar](/es/culling/rating/): las estrellas, el teclado y los filtros que se construyen encima.
+- [Archivar una foto](/es/culling/archiving/): la diferencia entre ocultar y borrar.
+- [El enlace para tu cliente](/es/sharing/client-link/): qué pasa al otro lado cuando terminas.

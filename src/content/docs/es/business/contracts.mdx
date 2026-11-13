@@ -1,0 +1,66 @@
+---
+title: "Plantillas y firmas"
+description: "La diferencia entre una plantilla y un contrato enviado, cómo firma el cliente y qué pasa con el PDF."
+help:
+  section: business.contracts
+  summary: Una plantilla es texto reutilizable. Un contrato es una copia enviada a un cliente, firmada en el navegador y guardada como PDF.
+  appRoutes: [contracts, contracts.show, contract-templates]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="business.contracts"
+  summary="Una plantilla es texto reutilizable. Un contrato es una copia enviada a un cliente, firmada en el navegador y guardada como PDF."
+  routes={['contracts', 'contracts.show', 'contract-templates']}
+/>
+
+import screenshot from '@assets/screens/business-contracts-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Plantilla o contrato
+
+Este es el concepto que más confusiones crea:
+
+| | Plantilla | Contrato |
+| --- | --- | --- |
+| Qué es | Texto reutilizable, sin cliente asignado | Una copia de una plantilla para un cliente |
+| Editable tras enviarlo | Sí, y no cambia nada de lo ya enviado | No, queda congelado |
+| Tiene firma | No | Sí |
+| Tiene PDF | No | Sí |
+
+Edita la plantilla cuando quieras; los contratos nuevos toman el texto nuevo. Los contratos ya enviados conservan el texto que tenían.
+
+## Enviar uno
+
+<Steps>
+
+1. **Crea el contrato** y elige una plantilla. El texto se copia al contrato.
+2. **Rellena los datos:** cliente, sesión, precio y lo que la plantilla espere que completes.
+3. **Envía el enlace de firma.** El cliente lo abre en el navegador, lee, firma con el ratón o con el dedo y confirma.
+4. **Se genera el PDF** con las dos firmas y se guarda en el contrato. Puedes descargarlo cuando quieras.
+
+</Steps>
+
+## Qué se encuentra el cliente
+
+Una página limpia con el texto del contrato, tu marca, el precio y una zona de firma. Sin cuenta. Cuando firma, recibe el documento firmado al momento.
+
+Hay un segundo camino de firma para dos firmantes: firmas tú primero y luego el cliente. El orden queda registrado en el PDF.
+
+## El PDF es el documento
+
+El PDF se genera cuando se firma el contrato, no cuando se crea, y queda pegado al contrato. Descargarlo más tarde da el mismo archivo, así que puedes archivarlo o adjuntarlo a un email sin regenerar nada.
+
+Si editas el contrato antes de firmarlo, el PDF aún no existe y el cliente ve el texto actualizado. Una vez firmado, la edición se desactiva.
+
+## Límite mensual
+
+El plan gratuito incluye un contrato al mes. El límite cuenta contratos **enviados**, no plantillas, y se reinicia con el mes natural. Las plantillas son ilimitadas en todos los planes.
+
+## Dónde encontrar cada cosa
+
+- *Contratos* lista todo lo que has enviado, con su estado (borrador, enviado, firmado).
+- *Plantillas de contrato* es donde vive el texto reutilizable.
+- La ficha del cliente muestra los contratos vinculados a ese cliente.

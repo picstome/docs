@@ -1,0 +1,56 @@
+---
+title: "Archivar una foto"
+description: "Archivar oculta una foto al cliente sin borrar el archivo. Restaurarla es instantáneo; borrar las archivadas es para siempre."
+help:
+  section: culling.archiving
+  summary: Archivar oculta una foto al cliente pero conserva el archivo. Restaurarla es inmediato; borrar las archivadas es definitivo.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="culling.archiving"
+  summary="Archivar oculta una foto al cliente pero conserva el archivo. Restaurarla es inmediato; borrar las archivadas es definitivo."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/culling-archiving-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="Cuadrícula de galería con la pestaña de fotos activa y la acción de archivar disponible en el visor" caption="Archivar quita una foto de la vista del cliente sin borrar el archivo." />
+{/* media:end */}
+
+## Archivar no es borrar
+
+Es la distinción más importante de una galería:
+
+| | Archivar | Borrar |
+| --- | --- | --- |
+| La foto la ve el cliente | No | No |
+| El archivo en disco | Se conserva | Se elimina |
+| Se puede deshacer | Sí, al instante | No |
+| Cuenta en el almacenamiento | Sí | No |
+
+Archiva una foto cuando la quieras fuera de la vista del cliente por ahora: un duplicado, una foto con los ojos cerrados, una toma que aún quieres conservar, una foto para el archivo. No hay que volver a subir nada y no se pierde nada.
+
+Borra una foto solo cuando estés seguro. Elimina el archivo y el registro.
+
+## Qué nota el cliente
+
+Solo la ausencia. Las fotos archivadas desaparecen de la galería compartida, del ZIP de descarga y de la cuadrícula del porfolio, y su página devuelve un *no encontrado*. A nadie le llega un email diciendo que has archivado una foto.
+
+## Dónde viven las archivadas
+
+El propietario ve una pestaña **Archivadas** en la galería, justo después de *Fotos*, y solo mientras haya al menos una archivada. Desde ahí puedes revisar, restaurar o borrar.
+
+El visor del fotógrafo tiene el atajo `A`, que alterna la foto actual. Si lo pulsas en una foto viva, la archiva y salta a la siguiente; si lo pulsas en la pestaña de archivadas, la restaura.
+
+## Borrar todas las archivadas
+
+La pestaña de archivadas tiene la acción **Borrar todas las archivadas**. Es a propósito la única acción destructiva de la galería que avisa en mayúsculas: elimina todas las fotos archivadas y sus archivos de forma permanente. Úsala para terminar una limpieza, nunca como atajo para vaciar la pestaña.
+
+## El caso típico
+
+Entregaste 400 fotos, el cliente eligió 60 y el resto es ruido. Archivar las 340 sobrantes las oculta al cliente sin volver a subir nada, y puedes restaurar cualquiera si el cliente pide "esa del árbol".

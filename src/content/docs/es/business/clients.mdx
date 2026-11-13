@@ -1,0 +1,58 @@
+---
+title: "Fichas de clientes"
+description: "Qué guarda un cliente, por qué los datos fiscales importan antes de la primera factura y qué ve el cliente en su portal privado."
+help:
+  section: business.clients
+  summary: Un cliente agrupa galerías, contratos y facturas, y guarda los datos fiscales que necesitan tus facturas.
+  appRoutes: [customers, customers.show, clients.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="business.clients"
+  summary="Un cliente agrupa galerías, contratos y facturas, y guarda los datos fiscales que necesitan tus facturas."
+  routes={['customers', 'customers.show', 'clients.show']}
+/>
+
+import screenshot from '@assets/screens/business-clients-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Un registro, todo colgando de él
+
+Un cliente es el hilo común: cada galería, contrato y factura puede apuntar a uno. Eso es lo que hace posible el portal del cliente y el historial de facturas.
+
+Un cliente guarda:
+
+- el **nombre** que usas internamente y la **razón social** que va en las facturas;
+- **NIF, dirección, ciudad, provincia, código postal y país**, necesarios para emitir una factura completa;
+- datos de contacto, teléfono y cumpleaños (el cumpleaños alimenta el aviso del panel);
+- las galerías, contratos y facturas vinculados.
+
+El NIF es único por equipo, así que no puedes crear dos clientes con el mismo por error.
+
+## El portal del cliente
+
+Cada cliente tiene un enlace privado que lista **todas** sus galerías compartidas en una sola página. Es lo que mandas a un cliente que tiene tres sesiones contigo este año: un enlace en lugar de tres.
+
+Qué muestra el portal:
+
+- todas las galerías compartidas de ese cliente;
+- solo las galerías cuya contraseña ya se ha introducido;
+- una página con tu marca, tu logo y tus colores.
+
+Qué no muestra nunca: facturas, contratos, tus notas internas, otros clientes ni el panel.
+
+## Los datos fiscales, antes de necesitarlos
+
+Rellena los datos legales **antes** de crear la factura, no después. Una factura emitida congela una copia de los datos del cliente: corregir el cliente más tarde no cambia una factura ya emitida. Para arreglarlo necesitas una [factura rectificativa](/es/money/vat/).
+
+Para un particular, el NIF puede ser su DNI. Para una empresa es el CIF/NIF y la razón social debe coincidir con el registro.
+
+## Cumpleaños y seguimiento
+
+El panel lista los clientes que cumplen años en los próximos días. Es una función pequeña a propósito: un recordatorio, no una campaña de marketing. No se envía nada automáticamente.
+
+## Borrar un cliente
+
+Borrar un cliente no borra las galerías, contratos o facturas ya creados: cada uno conserva su propia copia de los datos. El registro del cliente desaparece de tus listas.

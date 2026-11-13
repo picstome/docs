@@ -1,0 +1,66 @@
+---
+title: "Picstome Sync, Rater y Photo Stats"
+description: "Qué hacen las apps de escritorio, cuál instalar y cómo se conectan a tu panel."
+help:
+  section: camera.desktop-apps
+  summary: Sync descarga y sube galerías sin ZIP, Rater hace la criba con el teclado y Photo Stats lee tus metadatos.
+  appRoutes: [settings.apps, galleries, tools.calculator]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="camera.desktop-apps"
+  summary="Sync descarga y sube galerías sin ZIP, Rater hace la criba con el teclado y Photo Stats lee tus metadatos."
+  routes={['settings.apps', 'galleries', 'tools.calculator']}
+/>
+
+## Tres apps, tres trabajos
+
+| App | Qué hace | Dónde conseguirla |
+| --- | --- | --- |
+| **Picstome Sync** | Mantiene una galería sincronizada con una carpeta del ordenador: descargar, editar y subir sin ZIP | Releases de GitHub |
+| **Picstome Rater** | Abre tus favoritas y las valora con el teclado | Releases de GitHub |
+| **Photo Stats** | Lee los metadatos de un grupo de fotos y enseña qué equipo y ajustes usas de verdad | picstome.com |
+
+Ninguna sustituye al panel. Quitan la parte aburrida: descomprimir un ZIP, abrir una carpeta, subir archivo a archivo.
+
+## Cómo se conectan
+
+Las apps de escritorio usan un **token de acceso personal**, no tu contraseña.
+
+1. Abre *Ajustes → Apps conectadas* en el panel.
+2. Crea un token y cópialo una vez (no se vuelve a mostrar).
+3. Pégalo en la app cuando te pida el servidor y el token.
+
+Puedes revocar un token en cualquier momento desde la misma página. Revocarlo desconecta la app al instante; no se borra nada.
+
+## Picstome Sync
+
+Asocia una galería a una carpeta local:
+
+- **Descargar:** baja la versión actual de cada foto y se salta las que ya tienes.
+- **Subir:** suelta un archivo corregido con el mismo nombre y se convierte en una [versión nueva](/es/galleries/file-versions/), no en un duplicado.
+- **Sin ZIP:** la app baja los archivos uno a uno, así una galería de 40 GB se puede reanudar después de una interrupción.
+
+Es el camino recomendado para un retocador o para una entrega que vas a editar durante varios días.
+
+## Rater
+
+Una ventana de criba: tus favoritas a un lado y el teclado al otro. Escribe la misma [valoración](/es/sharing/ratings/) del 1 al 5 que escribe el panel, así que los resultados aparecen en la galería de inmediato.
+
+Es más rápido que el navegador en sesiones largas porque precarga las imágenes y no dibuja el resto del panel.
+
+## Photo Stats
+
+Apúntalo a una carpeta y produce un resumen de tus metadatos: distancias focales, diafragmas, ISO, distribución de cámaras y objetivos. Útil para revisar el porfolio o para responder "¿qué objetivo uso de verdad?".
+
+Lee los archivos en local; no sube tus fotos a ningún sitio.
+
+## ¿Cuál necesito?
+
+- Entregas galerías y editas después: **Sync**.
+- Haces la criba de los clientes cada semana: **Rater**.
+- Tienes curiosidad por tus propias costumbres al disparar: **Photo Stats**.
+
+Instalar las tres no molesta; comparten el mismo token y ninguna modifica tus fotos sin preguntar.

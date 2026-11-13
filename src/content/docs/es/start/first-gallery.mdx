@@ -1,0 +1,57 @@
+---
+title: "Tu primera galería"
+description: "El camino más corto desde un panel vacío hasta que tu cliente abre sus fotos. Crear la galería, subir, compartir y listo."
+help:
+  section: start.first-gallery
+  summary: Crea una galería, sube las fotos y comparte el enlace. El cliente la abre sin crear ninguna cuenta.
+  appRoutes: [galleries, galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="start.first-gallery"
+  summary="Crea una galería, sube las fotos y comparte el enlace. El cliente la abre sin crear ninguna cuenta."
+  routes={['galleries', 'galleries.show']}
+/>
+
+## El flujo completo
+
+<Steps>
+
+1. **Crea la galería.** En *Galerías*, pulsa el botón de crear, ponle nombre y, si quieres, asígnala a una sesión y elige fecha de caducidad.
+
+2. **Sube las fotos.** Arrastra los archivos a la galería. La subida va en segundo plano: puedes salir de la página y volver.
+
+3. **Compártela.** Abre la pestaña *Compartir*, activa el enlace y cópialo. Ese enlace es lo que abre tu cliente.
+
+4. **Deja que tu cliente trabaje.** Abre el enlace en cualquier navegador, sin cuenta y sin app. Puede marcar favoritas, comentar o descargar, según lo que hayas activado.
+
+5. **Lee el resultado.** Las favoritas aparecen en la pestaña *Favoritos* de la galería. Desde ahí puedes exportar la lista de nombres de archivo.
+
+</Steps>
+
+## Las tres decisiones que importan
+
+Casi todos los líos de la primera galería vienen de tres interruptores. El resto tiene un valor por defecto sensato.
+
+| Interruptor | Qué cambia |
+| --- | --- |
+| **[Tamaño original](/es/galleries/original-size/)** | Si la galería guarda los archivos completos o versiones para web. |
+| **[Límite de selección](/es/sharing/selection/)** | Si el cliente puede marcar un máximo de fotos. |
+| **[Descarga](/es/galleries/downloads/)** | Si el cliente puede descargar fotos sueltas o un ZIP de toda la galería. |
+
+## Lo que recibe tu cliente
+
+Nada parecido a un formulario de acceso. El enlace abre una página con tu logo, el nombre de la galería y las fotos. Si la protegiste con contraseña, la escribe una vez y el navegador la recuerda para esa galería.
+
+No hay registro, ni confirmación por email, ni app que instalar. Si el cliente pierde el enlace, te lo puede pedir otra vez: al volver a compartir la galería se reutiliza el mismo.
+
+## Dudas típicas de la primera vez
+
+**¿Tengo que subir los RAW?** No. Sube el JPEG/PNG/TIFF que quieras mostrar, o deja que la cámara envíe el JPEG por FTP. Los RAW se aceptan, pero pesan mucho y el cliente nunca los descarga desde una galería compartida.
+
+**¿Puedo cambiar las fotos después de enviar el enlace?** Sí. Añadir, reemplazar o archivar fotos actualiza la galería que ve el cliente. Una foto archivada desaparece de su vista al momento.
+
+**¿Qué pasa cuando caduca la galería?** El cliente ya no puede abrirla y los archivos se eliminan. Los plazos están en el [artículo de planes](/es/start/plans-and-storage/).

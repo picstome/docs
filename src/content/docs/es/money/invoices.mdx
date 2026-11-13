@@ -1,0 +1,70 @@
+---
+title: "Facturas en resumen"
+description: "Cómo funciona la numeración, cuándo una factura pasa a ser oficial y qué recibe el cliente cuando la envías."
+help:
+  section: money.invoices
+  summary: Una factura es un borrador hasta que la emites. Al emitirla recibe número y PDF; el cliente recibe un enlace público.
+  appRoutes: [invoices, invoices.create, invoices.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="money.invoices"
+  summary="Una factura es un borrador hasta que la emites. Al emitirla recibe número y PDF; el cliente recibe un enlace público."
+  routes={['invoices', 'invoices.create', 'invoices.show']}
+/>
+
+import screenshot from '@assets/screens/money-invoices-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Borrador, emitida, pagada
+
+Tres estados, y solo uno es definitivo:
+
+| Estado | Qué significa |
+| --- | --- |
+| **Borrador** | La estás preparando. Sin número, sin PDF, editable, borrable. |
+| **Emitida** | Tiene número completo y PDF. Es un documento: la edición se limita a las notas y al estado de pago. |
+| **Pagada** | El mismo documento con el pago registrado. |
+
+Emitir es el momento que importa. Un borrador no consume número, así que puedes preparar diez borradores y solo los que emites toman número.
+
+## Numeración
+
+Los números siguen el patrón **serie + año + consecutivo**, por ejemplo `F-2026-0001`. La serie se configura en *Ajustes de facturación*.
+
+- Los borradores no consumen números.
+- El número se asigna al emitir, en orden, sin huecos.
+- Puedes editar el número impreso una vez, al emitir, para que coincida con un formato que ya uses (`INV-0042`, `2026/0042`). La serie, el año y el consecutivo internos y la cadena de verificación no se ven afectados.
+- Dos series son lo normal: `F` para facturas y `R` para [rectificativas](/es/money/vat/).
+
+## Qué recibe el cliente
+
+Un email con un enlace a una página pública, con tu marca, la factura y la descarga del PDF. Sin cuenta y sin login.
+
+La página se puede desactivar. Desactivarla inutiliza el enlace mientras la factura sigue en tu panel.
+
+## La parte legal
+
+Cada factura guarda una **copia** de tus datos fiscales y de los del cliente en el momento de emitirla. Cambiar tu dirección o los datos del cliente después nunca reescribe una factura ya emitida.
+
+El PDF lleva un enlace de verificación a una página pública con una huella, para que cualquiera pueda confirmar que el documento no se ha alterado.
+
+Picstome no es un sistema de facturación homologado (no imprime VERI*FACTU ni el QR de la AEAT). Produce facturas correctas; no sustituye a un programa homologado si la ley te lo exige en tu caso.
+
+## Envío y recordatorios
+
+- La factura se puede enviar por email desde la página de la factura.
+- Lo que descarga el cliente es un PDF, sea cual sea el dispositivo.
+- El estado de pago es manual salvo que la factura se pague por Stripe, en cuyo caso se marca solo.
+
+## Límite mensual
+
+El plan gratuito incluye una factura al mes. Los borradores cuentan al emitirse, así que un mes solo con borradores no consume nada.
+
+## Relacionado
+
+- [IVA, exenciones y rectificativas](/es/money/vat/)
+- [Cobrar con Stripe](/es/money/stripe/)

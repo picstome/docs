@@ -1,0 +1,197 @@
+/*
+ * Picstome brand layer on top of Starlight.
+ *
+ * Starlight exposes its theme through `--sl-*` custom properties, declared on
+ * `:root[data-theme='light']` and `:root[data-theme='dark']`. We remap those
+ * tokens to the product palette from `resources/css/app.css` in the app repo, so
+ * the docs look like the app instead of like a generic documentation theme.
+ *
+ * Note `--sl-color-white` and `--sl-color-black` are contrast tokens, not literal
+ * colours: in light mode "white" is the ink used on light surfaces and "black"
+ * is the page background.
+ */
+
+:root,
+:root[data-theme='light'] {
+  --sl-font:
+    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --sl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Contrast + neutral ramp */
+  --sl-color-white: #322f30;
+  --sl-color-gray-1: #2a2625;
+  --sl-color-gray-2: #3f3b3c;
+  --sl-color-gray-3: #5f5a5b;
+  --sl-color-gray-4: #7d7879;
+  --sl-color-gray-5: #d9ded5;
+  --sl-color-gray-6: #eef1ea;
+  --sl-color-gray-7: #f5f7f1;
+  --sl-color-black: #fbfcf9;
+
+  /* Brand green as the accent, deep enough for AA text on paper */
+  --sl-color-accent-low: #d7eae4;
+  --sl-color-accent: #316d61;
+  --sl-color-accent-high: #1e3e37;
+
+  --sl-color-text: #322f30;
+  --sl-color-text-accent: #27564c;
+  --sl-color-text-invert: #fff9ec;
+
+  --sl-color-bg: #fbfcf9;
+  --sl-color-bg-nav: #fff9ec;
+  --sl-color-bg-sidebar: #fbfcf9;
+  --sl-color-bg-inline-code: #eef4e6;
+  --sl-color-bg-accent: #316d61;
+  --sl-color-hairline-light: #e3e9e0;
+  --sl-color-hairline: #eef1ea;
+  --sl-color-hairline-shade: #dfe6da;
+
+  --sl-color-backdrop-overlay: rgb(50 47 48 / 0.55);
+}
+
+:root[data-theme='dark'] {
+  --sl-color-white: #fff9ec;
+  --sl-color-gray-1: #f3f6ef;
+  --sl-color-gray-2: #e2e9dc;
+  --sl-color-gray-3: #b9c6b4;
+  --sl-color-gray-4: #8b9a86;
+  --sl-color-gray-5: #2f403a;
+  --sl-color-gray-6: #24302b;
+  --sl-color-gray-7: #1f2925;
+  --sl-color-black: #101614;
+
+  --sl-color-accent-low: #244d45;
+  --sl-color-accent: #84baac;
+  --sl-color-accent-high: #d7eae4;
+
+  --sl-color-text: #f3f6ef;
+  --sl-color-text-accent: #c6d8af;
+  --sl-color-text-invert: #161e1b;
+
+  --sl-color-bg: #1b2320;
+  --sl-color-bg-nav: #161e1b;
+  --sl-color-bg-sidebar: #161e1b;
+  --sl-color-bg-inline-code: #244d45;
+  --sl-color-bg-accent: #316d61;
+  --sl-color-hairline-light: #2f403a;
+  --sl-color-hairline: #24302b;
+  --sl-color-hairline-shade: #101614;
+
+  --sl-color-backdrop-overlay: rgb(16 22 20 / 0.7);
+}
+
+/* The splash hero uses `--sl-color-white` (ink) on the paper background. */
+:root[data-theme='light'] .hero h1 {
+  color: #27564c;
+}
+
+:root[data-theme='dark'] .hero h1 {
+  color: #c6d8af;
+}
+
+.site-title img {
+  max-height: 2.25rem;
+  width: auto;
+}
+
+.sl-markdown-content {
+  --sl-text-body: 1rem;
+}
+
+.sl-markdown-content :is(h2, h3, h4) {
+  color: var(--sl-color-gray-1);
+  letter-spacing: -0.01em;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  text-underline-offset: 2px;
+}
+
+/* Tables carry the “what the client sees” comparisons. */
+.sl-markdown-content table {
+  font-size: 0.9375rem;
+}
+
+.sl-markdown-content table th {
+  background-color: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-gray-1);
+}
+
+/* Help metadata block rendered by the HelpMeta component. */
+.ps-help-meta {
+  border: 1px solid var(--sl-color-hairline-light);
+  border-left: 4px solid var(--sl-color-accent);
+  border-radius: 0.75rem;
+  background-color: var(--sl-color-bg-inline-code);
+  padding: 0.9rem 1rem;
+}
+
+.ps-help-meta p {
+  margin: 0;
+}
+
+/* Video slot: always letterboxed 16:9 so the poster never jumps on load. */
+.ps-video {
+  border-radius: 0.75rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  overflow: hidden;
+  background-color: #101614;
+}
+
+.ps-video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+
+/* Status board */
+.ps-status-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 50rem) {
+  .ps-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ps-status-card {
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ps-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 9999px;
+  background-color: var(--sl-color-gray-4);
+  flex: none;
+  margin-top: 0.35rem;
+}
+
+.ps-dot[data-state='up'] {
+  background-color: #46b17b;
+}
+
+.ps-dot[data-state='degraded'] {
+  background-color: #e8b44a;
+}
+
+.ps-dot[data-state='down'] {
+  background-color: #d95746;
+}
+
+/* Print: drop the chrome, keep the article readable. */
+@media print {
+  .ps-video {
+    display: none;
+  }
+}

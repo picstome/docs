@@ -1,0 +1,65 @@
+---
+title: "Descargas de la galería"
+description: "Qué entra en el ZIP, por qué deja fuera los RAW y las versiones antiguas, y qué puede descargar el cliente foto a foto."
+help:
+  section: sharing.downloads
+  summary: El ZIP lleva la versión actual de cada foto procesada, vídeo y PDF. Sin RAW y sin versiones antiguas.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="sharing.downloads"
+  summary="El ZIP lleva la versión actual de cada foto procesada, vídeo y PDF. Sin RAW y sin versiones antiguas."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-downloads-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pestaña Compartir con el interruptor de descarga activo y la entrada de descarga de la galería" caption="Las descargas son un interruptor: si está apagado, el cliente no tiene botón de descarga." />
+{/* media:end */}
+
+## Dos formas de descargar
+
+- **Una foto:** el botón de descarga del visor. El navegador recibe el archivo directamente.
+- **La galería entera:** la pestaña *Descargar* prepara un único ZIP y te da un enlace cuando está listo.
+
+Las dos respetan lo que permitiste al compartir: si las descargas están desactivadas para el cliente, no existe ninguna de las dos para él.
+
+## Qué hay dentro del ZIP
+
+Exactamente una entrada por foto, con la **versión actual**:
+
+- imágenes procesadas (JPG, PNG, TIFF)
+- vídeos (MP4, WEBM, OGG)
+- PDF
+
+Nunca incluye:
+
+- **Archivos RAW.** Si un RAW se procesó, lo que entra es el JPEG extraído.
+- **Versiones históricas.** Solo la versión que el cliente ve ahora.
+- **Fotos archivadas.** Están ocultas al cliente en todas partes, también en el ZIP.
+- **Fotos que aún se están procesando.** Aparecen cuando termina el proceso; vuelve a descargar para incluirlas.
+
+## Por qué el ZIP no es instantáneo
+
+Montar un ZIP de 800 fotos lleva tiempo y disco. Picstome lo hace en un worker de cola, sube el resultado y lo conserva **7 días**. Hasta entonces, pedir la misma galería reutiliza el archivo en lugar de volver a montarlo.
+
+Cambiar una sola foto invalida el ZIP: la siguiente descarga lo reconstruye con el archivo nuevo.
+
+## Tamaño y espacio
+
+Los ZIP son archivos temporales guardados en **tu** almacenamiento. Cuentan en tu plan mientras existen y se borran automáticamente al caducar.
+
+Si estás cerca del límite, prefiere descargas individuales o pide al cliente que descargue antes de empezar una subida grande. También existe la opción de mantener desactivada la preparación de ZIP si prefieres no gastar almacenamiento en ella.
+
+## Un aviso para móviles
+
+En iPhone y iPad, la app Archivos necesita espacio libre extra para descomprimir el ZIP. Si el ZIP no se abre, descarga las fotos sueltas. La página compartida avisa al cliente de esto.
+
+## Reanudar descargas
+
+Las descargas las sirve el proveedor de almacenamiento, no PHP, así que un vídeo grande se puede pausar y reanudar desde el navegador. El enlace caduca (10 minutos para fotos, 6 horas para vídeos); si caduca a mitad, la descarga en curso sigue, pero un intento nuevo necesita otro clic.

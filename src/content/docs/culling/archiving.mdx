@@ -1,0 +1,56 @@
+---
+title: "Archive a photo"
+description: "Archiving hides a photo from the client without deleting the file. Restoring is instant; deleting archived photos is forever."
+help:
+  section: culling.archiving
+  summary: Archiving hides a photo from clients but keeps the file. Restoring is instant, deleting archived photos is permanent.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="culling.archiving"
+  summary="Archiving hides a photo from clients but keeps the file. Restoring is instant, deleting archived photos is permanent."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/culling-archiving.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="Gallery grid with the photos tab active and the archive action available in the viewer" caption="Archiving removes a photo from the client view without deleting the file." />
+{/* media:end */}
+
+## Archive is not delete
+
+This is the single most important distinction in a gallery:
+
+| | Archive | Delete |
+| --- | --- | --- |
+| Photo visible to client | No | No |
+| File on disk | Kept | Removed |
+| Can be undone | Yes, instantly | No |
+| Counts against storage | Yes | No |
+
+Archive a photo when you want it out of the client's view for now: a duplicate, a blink, a shot you may still want, a photo kept for the record. Nothing is uploaded again and nothing is lost.
+
+Delete a photo only when you are sure. It removes the file and the row.
+
+## What the client notices
+
+Nothing but the absence. Archived photos disappear from the shared gallery, from the ZIP download, from the portfolio grid, and their photo page returns a *not found*. Nobody gets an email saying a photo was archived.
+
+## Where archived photos live
+
+The owner sees an **Archived** tab in the gallery, right after *Photos*, and only while at least one photo is archived. From there you can review, restore or delete.
+
+The photographer viewer has an `A` shortcut that toggles the current photo. Pressing it on a live photo archives it and jumps on; pressing it in the Archived tab restores it.
+
+## Deleting everything archived
+
+The Archived tab has a **Delete all archived photos** action. It is deliberately the only destructive action in the gallery that warns in capitals: it removes every archived photo and its files permanently. Use it to finish a cleanup, never as a quick way to empty the tab.
+
+## Common case
+
+You delivered 400 photos, the client selected 60, and the rest are noise. Archiving the 340 leftovers hides them from the client without re-uploading anything, and you can restore any of them if the client asks for "that one with the tree".

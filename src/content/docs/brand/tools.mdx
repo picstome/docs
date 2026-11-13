@@ -1,0 +1,54 @@
+---
+title: "Tools"
+description: "What the price calculator and the black screen do, and when each one saves you time."
+help:
+  section: brand.tools
+  summary: The calculator turns your costs and hours into a session price. The black screen turns the monitor off without sleeping the computer.
+  appRoutes: [tools.calculator, tools.black-screen]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="brand.tools"
+  summary="The calculator turns your costs and hours into a session price. The black screen turns the monitor off without sleeping the computer."
+  routes={['tools.calculator', 'tools.black-screen']}
+/>
+
+import screenshot from '@assets/screens/brand-tools.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## The session price calculator
+
+Most photographers price a session by intuition and then discover the hourly rate was below minimum wage. The calculator makes the arithmetic explicit:
+
+1. **Fixed monthly costs** — rent, software, insurance, gear depreciation, your salary.
+2. **Session costs** — travel, an assistant, a second shooter, props.
+3. **Equipment** — what you bought for this kind of shoot, amortized.
+4. **Time** — shooting, editing, admin and the hours you actually spend per session.
+5. **Tasks per month** — how many sessions, edits and admin hours you really do.
+
+The output is a suggested session price with the effective hourly rate next to it. If the rate looks low, the price is low, and now you can see why.
+
+VAT and IRPF are applied transparently, so the number you read is the number you can invoice, not a pre-tax guess.
+
+Everything can be reset to defaults from the calculator itself.
+
+## The black screen
+
+Press the button, or `Ctrl+B` / `⌘B` anywhere in the app, and the screen goes fully black. It is meant for:
+
+- cleaning the monitor;
+- using the screen as a light source or a reflector on a shoot;
+- keeping the computer awake without the display on.
+
+Press any key or move the mouse to come back. Nothing is closed, nothing sleeps, and it works from any page in the panel.
+
+## Both are free on every plan
+
+There is no paywall behind these tools. They are part of the app because they are useful during a session, not because they are a product to sell.
+
+## Related
+
+- [Picstome Sync](/camera/desktop-apps/) — the desktop app for gallery synchronization.
+- [Plans and storage](/start/plans-and-storage/) — what the plan does and does not change.

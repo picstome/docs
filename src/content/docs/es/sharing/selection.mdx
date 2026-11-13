@@ -1,0 +1,72 @@
+---
+title: "Favoritos y el límite de selección"
+description: "Cómo marca fotos tu cliente con el corazón, qué bloquea el límite y cómo sacar la lista de nombres de archivo elegidos."
+help:
+  section: sharing.selection
+  summary: El cliente marca fotos con el corazón y tú lees esa lista en la pestaña Favoritos. El límite lo frena en el número que elijas.
+  video: selection-es
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="sharing.selection"
+  summary="El cliente marca fotos con el corazón y tú lees esa lista en la pestaña Favoritos. El límite lo frena en el número que elijas."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-selection-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+import Video from '@components/Video.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pestaña Favoritos mostrando 4 de 40 fotos seleccionadas y el botón de Exportar favoritos" caption="La pestaña Favoritos es donde la selección del cliente se convierte en una lista de archivos." />
+<Video
+  slug="selection-es"
+  alt="El cliente abre el enlace, marca dos fotos con el corazón y el contador pasa de 2 a 4 de 40."
+  caption="El cliente abre el enlace, marca dos fotos con el corazón y el contador pasa de 2 a 4 de 40."
+/>
+{/* media:end */}
+
+## Cómo selecciona el cliente
+
+En una galería compartida con *Seleccionar fotos* activo, cada foto tiene un corazón. El cliente lo pulsa para marcarla y otra vez para quitarla. No hace falta nada más: ni botón de enviar, ni email de confirmación, ni descargar la foto.
+
+La selección se guarda en el momento en que pulsa. Si cierra el navegador, los corazones siguen ahí cuando vuelve.
+
+## Cómo lees tú la selección
+
+En tu panel, la galería tiene una pestaña **Favoritos** con esas mismas fotos. Desde ahí puedes:
+
+- ver el recuento y recorrer la selección;
+- ordenar y filtrar;
+- exportar la lista de **nombres de archivo**, que es lo que pegas en Lightroom o Capture One;
+- añadir favoritos en bloque pegando una lista de nombres, útil cuando el cliente manda la selección por email.
+
+## El límite de selección
+
+El límite es un número que pones al compartir: por ejemplo, "elige tus 40 favoritas". Cuando el cliente lo alcanza:
+
+- el siguiente corazón no se enciende;
+- aparece un aviso explicando que se ha llegado al límite;
+- las fotos ya seleccionadas siguen seleccionadas.
+
+Dos cosas que conviene saber:
+
+- El límite cuenta **favoritos**, no descargas ni visitas.
+- Si has [archivado](/es/galleries/archiving/) algunas de las favoritas del cliente, el recuento baja: las archivadas no cuentan.
+
+Recibes una notificación cuando el cliente llega al límite, así que no tienes que refrescar la galería para enterarte.
+
+## Cambiar el límite después
+
+Puedes subirlo, bajarlo o quitarlo. Bajarlo por debajo de lo que el cliente ya seleccionó no borra su selección; simplemente impide nuevas marcas hasta que quite algunas.
+
+## Favoritos en bloque
+
+La acción en bloque acepta un nombre de archivo por línea. Existe para el cliente que responde con una hoja de cálculo, y también va bien cuando quieres preseleccionar una lista corta para él.
+
+## Lo que el cliente nunca ve
+
+El recuento de favoritos de tu panel, tus notas internas, tus valoraciones con estrellas y la diferencia entre "su corazón" y "tus cinco estrellas". El cliente solo ve corazones.

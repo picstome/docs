@@ -1,0 +1,63 @@
+---
+title: "El enlace para tu cliente"
+description: "Qué ve tu cliente al abrir una galería compartida, por qué no hay cuenta y cómo se controla la página desde la pestaña Compartir."
+help:
+  section: sharing.client-link
+  summary: Un enlace por galería. El cliente lo abre sin cuenta; cada interruptor de Compartir cambia lo que puede hacer en esa página.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="sharing.client-link"
+  summary="Un enlace por galería. El cliente lo abre sin cuenta; cada interruptor de Compartir cambia lo que puede hacer en esa página."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-client-link-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="Una galería compartida abierta como la ve el cliente, con el logo del estudio, el nombre de la galería y las fotos" caption="Sin cuenta y sin app: el enlace abre una página con tu marca y las fotos." />
+{/* media:end */}
+
+## Compartir es un interruptor con opciones
+
+Activar el enlace publica la galería en una dirección. No significa "el cliente puede hacerlo todo": eso lo deciden los demás interruptores.
+
+| Interruptor | Qué añade a la página del cliente |
+| --- | --- |
+| Contraseña | El cliente la escribe una vez para entrar |
+| Fecha de caducidad | El enlace deja de funcionar ese día |
+| Seleccionar fotos | Aparecen los corazones y la selección se guarda para ti |
+| Límite de selección | La selección se detiene en N fotos |
+| Descarga | Descargas sueltas y ZIP de la galería |
+| Marca de agua | Las fotos se muestran con tu marca |
+| Comentarios | El cliente puede comentar, con o sin chinchetas |
+| Descripción | Un bloque de texto sobre las fotos |
+| Versiones | El cliente puede comparar versiones de archivo |
+
+Cada interruptor recuerda tu última elección para la siguiente galería. La contraseña y la descripción nunca se recuerdan.
+
+## Un enlace, siempre el mismo
+
+El enlace se construye con el identificador de la galería, así que no cambia cuando renombras la galería o editas sus fotos. Puedes mandarlo una vez y seguir trabajando.
+
+Renombrar una galería cambia la parte legible de la dirección, pero la dirección antigua redirige a la nueva, así que nadie acaba en un 404.
+
+## Sin cuenta y sin app
+
+El cliente no se registra. Abre el enlace y ya está. No hay recogida de emails, ni recuperación de contraseña, ni tienda de aplicaciones.
+
+La contrapartida: quien tenga el enlace puede abrir la galería. Por eso existe el interruptor de contraseña, y por eso el enlace se manda al cliente, no se publica.
+
+## El portal del cliente
+
+Si vinculas una ficha de cliente a la galería, el cliente tiene una página con **todas** sus galerías compartidas, no solo una. La protección con contraseña se aplica galería a galería: el portal muestra solo las que ya se han desbloqueado.
+
+## Apagarlo
+
+Desactivar el enlace invalida la dirección al momento. La galería, las fotos y los favoritos del cliente siguen en tu panel; solo desaparece la página pública. Al volver a activarlo se reutiliza el mismo enlace.
+
+Todos los interruptores son por galería; solo los valores booleanos se recuerdan para la siguiente.

@@ -1,0 +1,62 @@
+---
+title: "Cobrar con Stripe"
+description: "Qué es Stripe Connect, por qué el onboarding es inevitable y dónde acaba el dinero de verdad."
+help:
+  section: money.stripe
+  summary: Stripe Connect enlaza tu propia cuenta de Stripe. El dinero va directo a tu banco y Picstome nunca lo toca.
+  appRoutes: [payments, stripe.connect.index, public-profile, branding.payments]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="money.stripe"
+  summary="Stripe Connect enlaza tu propia cuenta de Stripe. El dinero va directo a tu banco y Picstome nunca lo toca."
+  routes={['payments', 'stripe.connect.index', 'public-profile', 'branding.payments']}
+/>
+
+import screenshot from '@assets/screens/money-stripe-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## ¿De quién es la cuenta?
+
+**Tuya.** Picstome se conecta a una cuenta de Stripe que te pertenece, mediante Stripe Connect. El cliente paga con tarjeta, Stripe procesa el cobro y el dinero se liquida en tu cuenta bancaria con el calendario habitual de Stripe.
+
+Picstome nunca guarda el dinero ni se lleva un porcentaje del pago. Las comisiones de Stripe son entre Stripe y tú.
+
+## El onboarding no es opcional
+
+Stripe tiene que verificar quién recibe el dinero: identidad, dirección, cuenta bancaria y, según el país, datos fiscales. Eso es el onboarding. Ocurre en las páginas de Stripe, no en Picstome, y se hace en unos minutos.
+
+Hasta que esté completo puedes enviar facturas y contratos, pero no aceptar pagos con tarjeta. La pantalla de Stripe muestra el estado actual y si falta algo.
+
+Si dejas el onboarding a medias, vuelve a la misma pantalla: el estado se lee de Stripe cada vez que carga la página, así que terminar el proceso en otra pestaña se detecta.
+
+## Dónde se puede cobrar
+
+Una vez conectado:
+
+- **Enlaces de pago:** pones un importe y una descripción y mandas el enlace.
+- **Perfil público:** el botón de *aceptar pagos* aparece en tu página de perfil, si lo activas.
+- **Facturas:** una factura se puede pagar con tarjeta cuando Stripe está conectado.
+
+El cliente paga en una página de Stripe con tu logo. Sin cuenta en Picstome.
+
+## Modo de prueba
+
+La pantalla de Stripe tiene un interruptor de **modo de prueba**. Usa claves separadas y una cuenta de prueba, y no se mueve dinero real.
+
+En modo de prueba usa la tarjeta `4242 4242 4242 4242`, cualquier fecha futura y cualquier CVC. Es la forma más segura de comprobar que el botón, la factura y el email de confirmación funcionan antes de enseñárselo a un cliente.
+
+La cuenta de prueba también necesita un onboarding completado (con datos falsos). No afecta a tu cuenta real.
+
+## El límite mensual
+
+El plan gratuito incluye un pago completado al mes. Un checkout abandonado no cuenta. Cuando se alcanza el límite, el botón de pago se oculta al cliente y ve un mensaje neutro, nunca tus datos de facturación.
+
+## Desconectar
+
+Desconectar elimina la cuenta de Stripe de Picstome para el modo actual (prueba o real). Los pagos ya realizados siguen en Stripe y en tu panel. Puedes volver a conectarla cuando quieras.
+
+La tarjeta del cliente nunca se guarda en Picstome: no hay nada que filtrar.

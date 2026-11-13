@@ -1,0 +1,32 @@
+---
+/**
+ * Machine-readable metadata for the in-app help flyout.
+ *
+ * The article is the source of truth: `src/integrations/help-export.mjs` reads
+ * these data attributes from the *built HTML* and emits `api/help-{en,es}.json`,
+ * which the Laravel app commits. Editing the frontmatter is therefore enough to
+ * move, rename or hide a section inside the panel.
+ */
+interface Props {
+  section: string;
+  summary: string;
+  routes?: string[];
+  video?: string;
+  hidden?: boolean;
+}
+
+const { section, summary, routes = [], video, hidden = false } = Astro.props;
+const label = (Astro.currentLocale ?? 'en').startsWith('es') ? 'En el panel' : 'In the panel';
+---
+
+<div
+  class="ps-help-meta not-content"
+  data-help-meta
+  data-help-section={section}
+  data-help-summary={summary}
+  data-help-routes={routes.join(',')}
+  data-help-video={video}
+  data-help-hidden={hidden ? 'true' : 'false'}
+>
+  <p><strong>{label}:</strong> {summary}</p>
+</div>

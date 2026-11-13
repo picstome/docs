@@ -1,0 +1,306 @@
+---
+title: "Instala Picstome en tu servidor"
+description: "Guía paso a paso para instalar Picstome gratis en un servidor Ubuntu, con Nginx, MySQL, PHP, workers de cola y HTTPS."
+help:
+  section: self-hosting
+  summary: Picstome es gratis en tu propio servidor. Este es el proceso completo, desde un VPS vacío hasta tu primer acceso.
+  appRoutes: [admin.system]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="self-hosting"
+  summary="Picstome es gratis en tu propio servidor. Este es el proceso completo, desde un VPS vacío hasta tu primer acceso."
+  routes={['admin.system']}
+/>
+
+Picstome es gratis y de código abierto. Puedes tenerlo en tu propio servidor con **todas las funciones**: galerías, compartir, contratos, facturas, Stripe, subida desde cámara y las apps de escritorio. No hay edición de pago ni funciones bloqueadas.
+
+Lo único que pagas es el servidor y, si quieres, el servicio de instalación que explicamos al final.
+
+## Qué necesitas
+
+Un servidor con **Ubuntu 22.04 o 24.04** y acceso root. El mínimo realista para un estudio pequeño:
+
+| Recurso | Mínimo | Cómodo |
+| --- | --- | --- |
+| CPU | 2 vCPU | 4 vCPU |
+| RAM | 2 GB | 4 GB |
+| Disco | 40 GB | 100 GB o más |
+| Software | PHP 8.3+, MySQL 8 / MariaDB 10.6+, Nginx, Node 20+ | lo mismo |
+
+El procesado de fotos es la parte cara: los RAW y los vídeos grandes necesitan CPU y RAM mientras se convierten. Si prevés ingerir miles de fotos por sesión, coge más que el mínimo.
+
+:::caution[El almacenamiento es el límite real]
+El disco de tu VPS es donde viven las galerías si no usas S3. Un disco de 40 GB se llena rápido con bodas. O dimensionas el disco para un año de trabajo o [usas almacenamiento S3](#usar-almacenamiento-s3) desde el primer día.
+:::
+
+## El camino rápido
+
+Hay un script de instalación que lo hace todo en un servidor Ubuntu recién creado: paquetes, base de datos, Nginx, HTTPS y la app.
+
+```bash
+ssh root@ip-de-tu-servidor
+curl -fsSL https://raw.githubusercontent.com/picstome/picstome/main/scripts/install.sh | bash
+```
+
+Te pregunta el dominio, configura Let's Encrypt e imprime las credenciales de administrador al final. Úsalo si quieres una instalación funcionando en diez minutos y no te importa que un script toque el servidor.
+
+Si prefieres saber exactamente qué está pasando en la máquina, sigue los pasos manuales de abajo. Hacen lo mismo, un comando a la vez.
+
+## Instalación manual
+
+<Steps>
+
+1. **Apunta el dominio al servidor.** Crea un registro `A` para `fotos.tudominio.com` apuntando a la IP del servidor. Hazlo primero: el paso de HTTPS falla sin ello.
+
+2. **Instala los paquetes.**
+
+   ```bash
+   apt update && apt upgrade -y
+   apt install -y nginx mysql-server unzip git supervisor \
+     php8.3-fpm php8.3-cli php8.3-mysql php8.3-mbstring php8.3-xml \
+     php8.3-curl php8.3-zip php8.3-gd php8.3-intl php8.3-imagick
+   ```
+
+   Comprueba con `php -v` que estás en 8.3 o superior.
+
+3. **Crea la base de datos.**
+
+   ```bash
+   mysql -u root -p
+   ```
+
+   ```sql
+   CREATE DATABASE picstome CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE USER 'picstome'@'localhost' IDENTIFIED BY 'una-contrasena-larga-y-aleatoria';
+   GRANT ALL PRIVILEGES ON picstome.* TO 'picstome'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+
+4. **Descarga el código y las dependencias.**
+
+   ```bash
+   cd /var/www
+   git clone https://github.com/picstome/picstome.git
+   cd picstome
+   composer install --no-dev --optimize-autoloader
+   npm ci && npm run build
+   ```
+
+5. **Configura el entorno.**
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+   Luego edita `.env` y pon al menos:
+
+   ```dotenv
+   APP_NAME=Picstome
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://fotos.tudominio.com
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=picstome
+   DB_USERNAME=picstome
+   DB_PASSWORD=una-contrasena-larga-y-aleatoria
+   ```
+
+6. **Crea el esquema y el primer administrador.**
+
+   ```bash
+   php artisan migrate --force
+   php artisan create-admin-user
+   php artisan storage:link
+   ```
+
+7. **Nginx.** Crea `/etc/nginx/sites-available/picstome`:
+
+   ```nginx
+   server {
+       listen 80;
+       server_name fotos.tudominio.com;
+       root /var/www/picstome/public;
+
+       index index.php;
+       client_max_body_size 5120M;   # igual que el límite de 5 GB por archivo de la app
+
+       location / {
+           try_files $uri $uri/ /index.php?$query_string;
+       }
+
+       location ~ \.php$ {
+           include snippets/fastcgi-php.conf;
+           fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+           fastcgi_read_timeout 3600;
+       }
+
+       location ~ /\.(?!well-known).* {
+           deny all;
+       }
+   }
+   ```
+
+   ```bash
+   ln -s /etc/nginx/sites-available/picstome /etc/nginx/sites-enabled/
+   nginx -t && systemctl reload nginx
+   ```
+
+8. **HTTPS.**
+
+   ```bash
+   apt install -y certbot python3-certbot-nginx
+   certbot --nginx -d fotos.tudominio.com
+   ```
+
+9. **El worker de fondo.** Las subidas, la conversión de RAW, los ZIP de galería y los emails pasan por una cola. Sin él, las fotos se quedan en *procesando* para siempre.
+
+   Crea `/etc/supervisor/conf.d/picstome-worker.conf`:
+
+   ```ini
+   [program:picstome-worker]
+   command=php /var/www/picstome/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+   autostart=true
+   autorestart=true
+   user=www-data
+   numprocs=2
+   stdout_logfile=/var/www/picstome/storage/logs/worker.log
+   stopwaitsecs=3600
+   ```
+
+   ```bash
+   supervisorctl reread && supervisorctl update
+   ```
+
+10. **El planificador.** Los recordatorios de caducidad, la limpieza y la purga van con el scheduler de Laravel. Añádelo al crontab de root con `crontab -e`:
+
+    ```text
+    * * * * * cd /var/www/picstome && php artisan schedule:run >> /dev/null 2>&1
+    ```
+
+11. **Permisos y cachés.**
+
+    ```bash
+    chown -R www-data:www-data /var/www/picstome
+    chmod -R 775 storage bootstrap/cache
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+    ```
+
+12. **Entra.** Abre `https://fotos.tudominio.com` con el usuario administrador que creaste y cambia la contraseña inmediatamente.
+
+</Steps>
+
+## Ajustes de PHP que importan
+
+Dos valores de INI provocan la mayoría de las peticiones de soporte del autoalojamiento. Edita `/etc/php/8.3/fpm/php.ini` y reinicia el servicio:
+
+```ini
+upload_max_filesize = 5120M
+post_max_size = 5120M
+max_execution_time = 3600
+memory_limit = 512M
+```
+
+`upload_max_filesize` también tiene que coincidir con `client_max_body_size` de Nginx. Si uno es menor que el otro, las subidas grandes fallan con un error genérico.
+
+Para archivos muy grandes, el que realmente procesa es el worker de cola, así que da a PHP-FPM un `max_execution_time` generoso y mantén `numprocs` en 2 o más.
+
+## Usar almacenamiento S3
+
+El disco local funciona, pero el almacenamiento compatible con S3 (AWS S3, Cloudflare R2, Hetzner, Backblaze B2, MinIO) encaja mejor con fotos: más barato por GB, sin límites de disco y con las descargas servidas directamente por el proveedor.
+
+Pon esto en `.env`:
+
+```dotenv
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=auto
+AWS_BUCKET=picstome
+AWS_ENDPOINT=https://endpoint-de-tu-proveedor
+AWS_USE_PATH_STYLE_ENDPOINT=false
+```
+
+Después ejecuta otra vez `php artisan storage:link` y sube una foto de prueba. El bucket debe ser **privado**: Picstome genera enlaces de corta duración para cada descarga.
+
+## Actualizaciones
+
+No hay actualización automática. Una actualización segura, siempre:
+
+```bash
+cd /var/www/picstome
+php artisan down
+git pull
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+php artisan migrate --force
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+php artisan queue:restart
+php artisan up
+```
+
+`php artisan queue:restart` no es opcional: los workers mantienen el código antiguo en memoria hasta que se reinician.
+
+Haz una copia de la base de datos y de `storage/app` antes de cada actualización. Las migraciones son aditivas, pero una copia es lo que convierte una actualización mala en una tarde mala.
+
+## Copias de seguridad
+
+Tres cosas que copiar, en este orden:
+
+1. **La base de datos** — `mysqldump picstome > picstome.sql` de forma programada.
+2. **`storage/app`** — los archivos que no están en S3. Si usas S3, copia el bucket aparte.
+3. **`.env`** — guarda la clave de la app; sin ella, los valores cifrados son ilegibles.
+
+## Problemas frecuentes
+
+| Síntoma | Causa |
+| --- | --- |
+| Fotos atascadas en *procesando* | El worker no está corriendo. `supervisorctl status`. |
+| 500 en todas las páginas tras actualizar | Cachés obsoletas. `php artisan optimize:clear`. |
+| Fallan las subidas grandes | `client_max_body_size` o `upload_max_filesize` demasiado bajos. |
+| Los emails no llegan | Configura las variables `MAIL_*`; el driver por defecto `log` escribe en `storage/logs`. |
+| La descarga de galería nunca está lista | Worker parado o el disco de archivos lleno. |
+| La cámara conecta pero no aparece nada | La carpeta de entrada o el estado de la cuenta; revisa el diálogo de cámara. |
+
+Los logs están en `storage/logs/laravel.log` y `storage/logs/worker.log`.
+
+## Lista de seguridad
+
+Antes de invitar a un cliente:
+
+- [ ] `APP_ENV=production` y `APP_DEBUG=false`.
+- [ ] La contraseña de administrador no es la de por defecto.
+- [ ] HTTPS activo y la versión HTTP redirige.
+- [ ] La base de datos no es accesible desde internet.
+- [ ] `php artisan about` no muestra el entorno `local`.
+- [ ] Las copias se ejecutan y has restaurado una al menos una vez.
+
+## Te lo instalamos nosotros
+
+Si todo esto no es como quieres pasar una tarde, instalamos Picstome en **tu propio servidor** por **100 €**. El servidor, los datos y las actualizaciones son tuyos; nosotros hacemos la puesta en marcha.
+
+Qué incluye el servicio:
+
+- un servidor Ubuntu limpio configurado con Nginx, PHP, MySQL, HTTPS y el worker de cola;
+- la app instalada y migrada, con tu usuario administrador listo;
+- el almacenamiento configurado (disco local o tu bucket S3);
+- una galería de prueba subida y un enlace compartido verificado de principio a fin;
+- el envío de email comprobado con un envío real;
+- un traspaso breve con las credenciales, el comando de copia y el comando de actualización.
+
+Qué no incluye: el servidor, el dominio, los costes de S3 ni ninguna suscripción de terceros. Escribe a [info@picstome.com](mailto:info@picstome.com) con el proveedor y el tamaño de servidor que tienes en mente.
+
+## Relacionado
+
+- [Planes y almacenamiento](/es/start/plans-and-storage/) — qué cambia entre planes en app.picstome.com.
+- [Picstome Sync, Rater y Photo Stats](/es/camera/desktop-apps/) — las apps de escritorio.
+- [¿Picstome está funcionando?](/status/) — el estado del servicio alojado.

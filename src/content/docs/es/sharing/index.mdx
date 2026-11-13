@@ -1,0 +1,73 @@
+---
+title: "Compartir con clientes"
+description: "Un enlace, sin cuentas. Qué ve tu cliente, qué puede hacer y qué interruptor controla cada cosa."
+help:
+  section: sharing.overview
+  summary: Compartir es un enlace por galería. El cliente lo abre sin cuenta y cada interruptor decide qué puede hacer ahí.
+  appRoutes: [galleries.show, shares.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<HelpMeta
+  section="sharing.overview"
+  summary="Compartir es un enlace por galería. El cliente lo abre sin cuenta y cada interruptor decide qué puede hacer ahí."
+  routes={['galleries.show', 'shares.show']}
+/>
+
+import screenshot from '@assets/screens/sharing-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pestaña Compartir de una galería con los interruptores de contraseña, límite de selección, descarga y marca de agua" caption="Cada interruptor de la pestaña Compartir controla una cosa que puede hacer el cliente." />
+{/* media:end */}
+
+
+Compartir es el momento en que la galería pasa a ser algo que un cliente puede abrir. Es un solo enlace, sin cuenta y sin app, y los interruptores de la pestaña *Compartir* deciden exactamente qué pasa cuando alguien lo pulsa.
+
+## Las piezas
+
+<CardGrid>
+  <LinkCard
+    title="El enlace para tu cliente"
+    description="Cómo se ve la página, por qué el enlace nunca cambia y cómo apagarlo."
+    href="/es/sharing/client-link/"
+  />
+  <LinkCard
+    title="Favoritos y el límite de selección"
+    description="Cómo marca fotos el cliente y qué bloquea de verdad el límite."
+    href="/es/sharing/selection/"
+  />
+  <LinkCard
+    title="Comentarios y anotaciones"
+    description="Feedback pegado a la foto, con o sin chinchetas."
+    href="/es/sharing/comments/"
+  />
+  <LinkCard
+    title="Descargas"
+    description="Archivos sueltos, el ZIP de la galería y lo que nunca se incluye."
+    href="/es/sharing/downloads/"
+  />
+</CardGrid>
+
+## Lo que compartir no es
+
+- **No es un login.** El cliente no crea cuenta. Quien tenga el enlace puede abrir la galería, y por eso existe el interruptor de contraseña.
+- **No es publicar.** Una galería compartida sigue siendo privada por defecto: no se indexa, no está en tu porfolio y no la ve nadie sin el enlace.
+- **No es para siempre.** Puedes desactivar el enlace cuando quieras y deja de funcionar al momento, mientras la galería y la selección del cliente siguen en tu panel.
+
+## Antes de enviarlo
+
+1. **Mira la galería como la verá el cliente.** La página del cliente se puede previsualizar antes de compartirla.
+2. **Decide los interruptores una vez.** Contraseña, selección, descargas, marca de agua y comentarios tienen un valor por defecto sensato, y tu última elección se recuerda para la siguiente galería.
+3. **Revisa el recuento.** Si quedan fotos procesándose aparecen unos segundos después, así que espera antes de mandar el enlace a un cliente que está esperando.
+
+## Después de enviarlo
+
+Tu panel muestra la actividad del cliente según ocurre: favoritas, comentarios y el aviso de límite de selección. No se envía nada por email salvo que lo actives, así que una galería silenciosa significa un cliente que aún no ha abierto el enlace, no un enlace roto.
+
+## Relacionado
+
+- [Culling](/es/culling/): lo que haces tú antes de compartir.
+- [Perfil público y porfolio](/es/brand/public-pages/): compartir con todo internet en lugar de con un cliente.
