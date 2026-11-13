@@ -36,6 +36,10 @@ export default defineConfig({
         replacesTitle: true,
       },
       favicon: '/favicon.svg',
+      components: {
+        Header: './src/components/starlight/Header.astro',
+        Sidebar: './src/components/starlight/Sidebar.astro',
+      },
       customCss: [
         './src/styles/tailwind.css',
         './src/styles/picstome.css',

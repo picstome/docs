@@ -1,0 +1,20 @@
+---
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+{/*
+  Theme and language live outside the header so the header only holds navigation.
+  The sidebar renders this at its bottom; splash pages, which have no sidebar,
+  render it at the end of the content instead.
+*/}
+<div class:list={['picstome-preferences', className]}>
+  <ThemeSelect />
+  <LanguageSelect />
+</div>

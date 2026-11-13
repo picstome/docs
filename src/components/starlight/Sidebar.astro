@@ -1,0 +1,15 @@
+---
+import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
+import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
+import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
+
+import Preferences from '@components/Preferences.astro';
+
+const { sidebar } = Astro.locals.starlightRoute;
+---
+
+<SidebarPersister><SidebarSublist sublist={sidebar} /></SidebarPersister>
+
+<Preferences class="sidebar-preferences sl-hidden md:sl-flex print:hidden" />
+
+<div class="md:sl-hidden"><MobileMenuFooter /></div>

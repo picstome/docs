@@ -90,9 +90,42 @@
   color: #c6d8af;
 }
 
-.site-title img {
-  max-height: 2.25rem;
-  width: auto;
+/* Theme and language pickers. They live at the bottom of the sidebar on
+   article pages and at the end of the content on splash pages, which have no
+   sidebar. The controls themselves are Starlight's, so keyboard and screen
+   reader behaviour stays the same. */
+.picstome-preferences {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sidebar-preferences {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  background-color: var(--sl-color-bg-sidebar);
+}
+
+/* Starlight sizes the theme picker for the short English strings ("Auto").
+   In Spanish "Automático" does not fit, so give it the width of the longest
+   option. The picker is borderless, so the extra space is invisible. */
+.picstome-preferences starlight-theme-select select {
+  width: calc(8.5em + 1rem);
+}
+
+.page-preferences {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--sl-color-hairline);
 }
 
 .sl-markdown-content {
