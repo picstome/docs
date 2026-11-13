@@ -186,7 +186,7 @@ const MEDIA = {
       caption: 'Copia estos datos en la cámara una vez; la galería se llena mientras disparas.',
     },
   },
-  'apps/rater-and-photo-stats': {
+  'apps/rater': {
     en: {
       alt: 'The export favorites dialog with the App tab selected and the Rate my images button',
       caption: 'Picstome hands the favorites to the Rater from here: one button, no login.',
@@ -194,6 +194,16 @@ const MEDIA = {
     es: {
       alt: 'El diálogo de exportar favoritos con la pestaña App seleccionada y el botón Calificar mis imágenes',
       caption: 'Picstome le pasa las favoritas al Rater desde aquí: un botón y sin iniciar sesión.',
+    },
+  },
+  'apps/photo-stats': {
+    en: {
+      alt: 'The Photo Stats window with the filters, the timeline and the charts for cameras, lenses, ISO, aperture, shutter speed and focal length',
+      caption: 'The app shows the gear and settings you actually use, not the ones you think you use.',
+    },
+    es: {
+      alt: 'La ventana de Photo Stats con los filtros, la línea temporal y los gráficos de cámaras, objetivos, ISO, diafragma, velocidad y distancia focal',
+      caption: 'La app enseña qué equipo y qué ajustes usas de verdad, no los que crees que usas.',
     },
   },
   'business/clients': {

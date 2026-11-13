@@ -1,0 +1,65 @@
+---
+title: "Photo Stats"
+description: "Cómo leer los metadatos de una carpeta y ver qué cámaras, objetivos y ajustes usas de verdad."
+help:
+  section: apps.photo-stats
+  summary: Photo Stats lee una carpeta con exiftool y enseña tus cámaras, objetivos, ISO, diafragma, velocidad y focales reales. Todo en tu ordenador.
+  appRoutes: []
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="apps.photo-stats"
+  summary="Photo Stats lee una carpeta con exiftool y enseña tus cámaras, objetivos, ISO, diafragma, velocidad y focales reales. Todo en tu ordenador."
+  routes={[]}
+/>
+
+import screenshot from '@assets/screens/apps-photo-stats-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La ventana de Photo Stats con los filtros, la línea temporal y los gráficos de cámaras, objetivos, ISO, diafragma, velocidad y distancia focal" caption="La app enseña qué equipo y qué ajustes usas de verdad, no los que crees que usas." />
+{/* media:end */}
+
+## Qué hace
+
+Photo Stats abre una carpeta de fotos, lee los metadatos de cada archivo y los convierte en gráficos: qué cámaras y objetivos aparecen más, con qué ISO, diafragma, velocidad y distancia focal disparas, y cómo cambia todo con los años.
+
+No es una galería ni un editor. No muestra las fotos para valorarlas: mide el patrón que hay detrás de tu trabajo.
+
+## Cómo se usa
+
+1. Abre la app y elige **Open** para seleccionar la carpeta de fotos.
+2. Pulsa **Scan**. La primera pasada indexa los archivos; las siguientes solo leen lo nuevo o lo que ha cambiado.
+3. Usa los filtros de la izquierda o pulsa una barra del gráfico para acotar el resto.
+
+Todo se calcula en tu ordenador. No hay cuenta, no se sube nada y no hay nube.
+
+## Qué enseña
+
+- **Cámaras y objetivos:** cuántas fotos vienen de cada cuerpo y de cada óptica.
+- **ISO, diafragma, velocidad y distancia focal:** con qué ajustes disparas de verdad.
+- **Orientación:** cuántas fotos van en vertical y cuántas en horizontal.
+- **Línea temporal:** cómo cambia tu forma de disparar mes a mes y año a año.
+- **Filtros cruzados:** al pulsar una barra, el resto de gráficos se actualiza para enseñar solo ese subconjunto. Si filtras por 35 mm, el gráfico de ISO pasa a mostrar el ISO de tus fotos de 35 mm.
+
+## Dónde vive el índice
+
+Photo Stats guarda un archivo `photo_stats.db` dentro de la carpeta que abres. Ese archivo es el índice; la próxima pasada solo lee lo nuevo o lo modificado, así que no vuelve a procesar miles de fotos cada vez.
+
+Necesita **exiftool** para leer los metadatos, con la misma instalación que el [Rater](/es/apps/rater/): `brew install exiftool` en macOS, o `exiftool.exe` en el PATH en Windows.
+
+## Para qué te sirve
+
+- Decidir si el objetivo que crees que usas es el que de verdad usas.
+- Ver si tu equipo ha cambiado tu forma de disparar o solo el armario.
+- Entender tu evolución sin abrir una hoja de cálculo.
+
+Se descarga en [picstome.com/photostats](https://picstome.com/photostats/).
+
+## Relacionado
+
+- [Picstome Rater](/es/apps/rater/) — la otra app de escritorio.
+- [Valorar y marcar](/es/culling/rating/) — las estrellas dentro del panel.
+- [Favoritos y el límite de selección](/es/sharing/selection/) — cómo elige el cliente.

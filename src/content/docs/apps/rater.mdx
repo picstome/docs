@@ -1,0 +1,64 @@
+---
+title: "Picstome Rater"
+description: "How to turn a gallery's favorites into stars in your own files, with no accounts and no uploads."
+help:
+  section: apps.rater
+  summary: Rater is a desktop app that receives a gallery's favorites and writes them as stars into your files with exiftool.
+  appRoutes: [galleries.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="apps.rater"
+  summary="Rater is a desktop app that receives a gallery's favorites and writes them as stars into your files with exiftool."
+  routes={['galleries.show']}
+/>
+
+import screenshot from '@assets/screens/apps-rater.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The export favorites dialog with the App tab selected and the Rate my images button" caption="Picstome hands the favorites to the Rater from here: one button, no login." />
+{/* media:end */}
+
+## What it does
+
+Rater connects two worlds that do not talk to each other: the selection that lives on the web and the files that live on your disk. You hand it a gallery's favorites and it writes that selection as **stars in the files themselves**, so Lightroom or Capture One see it without importing anything.
+
+It does not upload photos, does not ask for an account and does not keep a copy of the selection in the cloud. It only writes metadata.
+
+## How to use it
+
+1. In Picstome, open the gallery and go to the **Favorites** tab.
+2. Press **Export favorites**.
+3. On the **App** tab, press **Rate my images**.
+4. Choose how many stars you want, confirm the folder with the originals and press **Apply rating**.
+
+The app remembers the last folder. The next time you export favorites from the same shoot, you only have to confirm.
+
+## What it writes
+
+- The rating in the **EXIF/XMP metadata**, not in a separate file.
+- It looks up each photo by file name, **case-insensitively**. The folder must contain the originals you uploaded.
+- It stores the rating on the 0–100% scale that Lightroom and Capture One read as stars.
+
+When you open that folder in your editor, the favorites are already rated and you can filter them without touching the mouse.
+
+## Before installing
+
+Download the latest version from the [GitHub releases](https://github.com/picstome/picstome-rater/releases/latest). There are builds for macOS (Intel and Apple Silicon) and Windows.
+
+- **It needs exiftool** on the computer. On macOS, `brew install exiftool`; on Windows, put `exiftool.exe` on the PATH. If the app cannot find it, it tells you.
+- **The macOS build is unsigned.** The first time, open it with right-click → **Open**, not a double click.
+
+## What it does not do
+
+- **It does not delete or move photos.** It only writes metadata.
+- **It is one-way.** Rating on the computer does not send anything back to Picstome; the stars live in your files, which is where your editor reads them.
+
+## Related
+
+- [Favorites and the selection limit](/sharing/selection/) — where the favorites come from.
+- [Rating and flagging](/culling/rating/) — the same stars, inside the panel.
+- [Photo Stats](/apps/photo-stats/) — the other desktop app.

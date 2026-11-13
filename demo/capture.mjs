@@ -107,9 +107,9 @@ const SECTIONS = [
   // --- Camera and apps -----------------------------------------------------
   { article: 'galleries/direct-upload', path: '/galleries', wait: 1200, open: { name: /connect camera|conectar cámara/i }, waitAfter: 1600 },
   {
-    // The apps article is about the export favorites modal: that is where the
+    // The Rater article is about the export favorites modal: that is where the
     // "Rate my images" button hands the favorites to the desktop app.
-    article: 'apps/rater-and-photo-stats',
+    article: 'apps/rater',
     path: '/galleries/{gallery}',
     wait: 2400,
     tab: /favorit/i,

@@ -90,3 +90,6 @@ Once the app translates those, regenerate with `node demo/capture.mjs`.
   where the counter goes down.
 - Spanish and English captures differ: the interface language is a user setting,
   so the script switches it through *Settings → Appearance* like a person would.
+- Photo Stats is a desktop app and is not part of the browser capture pipeline.
+  Its screenshot comes from the product page at picstome.com/photostats and is
+  committed manually; the Rater screenshot is the export dialog inside Picstome.

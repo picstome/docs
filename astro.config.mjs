@@ -20,14 +20,16 @@ export default defineConfig({
   redirects: {
     '/camera/direct-upload': '/galleries/direct-upload',
     '/es/camera/direct-upload': '/es/galleries/direct-upload',
-    '/camera/desktop-apps': '/apps/rater-and-photo-stats',
-    '/es/camera/desktop-apps': '/es/apps/rater-and-photo-stats',
+    '/camera/desktop-apps': '/apps/rater',
+    '/es/camera/desktop-apps': '/es/apps/rater',
     '/brand/tools': '/apps/calculator',
     '/es/brand/tools': '/es/apps/calculator',
     '/apps/tools': '/apps/calculator',
     '/es/apps/tools': '/es/apps/calculator',
     '/brand/public-pages': '/brand/public-profile',
     '/es/brand/public-pages': '/es/brand/public-profile',
+    '/apps/rater-and-photo-stats': '/apps/rater',
+    '/es/apps/rater-and-photo-stats': '/es/apps/rater',
   },
   integrations: [
     starlight({
@@ -151,7 +153,8 @@ export default defineConfig({
           items: [
             { label: 'Session price calculator', translations: { 'es-ES': 'Calculadora de precios' }, slug: 'apps/calculator' },
             { label: 'Black screen', translations: { 'es-ES': 'Pantalla negra' }, slug: 'apps/black-screen' },
-            { label: 'Rater and Photo Stats', translations: { 'es-ES': 'Rater y Photo Stats' }, slug: 'apps/rater-and-photo-stats' },
+            { label: 'Rater', translations: { 'es-ES': 'Rater' }, slug: 'apps/rater' },
+            { label: 'Photo Stats', translations: { 'es-ES': 'Photo Stats' }, slug: 'apps/photo-stats' },
           ],
         },
         {
