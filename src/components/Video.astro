@@ -15,8 +15,12 @@ interface Props {
 }
 
 const { slug, caption, alt } = Astro.props;
-const src = `/videos/${slug}.webm`;
-const poster = `/videos/${slug}.webp`;
+
+// `BASE_URL` keeps the clip working when the site is served from a subfolder
+// (the GitHub Pages preview lives at `/docs/`).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const src = `${base}/videos/${slug}.webm`;
+const poster = `${base}/videos/${slug}.webp`;
 ---
 
 <figure class="not-content my-6">

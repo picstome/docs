@@ -153,10 +153,7 @@ function parseRoute(distDir, file) {
  * literally the published page: no second Markdown renderer to keep in sync.
  */
 export function helpExport() {
-  return {
-    name: 'picstome-help-export',
-    hooks: {
-      'astro:build:done': async ({ dir, logger }) => {
+  const run = async ({ dir, logger }) => {
         const distDir = dir.pathname;
         const payload = { en: {}, es: {} };
         let exported = 0;
@@ -225,7 +222,14 @@ export function helpExport() {
         logger.info(
           `Exportadas ${exported} secciones de ayuda para el panel (${LOCALES.join(', ')}).`
         );
-      },
+  };
+
+  return {
+    name: 'picstome-help-export',
+    hooks: {
+      'astro:build:done': run,
     },
+    // Reused by the base-links pass, which must run after it.
+    run,
   };
 }

@@ -4,11 +4,17 @@ import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { helpExport } from './src/integrations/help-export.mjs';
+import { baseLinks } from './src/integrations/base-links.mjs';
 
-const site = 'https://docs.picstome.com';
+// Production canonical URL. The GitHub Pages preview overrides both values with
+// DOCS_SITE / DOCS_BASE so canonical links, hreflang and internal links point at
+// the preview instead of the (not yet live) production domain.
+const site = process.env.DOCS_SITE ?? 'https://docs.picstome.com';
+const base = process.env.DOCS_BASE ?? '/';
 
 export default defineConfig({
   site,
+  base,
   trailingSlash: 'ignore',
   integrations: [
     starlight({
@@ -155,6 +161,7 @@ export default defineConfig({
       },
     }),
     helpExport(),
+    baseLinks({ base }),
   ],
   vite: {
     plugins: [tailwindcss()],
