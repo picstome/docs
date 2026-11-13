@@ -1,10 +1,10 @@
-name: Deploy preview to GitHub Pages
+name: Deploy documentation
 
-# Preview of the documentation so it can be reviewed without a local server.
+# Publishes the help center to GitHub Pages on every push to main.
 #
-# Production is Cloudflare Pages (docs.picstome.com) and uses the same build with
-# the default base. This workflow only publishes the same output under
-# https://picstome.github.io/docs/, which is why it sets DOCS_SITE and DOCS_BASE.
+# The site is served at https://docs.picstome.com from the domain root, so
+# DOCS_BASE stays `/`. The custom domain and the HTTPS certificate are configured
+# in the repository settings (Settings -> Pages), not here.
 
 on:
   push:
@@ -37,12 +37,12 @@ jobs:
 
       - name: Build the site
         env:
-          DOCS_SITE: https://picstome.github.io
-          DOCS_BASE: /docs
+          DOCS_SITE: https://docs.picstome.com
+          DOCS_BASE: /
         run: npm run build
 
-      # Pages serves 404.html for unknown paths; the sitemap already lists the
-      # canonical production URLs, which is what search engines should index.
+      # Pages serves 404.html for unknown paths; without this file Jekyll would
+      # also try to process the output.
       - name: Disable Jekyll
         run: touch dist/.nojekyll
 

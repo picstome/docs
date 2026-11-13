@@ -85,17 +85,22 @@ node scripts/screens.mjs
 
 ## Publishing
 
-Cloudflare Pages, project `picstome-docs`, connected to this repository:
+GitHub Pages, built by `.github/workflows/pages.yml` on every push to `main`:
 
 | Setting | Value |
 | --- | --- |
+| Source | GitHub Actions |
 | Build command | `npm run build` |
 | Output directory | `dist` |
-| Node version | 22 |
-| Custom domain | `docs.picstome.com` |
+| Custom domain | `docs.picstome.com` (Settings → Pages) |
+| DNS | `docs` CNAME → `picstome.github.io` |
 
-`docs.picstome.com` resolves to `picstome-docs.pages.dev`, so the Pages project
-must keep that exact name until the DNS record changes.
+The site is served from the domain root, so `DOCS_BASE` stays `/`. The workflow
+sets `DOCS_SITE` and `DOCS_BASE` explicitly and fails the build if `verify.mjs`
+finds a broken link.
+
+The preview without the custom domain, `https://picstome.github.io/docs/`, is no
+longer used: GitHub redirects it to the custom domain.
 
 ## Conventions
 
