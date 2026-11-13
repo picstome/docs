@@ -17,10 +17,12 @@ import { Aside } from '@astrojs/starlight/components';
 />
 
 import screenshot from '@assets/screens/culling-rating.webp';
+import detail from '@assets/screens/culling-rating.detail.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="Gallery grid with photos rated from one to five stars and a rating filter next to the sort control" caption="Stars live on the thumbnail, and the filter on the right shows only the rating you pick." />
+<Screenshot src={screenshot} alt="Gallery grid with photos rated from one to five stars and the rating filter in the toolbar" caption="Stars live on the thumbnail; the filter shows only the rating you pick." />
+<Screenshot src={detail} alt="The rating filter and the sort control in the gallery toolbar" caption="The star filter is exact: three stars shows only three-star photos." />
 {/* media:end */}
 
 :::caution[Your rating is private]
@@ -35,7 +37,7 @@ A scale that works:
 
 | Stars | Meaning |
 | --- | --- |
-| 5 | Client's pick, or my favourite |
+| 5 | Client's pick, or my favorite |
 | 4 | Delivers, keep it |
 | 3 | Doubt: worth a second look |
 | 1–2 | Reject |
@@ -80,9 +82,9 @@ The filter bar sits next to the tabs, on the same sticky row. It works on the wh
 
 **By rating.** The filter is exact: three stars shows only three-star photos. Comparisons ("three or more") were removed because they were hard to read at a glance.
 
-**By favourites.** The Favorites tab is a shortcut that applies the favourites filter to the same grid, so you can jump between "everything" and "the client's picks" without losing the sort.
+**By favorites.** The Favorites tab is a shortcut that applies the favorites filter to the same grid, so you can jump between "everything" and "the client's picks" without losing the sort.
 
-**Sort by** name, date added, rating, favourites, file size or number of versions. Unrated and un-hearted photos always sort last, whatever the direction: an empty value is never at the top of a culling pass.
+**Sort by** name, date added, rating, favorites, file size or number of versions. Unrated and un-hearted photos always sort last, whatever the direction: an empty value is never at the top of a culling pass.
 
 ## Archiving versus rating
 

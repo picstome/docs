@@ -34,6 +34,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceSetting;
 use App\Models\Photo;
 use App\Models\PhotoComment;
+use App\Models\Payment;
 use App\Models\Photoshoot;
 use App\Models\Team;
 use App\Models\User;
@@ -95,7 +96,9 @@ $team->forceFill([
     'website_url' => 'https://estudionorte.example',
     'stripe_currency' => 'EUR',
     'show_pay_button' => true,
-    'custom_storage_limit' => null,
+    // A real limit, not "unlimited": the plans article is about the storage bar
+    // and the percentage, and an unlimited account has no bar to show.
+    'custom_storage_limit' => 1073741824,
 ])->save();
 
 echo "✅ Estudio: {$team->name} ({$team->handle}) · disco {$disk}\n";
@@ -308,6 +311,10 @@ foreach ($galleryRows as $row) {
     foreach ($row['photos'] as $index => $file) {
         $uploaded = $stage($file, $gallery, $team);
 
+        // The wedding gallery keeps its last photo archived: the Archived tab only
+        // exists while something is archived, and the article needs to show it.
+        $archived = $gallery->name === 'Boda de Lucía y Marc' && $index === count($row['photos']) - 1;
+
         $photo = $gallery->photos()->create(array_merge($uploaded, [
             'name' => basename($file),
             'source_name' => basename($file),
@@ -316,8 +323,9 @@ foreach ($galleryRows as $row) {
             'uploaded_at' => now()->subDays(count($row['photos']) - $index),
             'disk' => $disk,
             'status' => 'processed',
-            'rating' => $row['ratings'][$index] ?? null,
-            'favorited_at' => $index < $row['favorites'] ? now()->subDays($index + 1) : null,
+            'rating' => $archived ? null : ($row['ratings'][$index] ?? null),
+            'favorited_at' => ! $archived && $index < $row['favorites'] ? now()->subDays($index + 1) : null,
+            'archived_at' => $archived ? now()->subDay() : null,
         ]));
 
         $ids[] = $photo->id;
@@ -327,6 +335,28 @@ foreach ($galleryRows as $row) {
         $gallery->forceFill(['cover_photo_id' => $ids[0]])->save();
     }
 
+    // Give the second photo a previous version: the file-versions article needs
+    // a real stack to show, and versions are created by re-uploading a file with
+    // the same name, which the seeder cannot do without a second file.
+    if ($ids !== [] && $gallery->name === 'Boda de Lucía y Marc' && isset($ids[1])) {
+        $current = App\Models\Photo::query()->find($ids[1]);
+
+        if ($current) {
+            $previous = $current->only([
+                'name', 'source_name', 'path', 'thumb_path', 'raw_path', 'disk',
+                'size', 'stored_size', 'stored_hash', 'status', 'uploaded_at',
+            ]);
+
+            $current->versions()->create(array_merge($previous, [
+                'photo_id' => $current->id,
+                'version_number' => 1,
+                'uploaded_at' => now()->subDays(4),
+            ]));
+
+            $current->forceFill(['version_count' => 2])->save();
+        }
+    }
+
     if ($row['comment'] ?? false) {
         PhotoComment::query()->updateOrCreate(
             ['photo_id' => $ids[0], 'comment' => '¿Podemos rebajar un poco las sombras de la cara?'],
@@ -334,8 +364,11 @@ foreach ($galleryRows as $row) {
         );
     }
 
+    $versioned = $gallery->photos()->where('version_count', '>', 1)->value('id');
+
     $state['galleries'][$row['name']] = [
         'id' => $gallery->id,
+        'versioned_photo_id' => $versioned,
         'ulid' => $gallery->ulid,
         'slug' => $gallery->slug,
         'shared' => (bool) $gallery->is_shared,
@@ -406,7 +439,7 @@ ContractTemplate::query()->updateOrCreate(
     ['markdown_body' => $body],
 );
 
-Contract::query()->updateOrCreate(
+$draft = Contract::query()->updateOrCreate(
     ['team_id' => $team->id, 'title' => 'Boda de Lucía y Marc — contrato'],
     [
         'photoshoot_id' => $wedding?->photoshoot_id,
@@ -418,7 +451,7 @@ Contract::query()->updateOrCreate(
     ],
 );
 
-Contract::query()->updateOrCreate(
+$signed = Contract::query()->updateOrCreate(
     ['team_id' => $team->id, 'title' => 'Retrato de estudio — contrato'],
     [
         'photoshoot_id' => $portrait?->photoshoot_id,
@@ -430,7 +463,22 @@ Contract::query()->updateOrCreate(
     ],
 );
 
-echo "✅ Contratos: 1 plantilla, 2 contratos\n";
+// A contract needs its signature rows before it can look real: the list shows
+// "signed/total", so an executed contract with 0/0 reads as broken.
+foreach ([$draft, $signed] as $contract) {
+    if ($contract->signatures()->count() === 0) {
+        $contract->addSignatures(2);
+    }
+}
+
+$signed->signatures()->update([
+    'signed_at' => now()->subWeeks(2),
+    'legal_name' => 'Marc Vidal Puig',
+    'document_number' => '87654321X',
+    'email' => 'marc@example.test',
+]);
+
+echo "✅ Contratos: 1 plantilla, 2 contratos (uno firmado)\n";
 
 /* ---------------------------------------------------------------------------
  * 6. Invoice settings + invoices
@@ -534,6 +582,32 @@ echo "✅ Facturas: borrador y emitida ({$issued->full_number})\n";
 
 $statePath = __DIR__.'/state.json';
 file_put_contents($statePath, json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+// A couple of completed payments: the Payments screen is an empty state without
+// them, and the article talks about the list and the Stripe state.
+Payment::query()->updateOrCreate(
+    ['team_id' => $team->id, 'stripe_payment_intent_id' => 'pi_demo_0001'],
+    [
+        'amount' => 296450,
+        'currency' => 'EUR',
+        'description' => 'Boda de Lucía y Marc',
+        'customer_email' => 'lucia@example.test',
+        'completed_at' => now()->subDays(20),
+    ],
+);
+
+Payment::query()->updateOrCreate(
+    ['team_id' => $team->id, 'stripe_payment_intent_id' => 'pi_demo_0002'],
+    [
+        'amount' => 48000,
+        'currency' => 'EUR',
+        'description' => 'Retrato de estudio',
+        'customer_email' => 'marc@example.test',
+        'completed_at' => now()->subDays(6),
+    ],
+);
+
+echo "✅ Pagos: 2 completados\n";
 
 echo "\n🎉 Demo listo\n";
 echo "   Login:   {$email} / {$password}\n";

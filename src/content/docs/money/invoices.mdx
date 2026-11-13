@@ -19,6 +19,10 @@ import { Steps } from '@astrojs/starlight/components';
 import screenshot from '@assets/screens/money-invoices.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Invoices list with the numbering, status and totals per invoice" caption="Drafts take no number; issuing assigns one and produces the PDF." />
+{/* media:end */}
+
 ## Draft, issued, paid
 
 Three states, and only one of them is final:

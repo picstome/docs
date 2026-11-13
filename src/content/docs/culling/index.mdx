@@ -19,9 +19,8 @@ import screenshot from '@assets/screens/culling.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="A gallery in the panel with six wedding photos, star ratings in the corner of each thumbnail and the Photos, Favorites and Comments tabs" caption="The gallery grid is where a culling pass starts: every photo can be opened, rated and filtered from here." />
+<Screenshot src={screenshot} alt="A gallery in the panel with six wedding photos, star ratings on each thumbnail and the Photos, Favorites and Comments tabs" caption="The gallery grid is where a culling pass starts: every photo can be opened, rated and filtered from here." />
 {/* media:end */}
-
 
 **Culling** is the pass you make before the client sees anything: you look at every photo, decide which ones are worth keeping, and remove the rest from view. In Picstome it all happens inside the gallery, with the keyboard, and nothing you do here is visible to the client.
 
@@ -36,11 +35,11 @@ Nothing, unless you want them to. Your stars, your ratings and your filters exis
 | Archive | No: the photo disappears from their gallery |
 | Heart | Yes, it is the same field as their selection |
 
-## The pass, in four steps
+## Culling, in four steps
 
 1. **Open the gallery and press the first photo.** The viewer fills the screen and the arrow keys walk the gallery in the same order you see in the grid.
 2. **Rate while you look.** `1` to `5` rate and jump to the next photo. `0` clears. You never touch the mouse.
-3. **Filter what is left.** Show only your four and five stars, or only the client's favourites, or only what is not archived yet.
+3. **Filter what is left.** Show only your four and five stars, or only the client's favorites, or only what is not archived yet.
 4. **Archive the rest.** Archived photos leave the client's gallery and the ZIP download, but the files stay on disk.
 
 ## The shortcut sheet

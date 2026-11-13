@@ -15,7 +15,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## The essentials
 
@@ -45,24 +45,46 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## Every section
 
 <CardGrid>
-  <Card title="Galleries" icon="pencil">
-    Uploading, versions, archiving and downloads.
-  </Card>
-  <Card title="Sharing" icon="heart">
-    Passwords, expiry, favorites, comments and annotations.
-  </Card>
-  <Card title="Camera" icon="laptop">
-    Shoot straight to a gallery, plus the desktop apps.
-  </Card>
-  <Card title="Business" icon="document">
-    Clients, contract templates and signatures.
-  </Card>
-  <Card title="Money" icon="approve-check">
-    Invoices, VAT, corrective invoices and Stripe.
-  </Card>
-  <Card title="Brand" icon="star">
-    Public profile, portfolio, watermark and tools.
-  </Card>
+  <LinkCard
+    title="Galleries"
+    description="Uploading, original size, file versions."
+    href="/galleries/uploading/"
+  />
+  <LinkCard
+    title="Culling"
+    description="Rate, filter and archive your own selection."
+    href="/culling/"
+  />
+  <LinkCard
+    title="Sharing with clients"
+    description="The client link, the selection limit, comments and downloads."
+    href="/sharing/"
+  />
+  <LinkCard
+    title="Camera and desktop apps"
+    description="Shoot straight to a gallery, plus Sync and Rater."
+    href="/camera/direct-upload/"
+  />
+  <LinkCard
+    title="Clients and contracts"
+    description="Client records, templates and online signatures."
+    href="/business/clients/"
+  />
+  <LinkCard
+    title="Invoices and payments"
+    description="Numbering, VAT, corrective invoices and Stripe."
+    href="/money/invoices/"
+  />
+  <LinkCard
+    title="Your brand"
+    description="Public profile, portfolio, watermark and tools."
+    href="/brand/public-pages/"
+  />
+  <LinkCard
+    title="Self-hosting"
+    description="Run Picstome on your own server, step by step."
+    href="/self-hosting/"
+  />
 </CardGrid>
 
 ## Need help right now?

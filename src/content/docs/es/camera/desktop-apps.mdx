@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['settings.apps', 'galleries', 'tools.calculator']}
 />
 
+import screenshot from '@assets/screens/camera-desktop-apps-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pantalla de ajustes donde se listan las apps conectadas y sus tokens de acceso" caption="Las apps de escritorio usan un token, no tu contraseña. Revocarlo las desconecta." />
+{/* media:end */}
+
 ## Tres apps, tres trabajos
 
 | App | Qué hace | Dónde conseguirla |
@@ -29,7 +36,7 @@ Ninguna sustituye al panel. Quitan la parte aburrida: descomprimir un ZIP, abrir
 
 Las apps de escritorio usan un **token de acceso personal**, no tu contraseña.
 
-1. Abre *Ajustes → Apps conectadas* en el panel.
+1. Abre *Ajustes → Contraseña*: la sección **Apps conectadas** está al final de esa página.
 2. Crea un token y cópialo una vez (no se vuelve a mostrar).
 3. Pégalo en la app cuando te pida el servidor y el token.
 
@@ -53,7 +60,7 @@ Es más rápido que el navegador en sesiones largas porque precarga las imágene
 
 ## Photo Stats
 
-Apúntalo a una carpeta y produce un resumen de tus metadatos: distancias focales, diafragmas, ISO, distribución de cámaras y objetivos. Útil para revisar el porfolio o para responder "¿qué objetivo uso de verdad?".
+Apúntalo a una carpeta y produce un resumen de tus metadatos: distancias focales, diafragmas, ISO, distribución de cámaras y objetivos. Útil para revisar el portfolio o para responder "¿qué objetivo uso de verdad?".
 
 Lee los archivos en local; no sube tus fotos a ningún sitio.
 

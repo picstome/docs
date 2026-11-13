@@ -1,9 +1,9 @@
 ---
 title: "The client link"
-description: "What your client sees when they open a shared gallery, why there is no account, and how to control the page from the Share tab."
+description: "What your client sees when they open a shared gallery, why there is no account, and how to control the page from the Share dialog."
 help:
   section: sharing.client-link
-  summary: One link per gallery. The client opens it without an account; every switch in the Share tab changes what that page lets them do.
+  summary: One link per gallery. The client opens it without an account; every switch in the Share dialog changes what that page lets them do.
   appRoutes: [galleries.show, shares.show]
 ---
 
@@ -11,7 +11,7 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="sharing.client-link"
-  summary="One link per gallery. The client opens it without an account; every switch in the Share tab changes what that page lets them do."
+  summary="One link per gallery. The client opens it without an account; every switch in the Share dialog changes what that page lets them do."
   routes={['galleries.show', 'shares.show']}
 />
 
@@ -19,7 +19,7 @@ import screenshot from '@assets/screens/sharing-client-link.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="A shared gallery opened as a client sees it, with the studio logo, the gallery name and the photos" caption="No account, no app: the link opens a page with your branding and the photos." />
+<Screenshot src={screenshot} alt="A shared gallery opened as a client sees it, with the studio name, the gallery title and the photos" caption="No account, no app: the link opens a page with your branding and the photos." />
 {/* media:end */}
 
 ## Sharing is a switch with options

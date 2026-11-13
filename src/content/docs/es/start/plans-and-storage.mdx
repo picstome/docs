@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['subscribe', 'dashboard', 'payments']}
 />
 
+import screenshot from '@assets/screens/start-plans-and-storage-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="El resumen de la cuenta del panel con el almacenamiento usado y el número de galerías" caption="El almacenamiento y los contadores mensuales están en el panel, y la barra siempre se ve en la barra lateral." />
+{/* media:end */}
+
 ## Las funciones nunca están bloqueadas
 
 Esta es la parte que más se malinterpreta. **Todas las funciones están en todos los planes.** Compartir, contraseñas, comentarios, anotaciones, límite de selección, versiones de archivo, Stripe, subida desde cámara y contratos no son extras de pago.
@@ -28,7 +35,7 @@ El plan solo cambia la capacidad:
 | Contratos al mes | 1 | Sin límite |
 | Pagos al mes | 1 | Sin límite |
 | Galerías privadas caducan | 1 año desde su creación | Nunca |
-| Galerías públicas (porfolio) caducan | Nunca | Nunca |
+| Galerías públicas (portfolio) caducan | Nunca | Nunca |
 | Marca blanca (`Powered by Picstome`) | No | Sí |
 
 ## Qué significa "1 GB" en la práctica
@@ -43,7 +50,7 @@ Una entrega de boda típica de 600 JPEG para web ronda 1–2 GB, así que el pla
 
 En el plan gratuito, una galería privada caduca **un año después de crearse**, no después de la última visita. La fecha es un techo: puedes moverla antes o después, pero nunca más allá de un año desde la creación.
 
-Cuando la fecha se acerca, recibes un email tres días antes. Cuando pasa, la galería y sus archivos se eliminan. Las galerías públicas del porfolio nunca caducan.
+Cuando la fecha se acerca, recibes un email tres días antes. Cuando pasa, la galería y sus archivos se eliminan. Las galerías públicas del portfolio nunca caducan.
 
 Al suscribirte desaparece la fecha de caducidad desde ese momento: las galerías ya creadas se quedan sin fecha y las nuevas nacen sin ella. Si la suscripción termina, las galerías vuelven a tener fecha en lugar de desaparecer de golpe.
 

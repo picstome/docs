@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['galleries.show']}
 />
 
+import screenshot from '@assets/screens/galleries-file-versions-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="El diálogo de comparar versiones con el archivo actual a la izquierda y la versión anterior a la derecha" caption="Antigua y nueva lado a lado, con un zoom que mueve los dos paneles a la vez." />
+{/* media:end */}
+
 ## El problema que resuelve
 
 Entregas una galería, el cliente pide una foto con un revelado más cálido y vuelves a subir `IMG_2043.jpg`. Sin versiones, el original se pierde y no puedes enseñar qué ha cambiado.

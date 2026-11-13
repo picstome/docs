@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['subscribe', 'dashboard', 'payments']}
 />
 
+import screenshot from '@assets/screens/start-plans-and-storage.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The dashboard account summary with the storage used and the gallery count" caption="Storage and the monthly counters live in the dashboard, and the sidebar always shows the bar." />
+{/* media:end */}
+
 ## Features are never locked
 
 This is the part people usually get wrong. **Every feature works on every plan.** Sharing, passwords, comments, annotations, selection limits, file versions, Stripe, camera upload and contracts are not paid add-ons.

@@ -17,10 +17,12 @@ import { Aside } from '@astrojs/starlight/components';
 />
 
 import screenshot from '@assets/screens/culling-rating-es.webp';
+import detail from '@assets/screens/culling-rating-es.detail.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="Cuadrícula de galería con fotos valoradas de una a cinco estrellas y un filtro por valoración junto al control de orden" caption="Las estrellas van en la miniatura, y el filtro de la derecha deja solo la valoración que elijas." />
+<Screenshot src={screenshot} alt="Cuadrícula de galería con fotos valoradas de una a cinco estrellas y el filtro por valoración en la barra" caption="Las estrellas van en la miniatura; el filtro deja solo la valoración que elijas." />
+<Screenshot src={detail} alt="El filtro por valoración y el control de orden en la barra de la galería" caption="El filtro de estrellas es exacto: tres estrellas muestra solo fotos de tres estrellas." />
 {/* media:end */}
 
 :::caution[Tu valoración es privada]
@@ -89,7 +91,7 @@ La barra de filtros está junto a las pestañas, en la misma fila fija. Actúa s
 Se parecen y no son lo mismo:
 
 - **Valorar** es una nota para ti. La foto sigue visible para el cliente.
-- **[Archivar](/es/culling/archiving/)** oculta la foto al cliente, al ZIP y al porfolio. El archivo sigue en disco.
+- **[Archivar](/es/culling/archiving/)** oculta la foto al cliente, al ZIP y al portfolio. El archivo sigue en disco.
 
 Una pasada habitual: valóralo todo, filtra a tres estrellas o menos, archiva los descartes y deja visibles las cuatro y cinco estrellas para el cliente.
 

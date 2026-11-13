@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['settings.apps', 'galleries', 'tools.calculator']}
 />
 
+import screenshot from '@assets/screens/camera-desktop-apps.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The settings screen where the connected apps and their access tokens are listed" caption="The desktop apps use a token, not your password. Revoking it disconnects them." />
+{/* media:end */}
+
 ## Three apps, three jobs
 
 | App | What it does | Where to get it |
@@ -29,7 +36,7 @@ None of them replaces the panel. They remove the boring part: unpacking a ZIP, o
 
 The desktop apps use a **personal access token**, not your password.
 
-1. Open *Settings → Connected apps* in the panel.
+1. Open *Settings → Password*: the **Connected apps** section is at the bottom of that page.
 2. Create a token and copy it once (it is never shown again).
 3. Paste it into the app when it asks for the server and the token.
 

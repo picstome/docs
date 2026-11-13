@@ -19,6 +19,10 @@ import { Steps } from '@astrojs/starlight/components';
 import screenshot from '@assets/screens/money-invoices-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="La lista de Facturas con la numeración, el estado y los totales" caption="Los borradores no consumen número; al emitir se asigna uno y se genera el PDF." />
+{/* media:end */}
+
 ## Borrador, emitida, pagada
 
 Tres estados, y solo uno es definitivo:
@@ -42,7 +46,7 @@ Los números siguen el patrón **serie + año + consecutivo**, por ejemplo `F-20
 
 ## Qué recibe el cliente
 
-Un email con un enlace a una página pública, con tu marca, la factura y la descarga del PDF. Sin cuenta y sin login.
+Un email con un enlace a una página pública, con tu marca, la factura y la descarga del PDF. Sin cuenta y sin iniciar sesión.
 
 La página se puede desactivar. Desactivarla inutiliza el enlace mientras la factura sigue en tu panel.
 

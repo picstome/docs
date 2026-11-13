@@ -74,6 +74,17 @@ node scripts/screens.mjs
 It rewrites the `{/* media:start */} … {/* media:end */}` block of every article
 that has media, with the alt text and caption declared in `scripts/screens.mjs`.
 
+## Known gaps in the application
+
+Two screens still render untranslated labels inside the Spanish interface,
+because the strings live in the browser (file input) or in the calculator seed
+data. They are not documentation bugs, but they show up in the captures:
+
+- the native file input (`Choose File` / `No file chosen`) on *Marca → Marca de agua*;
+- the default calculator rows (`Self-Employment Quota`, …).
+
+Once the app translates those, regenerate with `node demo/capture.mjs`.
+
 ## Notes
 
 - The capture crops to the panel `<main>`: at article width the sidebar would

@@ -19,9 +19,8 @@ import screenshot from '@assets/screens/culling-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="Una galería del panel con seis fotos de boda, las estrellas de valoración en la esquina de cada miniatura y las pestañas Fotos, Favoritos y Comentarios" caption="La cuadrícula de la galería es donde empieza la selección: desde aquí se abre, valora y filtra cada foto." />
+<Screenshot src={screenshot} alt="Una galería del panel con seis fotos de boda, las estrellas en cada miniatura y las pestañas Fotos, Favoritos y Comentarios" caption="La cuadrícula de la galería es donde empieza la selección: desde aquí se abre, valora y filtra cada foto." />
 {/* media:end */}
-
 
 La **selección** (culling) es la pasada que haces antes de que el cliente vea nada: miras cada foto, decides cuáles merecen quedarse y quitas de la vista el resto. En Picstome todo ocurre dentro de la galería, con el teclado, y nada de lo que hagas aquí lo ve el cliente.
 
@@ -36,7 +35,7 @@ Nada, salvo que tú quieras. Tus estrellas, tus valoraciones y tus filtros exist
 | Archivar | No: la foto desaparece de su galería |
 | Corazón | Sí, es el mismo campo que su selección |
 
-## La pasada, en cuatro pasos
+## La selección, en cuatro pasos
 
 1. **Abre la galería y pulsa la primera foto.** El visor ocupa la pantalla y las flechas recorren la galería en el mismo orden que ves en la cuadrícula.
 2. **Valora mientras miras.** Del `1` al `5` puntúan y saltan a la siguiente foto. `0` borra. No tocas el ratón.

@@ -16,6 +16,13 @@ import { Steps } from '@astrojs/starlight/components';
   routes={['galleries', 'galleries.show']}
 />
 
+import screenshot from '@assets/screens/camera-direct-upload.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Connect camera dialog with the FTP and SFTP host, user and password" caption="Copy these values into the camera once; the gallery fills up as you shoot." />
+{/* media:end */}
+
 ## Why upload from the camera
 
 Dragging 3,000 photos into a browser after a wedding is slow and fragile. With a direct upload, the camera (or the tethering software) pushes files as you shoot, and the gallery is already complete when you finish.

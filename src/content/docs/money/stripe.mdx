@@ -19,6 +19,10 @@ import { Steps } from '@astrojs/starlight/components';
 import screenshot from '@assets/screens/money-stripe.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Payments screen with the Stripe Connect state" caption="Stripe Connect shows what is missing before you can take card payments." />
+{/* media:end */}
+
 ## Whose account is it?
 
 **Yours.** Picstome connects to a Stripe account that belongs to you, through Stripe Connect. The client pays with a card, Stripe processes the charge, and the money settles into your bank account on your normal Stripe schedule.

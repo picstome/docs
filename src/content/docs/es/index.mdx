@@ -15,7 +15,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## Lo esencial
 
@@ -45,24 +45,46 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## Todas las secciones
 
 <CardGrid>
-  <Card title="Galerías" icon="pencil">
-    Subidas, versiones, archivado y descargas.
-  </Card>
-  <Card title="Compartir" icon="heart">
-    Contraseñas, caducidad, favoritos, comentarios y anotaciones.
-  </Card>
-  <Card title="Cámara" icon="laptop">
-    Disparar directo a una galería y las apps de escritorio.
-  </Card>
-  <Card title="Negocio" icon="document">
-    Clientes, plantillas de contrato y firmas.
-  </Card>
-  <Card title="Dinero" icon="approve-check">
-    Facturas, IVA, rectificativas y Stripe.
-  </Card>
-  <Card title="Marca" icon="star">
-    Perfil público, porfolio, marca de agua y herramientas.
-  </Card>
+  <LinkCard
+    title="Galerías"
+    description="Subidas, tamaño original y versiones de archivo."
+    href="/es/galleries/uploading/"
+  />
+  <LinkCard
+    title="Selección (culling)"
+    description="Valora, filtra y archiva tu propia selección."
+    href="/es/culling/"
+  />
+  <LinkCard
+    title="Compartir con clientes"
+    description="El enlace, el límite de selección, comentarios y descargas."
+    href="/es/sharing/"
+  />
+  <LinkCard
+    title="Cámara y apps de escritorio"
+    description="Dispara directo a una galería, y Sync y Rater."
+    href="/es/camera/direct-upload/"
+  />
+  <LinkCard
+    title="Clientes y contratos"
+    description="Fichas de cliente, plantillas y firma online."
+    href="/es/business/clients/"
+  />
+  <LinkCard
+    title="Facturas y pagos"
+    description="Numeración, IVA, rectificativas y Stripe."
+    href="/es/money/invoices/"
+  />
+  <LinkCard
+    title="Tu marca"
+    description="Perfil público, portfolio, marca de agua y herramientas."
+    href="/es/brand/public-pages/"
+  />
+  <LinkCard
+    title="Instalación propia"
+    description="Ten Picstome en tu servidor, paso a paso."
+    href="/es/self-hosting/"
+  />
 </CardGrid>
 
 ## ¿Necesitas ayuda ahora?

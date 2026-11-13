@@ -16,6 +16,13 @@ import { Steps } from '@astrojs/starlight/components';
   routes={['galleries', 'galleries.show']}
 />
 
+import screenshot from '@assets/screens/start-first-gallery.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Galleries screen with the create gallery and connect camera buttons above the gallery grid" caption="Every delivery starts here. Create the gallery, then upload or connect the camera." />
+{/* media:end */}
+
 ## The whole flow
 
 <Steps>

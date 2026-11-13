@@ -18,6 +18,10 @@ import HelpMeta from '@components/HelpMeta.astro';
 import screenshot from '@assets/screens/money-vat.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="Invoice settings with the fiscal data, the VAT rate and the rectification series" caption="The VAT rate and the rectification series are configured once, per studio." />
+{/* media:end */}
+
 ## VAT on the invoice
 
 Each line carries a VAT rate, and the invoice shows the rate, the amount in euros and the total with VAT included. In *Invoice settings* you set the default rate, so a normal invoice needs no per-line work.
@@ -45,7 +49,7 @@ You never edit an issued invoice. If something is wrong, you issue a **correctiv
 
 The original keeps its number and its PDF untouched. The corrective gets a number from the rectification series. Both appear linked, and the client can open either one.
 
-This is the behaviour the law expects: an audit trail, not a rewritten history.
+This is the behavior the law expects: an audit trail, not a rewritten history.
 
 ## What a corrective invoice does not do
 

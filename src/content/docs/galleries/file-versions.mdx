@@ -15,6 +15,13 @@ import HelpMeta from '@components/HelpMeta.astro';
   routes={['galleries.show']}
 />
 
+import screenshot from '@assets/screens/galleries-file-versions.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The version comparison dialog with the current file on the left and the previous version on the right" caption="Old and new side by side, with a zoom that moves both panes together." />
+{/* media:end */}
+
 ## The problem it solves
 
 You deliver a gallery, the client asks for a photo with a warmer edit, and you upload `IMG_2043.jpg` again. Without versions, the original is gone and you cannot show what changed.

@@ -18,12 +18,16 @@ import HelpMeta from '@components/HelpMeta.astro';
 import screenshot from '@assets/screens/brand-watermark-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="Ajustes de marca de agua con el tipo, la posición, el tamaño y la opacidad" caption="La marca de agua se graba en la copia entregada, nunca en tus originales." />
+{/* media:end */}
+
 ## Dónde aparece
 
 La marca de agua se aplica a las fotos de las **galerías compartidas** cuando el interruptor *Marca de agua* está activo en esa galería. No se aplica:
 
 - a tu vista de la galería en el panel;
-- al porfolio;
+- al portfolio;
 - a los originales descargados, si permites descargas.
 
 Los archivos en disco no se reescriben: la marca forma parte de la imagen entregada, y por eso nunca daña tu original.
@@ -42,11 +46,11 @@ Para un logo, la altura recomendada es de 32 px. Se muestra pequeño a propósit
 - **Posición:** arriba, abajo, en el centro o repetida por toda la imagen.
 - **Opacidad:** de 0 a 100. Alrededor de 60–70 se mantiene visible sin estropear la foto.
 
-La posición *repetida* es para máxima protección en previews: hace que la foto sea difícil de recortar. Para una entrega a cliente, una sola esquina suele bastar.
+La posición *repetida* es para máxima protección en las vistas previas: hace que la foto sea difícil de recortar. Para una entrega a cliente, una sola esquina suele bastar.
 
 ## Por galería, no global
 
-Los ajustes de marca de agua definen *cuál* es la marca. Si se aplica o no es un interruptor en las opciones de compartir de cada galería, así que puedes entregar una boda limpia y una preview de concierto con marca desde el mismo estudio.
+Los ajustes de marca de agua definen *cuál* es la marca. Si se aplica o no es un interruptor en las opciones de compartir de cada galería, así que puedes entregar una boda limpia y una vista previa de concierto con marca desde el mismo estudio.
 
 Si pones marca a una galería que ya está compartida, el cliente ve la versión nueva la próxima vez que cargue la página. No hay que enviar otra galería.
 
@@ -58,7 +62,7 @@ Si pones marca a una galería que ya está compartida, el cliente ve la versión
 
 ## Cuándo no la quieres
 
-- Galerías del porfolio, donde quieres que el trabajo se vea limpio.
+- Galerías del portfolio, donde quieres que el trabajo se vea limpio.
 - Entregas a un cliente que ha pagado las imágenes.
 - Cualquier galería donde la marca taparía el sujeto.
 

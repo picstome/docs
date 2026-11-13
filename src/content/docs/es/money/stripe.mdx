@@ -19,6 +19,10 @@ import { Steps } from '@astrojs/starlight/components';
 import screenshot from '@assets/screens/money-stripe-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pantalla de Pagos con el estado de Stripe Connect" caption="Stripe Connect indica qué falta antes de poder aceptar pagos con tarjeta." />
+{/* media:end */}
+
 ## ¿De quién es la cuenta?
 
 **Tuya.** Picstome se conecta a una cuenta de Stripe que te pertenece, mediante Stripe Connect. El cliente paga con tarjeta, Stripe procesa el cobro y el dinero se liquida en tu cuenta bancaria con el calendario habitual de Stripe.

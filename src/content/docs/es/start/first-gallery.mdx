@@ -16,6 +16,13 @@ import { Steps } from '@astrojs/starlight/components';
   routes={['galleries', 'galleries.show']}
 />
 
+import screenshot from '@assets/screens/start-first-gallery-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pantalla de Galerías con los botones de crear galería y conectar cámara encima de la cuadrícula" caption="Cada entrega empieza aquí. Crea la galería y luego sube o conecta la cámara." />
+{/* media:end */}
+
 ## El flujo completo
 
 <Steps>
@@ -24,7 +31,7 @@ import { Steps } from '@astrojs/starlight/components';
 
 2. **Sube las fotos.** Arrastra los archivos a la galería. La subida va en segundo plano: puedes salir de la página y volver.
 
-3. **Compártela.** Abre la pestaña *Compartir*, activa el enlace y cópialo. Ese enlace es lo que abre tu cliente.
+3. **Compártela.** Abre el diálogo *Compartir*, activa el enlace y cópialo. Ese enlace es lo que abre tu cliente.
 
 4. **Deja que tu cliente trabaje.** Abre el enlace en cualquier navegador, sin cuenta y sin app. Puede marcar favoritas, comentar o descargar, según lo que hayas activado.
 

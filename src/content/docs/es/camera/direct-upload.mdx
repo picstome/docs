@@ -16,6 +16,13 @@ import { Steps } from '@astrojs/starlight/components';
   routes={['galleries', 'galleries.show']}
 />
 
+import screenshot from '@assets/screens/camera-direct-upload-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="El diálogo de conectar cámara con el host, el usuario y la contraseña de FTP y SFTP" caption="Copia estos datos en la cámara una vez; la galería se llena mientras disparas." />
+{/* media:end */}
+
 ## Por qué subir desde la cámara
 
 Arrastrar 3.000 fotos al navegador después de una boda es lento y frágil. Con la subida directa, la cámara (o el software de tethering) empuja los archivos mientras disparas, y la galería ya está completa cuando terminas.

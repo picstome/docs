@@ -1,25 +1,27 @@
 #!/usr/bin/env node
 
 /**
- * Generate the screenshots and the short clip for the documentation.
+ * Generate every screenshot the documentation uses.
  *
  * Lives in the docs repository on purpose: the application repo stays untouched.
  * It only needs a running Picstome with the demo data:
  *
  *     php artisan tinker /workspace/projects/picstome-docs/demo/seed.php
- *     node demo/capture.mjs                    # everything
- *     node demo/capture.mjs --lang es          # one locale
- *     node demo/capture.mjs --only selection   # one section
- *     node demo/capture.mjs --video            # also record the clip
+ *     node demo/capture.mjs                     # everything, both locales
+ *     node demo/capture.mjs --lang es           # one locale
+ *     node demo/capture.mjs --only selection    # one article
+ *     node demo/capture.mjs --video             # also record the clips
  *
- * Where outputs go:
+ * Two kinds of output per article:
  *
- * - screens -> `src/assets/screens/{slug}.webp` (English) and
- *   `src/assets/screens/{slug}-es.webp` (Spanish), ready for the articles;
- * - video   -> `public/videos/{slug}.webm` plus a `.webp` poster.
+ * - a **full capture** of the panel area, to show the screen in context;
+ * - a **detail crop** (`.detail`) when a single control carries the point of the
+ *   article: the stars, the share switches, the download button. The crop keeps
+ *   the surrounding box so the reader can recognise where it lives.
  *
- * The script crops to the panel `<main>` so the screenshots read well inside an
- * article column, and it parks the pointer in a corner to avoid stray tooltips.
+ * Files land in `src/assets/screens/{slug}.webp` for English and
+ * `{slug}-es.webp` for Spanish. The articles import them through
+ * `scripts/screens.mjs`.
  */
 
 import { chromium } from 'playwright';
@@ -45,44 +47,86 @@ const RECORD_VIDEO = flag('video');
 const EMAIL = process.env.DOCS_EMAIL ?? 'docs@picstome.test';
 const PASSWORD = process.env.DOCS_PASSWORD ?? 'password';
 
-/**
- * Gallery ids and public link written by `demo/seed.php`.
- *
- * Using the state file keeps the capture script aligned with whatever ids the
- * local database assigned: the demo does not assume ULIDs.
- */
 const STATE_PATH = join(ROOT, 'demo/state.json');
 const state = existsSync(STATE_PATH) ? JSON.parse(readFileSync(STATE_PATH, 'utf8')) : null;
 const DEMO_GALLERY = 'Boda de Lucía y Marc';
 
-/** Rewrite the absolute URLs written by the seeder to the local base. */
-const local = (url) => (url ? new URL(new URL(url).pathname, BASE).toString() : null);
+const log = (message) => process.stdout.write(`${message}\n`);
 
 /**
- * One entry per documented article that needs a capture.
+ * Every capture the articles need.
  *
- * `path` is a route path. `{gallery}` is replaced with the id of the demo
- * gallery found on the Galleries screen. `crop: false` keeps the whole window
- * for client-facing pages (which have no sidebar).
+ * - `path` is a route path; `{gallery}` is the demo gallery id.
+ * - `tab` clicks one of the gallery tabs before shooting.
+ * - `open` clicks a button by its accessible name (the Share dialog, the
+ *   download panel) so the screenshot shows the thing the article explains.
+ * - `detail` names a selector that is cropped around, stored as `{slug}.detail`.
+ * - `wait` is the settle time for Livewire.
  */
 const SECTIONS = [
-  { id: 'culling', path: '/galleries/{gallery}', article: 'culling', action: 'tab:photos', wait: 2200 },
-  { id: 'culling-rating', path: '/galleries/{gallery}', article: 'culling/rating', action: 'tab:photos', wait: 2200 },
-  { id: 'culling-archiving', path: '/galleries/{gallery}', article: 'culling/archiving', action: 'tab:photos', wait: 2200 },
-  { id: 'sharing', path: '/galleries/{gallery}', article: 'sharing', action: 'tab:share', wait: 2400 },
-  { id: 'selection', path: '/galleries/{gallery}', article: 'sharing/selection', action: 'tab:favorites', wait: 2400 },
-  { id: 'client-link', path: '/galleries/{gallery}', article: 'sharing/client-link', action: 'tab:share', wait: 2400 },
-  { id: 'comments', path: '/galleries/{gallery}', article: 'sharing/comments', action: 'tab:comments', wait: 2400 },
-  { id: 'downloads', path: '/galleries/{gallery}', article: 'sharing/downloads', action: 'tab:share', wait: 2400 },
+  // --- Getting started -----------------------------------------------------
+  { article: 'start/what-picstome-does', path: '/dashboard', wait: 1400 },
+  { article: 'start/first-gallery', path: '/galleries', wait: 1200 },
+  { article: 'start/plans-and-storage', path: '/dashboard', wait: 1400, detail: 'main [class*="mt-auto"]' },
+
+  // --- Galleries -----------------------------------------------------------
+  { article: 'galleries/uploading', path: '/galleries', wait: 1200, open: { name: /create gallery|crear galería/i }, detail: null },
+  { article: 'galleries/original-size', path: '/galleries/{gallery}', wait: 2600 },
+  {
+    // Versions live in the photo viewer dock, not in a gallery tab: the capture
+    // opens the photo the seeder gave a previous version to, then the Versions
+    // button, which opens the comparison modal.
+    article: 'galleries/file-versions',
+    path: '/galleries/{gallery}/photos/{photo}',
+    wait: 2600,
+    open: { selector: '[data-photo-versions]' },
+  },
+
+  // --- Culling -------------------------------------------------------------
+  { article: 'culling', path: '/galleries/{gallery}', wait: 2600 },
+  { article: 'culling/rating', path: '/galleries/{gallery}', wait: 2600, detail: '[data-gallery-filter-bar]' },
+  { article: 'culling/archiving', path: '/galleries/{gallery}', wait: 2600, detail: '[data-archived-tab]' },
+
+  // --- Sharing -------------------------------------------------------------
+  { article: 'sharing', path: '/galleries/{gallery}', wait: 2400, openShare: true },
+  { article: 'sharing/client-link', path: '/galleries/{gallery}', wait: 2400, openShare: true },
+  { article: 'sharing/selection', path: '/galleries/{gallery}', wait: 2600, tab: /favorit/i },
+  { article: 'sharing/comments', path: '/galleries/{gallery}', wait: 2600, tab: /comment/i },
+  {
+    article: 'sharing/downloads',
+    path: '/galleries/{gallery}',
+    wait: 2400,
+    openShare: true,
+  },
+
+  // --- Camera and apps -----------------------------------------------------
+  { article: 'camera/direct-upload', path: '/galleries', wait: 1200, open: { name: /connect camera|conectar cámara/i }, waitAfter: 1600 },
+  { article: 'camera/desktop-apps', path: '/settings/password', wait: 1400 },
+
+  // --- Business ------------------------------------------------------------
+  { article: 'business/clients', path: '/customers', wait: 1200 },
+  { article: 'business/contracts', path: '/contracts', wait: 1200 },
+
+  // --- Money ---------------------------------------------------------------
+  { article: 'money/invoices', path: '/invoices', wait: 1200 },
+  { article: 'money/vat', path: '/invoices/settings', wait: 1600 },
+  { article: 'money/stripe', path: '/payments', wait: 1400 },
+
+  // --- Brand ---------------------------------------------------------------
+  { article: 'brand/public-pages', path: '/portfolio', wait: 1400 },
+  { article: 'brand/watermark', path: '/branding/watermark', wait: 1400 },
+  { article: 'brand/tools', path: '/tools/calculator', wait: 1400 },
 ];
 
-/** Client-facing page: the same gallery opened through its public link. */
-const CLIENT_PAGE = { article: 'sharing/client-link', crop: false };
+/** Client-facing pages: captured whole, no sidebar. */
+const CLIENT_PAGES = [
+  { article: 'sharing/client-link', full: true },
+];
 
-/** The one clip for the pilot page. */
-const VIDEO = { id: 'selection', article: 'sharing/selection' };
-
-const log = (message) => process.stdout.write(`${message}\n`);
+/** The clips, one per flow where motion explains more than a paragraph. */
+const VIDEOS = [
+  { id: 'selection', article: 'sharing/selection' },
+];
 
 async function login(page, locale) {
   await page.goto(`${BASE}/login`, { waitUntil: 'networkidle' });
@@ -109,108 +153,258 @@ async function login(page, locale) {
   log(`  logged in (${locale})`);
 }
 
-/**
- * Find the demo gallery the articles talk about.
- *
- * The Galleries screen lists every gallery, so the link is picked by its name
- * (`demo/seed.php` creates it) instead of "the first one", which could be the
- * portfolio gallery.
- */
-async function demoGallery(page) {
-  // Fast path: the seeder already told us the id of the gallery the articles use.
+async function demoGallery() {
   if (state?.galleries?.[DEMO_GALLERY]?.id) {
-    return { href: `/galleries/${state.galleries[DEMO_GALLERY].id}`, shareUrl: local(state.galleries[DEMO_GALLERY].share_url) };
+    const gallery = state.galleries[DEMO_GALLERY];
+
+    return {
+      id: gallery.id,
+      photo: gallery.versioned_photo_id ?? null,
+      shareUrl: gallery.share_url ? new URL(new URL(gallery.share_url).pathname, BASE).toString() : null,
+    };
   }
 
-  await page.goto(`${BASE}/galleries`, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(900);
-
-  const named = page.locator('main a[href*="/galleries/"]', { hasText: DEMO_GALLERY }).first();
-
-  if (await named.count()) {
-    return { href: await named.getAttribute('href'), shareUrl: null };
-  }
-
-  const link = page.locator('main a[href*="/galleries/"]').first();
-  if (!(await link.count())) {
-    throw new Error('No gallery found: did you run demo/seed.php?');
-  }
-
-  return { href: await link.getAttribute('href'), shareUrl: null };
+  throw new Error('demo/state.json is missing: run demo/seed.php first.');
 }
 
-async function openTab(page, name) {
-  const labels = {
-    photos: /^(fotos|photos)$/i,
-    share: /^(compartir|share)$/i,
-    favorites: /favorit/i,
-    comments: /comentario|comment/i,
-  };
+/** Click a tab or a button by accessible name, tolerating a missing element. */
+async function clickIfPresent(page, matcher) {
+  const target = page.getByRole('button', { name: matcher }).first();
 
-  const button = page.getByRole('button', { name: labels[name] ?? name }).first();
-
-  if (await button.count()) {
-    await button.click();
-    await page.waitForTimeout(1300);
+  if (await target.count()) {
+    await target.click().catch(() => {});
+    return true;
   }
+
+  const link = page.getByRole('link', { name: matcher }).first();
+
+  if (await link.count()) {
+    await link.click().catch(() => {});
+    return true;
+  }
+
+  return false;
 }
 
-async function capture(page, { article, locale, gallery, shareUrl, action, wait = 1600, crop = true }) {
-  const slug = article.replace(/\//g, '-');
-  const file = join(SHOT_DIR, `${slug}${locale === 'es' ? '-es' : ''}.webp`);
+/**
+ * Screenshot the panel area, trimmed to its real content height.
+ *
+ * At article width a full browser window leaves a large empty band below the
+ * content, and the sidebar would shrink the interface until the labels are
+ * unreadable. Cropping to `<main>` solves both.
+ */
+async function shootPanel(page, file) {
+  const main = page.locator('main').first();
+  const box = await main.boundingBox().catch(() => null);
 
-  const url = shareUrl ?? `${BASE}/galleries/${gallery}`;
-  await page.goto(url, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(wait);
-
-  if (action?.startsWith('tab:')) {
-    await openTab(page, action.slice(4));
+  if (!box) {
+    await page.screenshot({ path: file, type: 'webp', quality: 90 });
+    return;
   }
 
-  // Never leave a tooltip open from the previous click.
-  await page.mouse.move(2, 2);
-  await page.waitForTimeout(250);
+  const contentBottom = await page.evaluate(() => {
+    let bottom = 0;
+    for (const node of document.querySelectorAll('main *')) {
+      const rect = node.getBoundingClientRect();
+      if (rect.height > 0 && rect.width > 0) {
+        bottom = Math.max(bottom, rect.bottom + window.scrollY);
+      }
+    }
+    return bottom;
+  });
 
-  if (crop) {
-    const main = page.locator('main').first();
-    const box = await main.boundingBox().catch(() => null);
+  await page.screenshot({
+    path: file,
+    type: 'webp',
+    quality: 90,
+    clip: {
+      x: box.x,
+      y: box.y,
+      width: box.width,
+      height: Math.max(260, Math.min(box.height, contentBottom - box.y + 24)),
+    },
+  });
+}
 
-    if (box) {
-      const contentBottom = await page.evaluate(() => {
-        let bottom = 0;
-        for (const node of document.querySelectorAll('main *')) {
-          const rect = node.getBoundingClientRect();
-          if (rect.height > 0 && rect.width > 0) {
-            bottom = Math.max(bottom, rect.bottom + window.scrollY);
-          }
-        }
-        return bottom;
-      });
+/** Crop an open dialog: the whole modal box plus a little breathing room. */
+async function shootDialog(page, file) {
+  const dialog = page.locator('[role="dialog"], .tsui-modal, [data-modal]').first();
+
+  if ((await dialog.count()) && (await dialog.isVisible().catch(() => false))) {
+    const box = await dialog.boundingBox().catch(() => null);
+
+    if (box && box.width > 200) {
+      const margin = 24;
+      const viewport = page.viewportSize();
 
       await page.screenshot({
         path: file,
         type: 'webp',
         quality: 90,
         clip: {
-          x: box.x,
-          y: box.y,
-          width: box.width,
-          height: Math.max(260, Math.min(box.height, contentBottom - box.y + 20)),
+          x: Math.max(0, box.x - margin),
+          y: Math.max(0, box.y - margin),
+          width: Math.min(viewport.width - Math.max(0, box.x - margin), box.width + margin * 2),
+          height: Math.min(viewport.height - Math.max(0, box.y - margin), box.height + margin * 2),
         },
       });
 
-      log(`  ${locale}: ${file.replace(ROOT + '/', '')}`);
       return;
     }
   }
 
-  await page.screenshot({ path: file, type: 'webp', quality: 90 });
-  log(`  ${locale}: ${file.replace(ROOT + '/', '')}`);
+  await shootPanel(page, file);
+}
+
+/** Crop tightly around one element, keeping a margin so it stays recognisable. */
+async function shootDetail(page, selector, file) {
+  const element = page.locator(selector).first();
+
+  if (!(await element.count())) {
+    return false;
+  }
+
+  await element.scrollIntoViewIfNeeded().catch(() => {});
+  await page.waitForTimeout(400);
+
+  const box = await element.boundingBox().catch(() => null);
+
+  if (!box || box.width < 40 || box.height < 20) {
+    return false;
+  }
+
+  const margin = 28;
+  const viewport = page.viewportSize();
+
+  await page.screenshot({
+    path: file,
+    type: 'webp',
+    quality: 92,
+    clip: {
+      x: Math.max(0, box.x - margin),
+      y: Math.max(0, box.y - margin),
+      width: Math.min(viewport.width - Math.max(0, box.x - margin), box.width + margin * 2),
+      height: Math.min(viewport.height - Math.max(0, box.y - margin), box.height + margin * 2),
+    },
+  });
+
+  return true;
 }
 
 /**
- * Record the pilot clip: the client opens the shared gallery, hearts two photos
- * and the counter moves. `recordVideo` writes a WebM with no audio.
+ * Open the Share settings dialog.
+ *
+ * A shared gallery puts "Stop sharing" (which disables sharing when clicked) next
+ * to a chevron that opens a menu with "Share settings". This helper only ever
+ * clicks the chevron and the menu item, never the destructive button, so taking
+ * screenshots cannot change the demo data.
+ */
+async function openShareSettings(page) {
+  const menuItem = page
+    .getByText(/share settings|configuraciones de compartición|ajustes de compartir|configurar compartir/i)
+    .first();
+  const chevron = page.locator('button:has(svg)').filter({ has: page.locator('svg') });
+
+  // Shared gallery: the chevron sits right next to "Stop sharing".
+  const stopSharing = page.getByText(/stop sharing|dejar de compartir/i).first();
+
+  if (await stopSharing.count()) {
+    // The chevron is the small square button that follows the label.
+    const toggle = page.locator('button.-ms-px, button[class*="rounded-s-none"]').first();
+
+    if (await toggle.count()) {
+      await toggle.click();
+      await page.waitForTimeout(800);
+    }
+
+    if (await menuItem.count()) {
+      await menuItem.click();
+      await page.waitForTimeout(1600);
+      return true;
+    }
+  }
+
+  // Not shared yet: a plain "Share" button opens the same dialog.
+  const direct = page.getByRole('button', { name: /^share$|^compartir$/i }).first();
+
+  if (await direct.count()) {
+    await direct.click();
+    await page.waitForTimeout(1600);
+    return true;
+  }
+
+  return false;
+}
+
+async function capture(page, section, locale, gallery) {
+  const slug = section.article.replace(/\//g, '-');
+  const suffix = locale === 'es' ? '-es' : '';
+  const file = join(SHOT_DIR, `${slug}${suffix}.webp`);
+  const detailFile = join(SHOT_DIR, `${slug}${suffix}.detail.webp`);
+
+  const path = section.path
+    .replace('{gallery}', gallery.id)
+    .replace('{photo}', gallery.photo ?? '');
+  await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(section.wait ?? 1600);
+
+  if (section.tab) {
+    await clickIfPresent(page, section.tab);
+    await page.waitForTimeout(1200);
+  }
+
+  if (section.openShare) {
+    await openShareSettings(page);
+  } else if (section.open?.selector) {
+    const target = page.locator(section.open.selector).first();
+
+    if (await target.count()) {
+      await target.click().catch(() => {});
+      await page.waitForTimeout(section.waitAfter ?? 1800);
+    }
+  } else if (section.open) {
+    await clickIfPresent(page, section.open.name);
+    await page.waitForTimeout(section.waitAfter ?? 1400);
+  }
+
+  // Never leave a tooltip open from the previous click.
+  await page.mouse.move(2, 2);
+  await page.waitForTimeout(250);
+
+  if (section.openShare || section.open) {
+    // A dialog is open: crop to it so the article shows exactly the switches
+    // it talks about, with the page dimmed behind.
+    await shootDialog(page, file);
+  } else {
+    await shootPanel(page, file);
+  }
+
+  log(`  ${locale}: ${file.replace(ROOT + '/', '')}`);
+
+  if (section.detail) {
+    const shot = await shootDetail(page, section.detail, detailFile);
+
+    if (shot) {
+      log(`  ${locale}: ${detailFile.replace(ROOT + '/', '')} (detail)`);
+    }
+  }
+}
+
+/** Client-facing page, captured whole because it has no sidebar. */
+async function captureClient(page, locale, shareUrl) {
+  const file = join(SHOT_DIR, `sharing-client-link${locale === 'es' ? '-es' : ''}.webp`);
+
+  await page.goto(shareUrl, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1800);
+  await page.mouse.move(2, 2);
+  await page.waitForTimeout(250);
+  await page.screenshot({ path: file, type: 'webp', quality: 90 });
+  log(`  ${locale}: ${file.replace(ROOT + '/', '')} (client page)`);
+}
+
+/**
+ * Record a clip: the client opens the shared gallery, hearts two photos and the
+ * counter moves. `recordVideo` writes a WebM with no audio.
  */
 async function recordClip(browser, locale, shareUrl) {
   mkdirSync(VIDEO_DIR, { recursive: true });
@@ -226,23 +420,13 @@ async function recordClip(browser, locale, shareUrl) {
   await page.goto(shareUrl, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1600);
 
-  // Scroll the gallery so the photo grid is centred: the hearts live on the
-  // tiles, and the first screen is the cover and the tabs.
   await page.mouse.move(640, 400);
   for (let step = 0; step < 4; step += 1) {
     await page.mouse.wheel(0, 220);
     await page.waitForTimeout(320);
   }
-
   await page.waitForTimeout(900);
 
-  // Heart two photos that are not favourites yet.
-  //
-  // The demo gallery arrives with four of six photos already favourited, and the
-  // order on screen depends on the sort, so the clip cannot assume which tiles
-  // are free. It clicks, reads the counter in the tab, and undoes the click when
-  // the counter went down. That keeps the clip correct even when the demo data
-  // is not freshly seeded.
   const counter = async () => {
     const label = await page
       .locator('button[aria-label*="favorit" i]')
@@ -250,6 +434,7 @@ async function recordClip(browser, locale, shareUrl) {
       .getAttribute('aria-label')
       .catch(() => null);
     const match = /(\d+)/.exec(label ?? '');
+
     return match ? Number(match[1]) : null;
   };
 
@@ -265,14 +450,12 @@ async function recordClip(browser, locale, shareUrl) {
     }
   }
 
-  // The demo gallery is delivered with its first four photos favourited, and the
-  // grid is sorted by name, so the free tiles are the last ones. Starting there
-  // keeps the clip short; the counter check below still guards against a
-  // re-seeded demo where the order changed.
-  const candidates = [...visible].reverse();
+  // The demo gallery arrives with its first photos favorited and the grid is
+  // sorted by name, so the free tiles are the last ones. The counter check
+  // guards against a re-seeded demo where the order changed.
   let added = 0;
 
-  for (const heart of candidates.slice(0, 4)) {
+  for (const heart of [...visible].reverse().slice(0, 4)) {
     if (added >= 2) {
       break;
     }
@@ -292,7 +475,6 @@ async function recordClip(browser, locale, shareUrl) {
       continue;
     }
 
-    // Already a favourite: the click removed it, so put it back and try another.
     await heart.click({ force: true }).catch(() => {});
     await page.waitForTimeout(900);
   }
@@ -307,9 +489,10 @@ async function recordClip(browser, locale, shareUrl) {
     return;
   }
 
-  copyFileSync(recorded, join(VIDEO_DIR, `${VIDEO.id}${locale === 'es' ? '-es' : ''}.webm`));
+  const target = join(VIDEO_DIR, `selection${locale === 'es' ? '-es' : ''}.webm`);
+  copyFileSync(recorded, target);
   rmSync(recorded, { force: true });
-  log(`  video: ${VIDEO.id}${locale === 'es' ? '-es' : ''}.webm`);
+  log(`  video: ${target.replace(ROOT + '/', '')}`);
 }
 
 async function main() {
@@ -324,31 +507,31 @@ async function main() {
   });
   const page = await context.newPage();
 
-  const sections = ONLY && ONLY !== 'video'
-    ? SECTIONS.filter((section) => section.id === ONLY || section.article === ONLY)
-    : ONLY === 'video'
-      ? []
-      : SECTIONS;
+  const sections = ONLY
+    ? SECTIONS.filter((section) => section.article === ONLY || section.article.startsWith(`${ONLY}/`))
+    : SECTIONS;
 
   for (const locale of LOCALES) {
     log(`\n${locale.toUpperCase()}`);
     await login(page, locale);
 
-    const { href, shareUrl: sharedFromState } = await demoGallery(page);
-    const gallery = href.split('/galleries/')[1]?.split('?')[0]?.split('/')[0];
-    const shareUrl = sharedFromState ?? new URL(href, BASE).toString();
-    log(`  gallery ${gallery} · ${shareUrl}`);
+    const gallery = await demoGallery();
+    log(`  gallery ${gallery.id}`);
 
     for (const section of sections) {
-      await capture(page, { ...section, locale, gallery, shareUrl: null });
+      await capture(page, section, locale, gallery);
     }
 
     if (!ONLY) {
-      await capture(page, { ...CLIENT_PAGE, locale, shareUrl });
+      for (const clientPage of CLIENT_PAGES) {
+        if (gallery.shareUrl) {
+          await captureClient(page, locale, gallery.shareUrl);
+        }
+      }
     }
 
-    if (RECORD_VIDEO) {
-      await recordClip(browser, locale, shareUrl);
+    if (RECORD_VIDEO && gallery.shareUrl) {
+      await recordClip(browser, locale, gallery.shareUrl);
     }
   }
 
@@ -356,7 +539,7 @@ async function main() {
   log('\nDone.');
   log(`Screens: ${SHOT_DIR}`);
   if (RECORD_VIDEO) {
-    log(`Video:   ${VIDEO_DIR}`);
+    log(`Videos:  ${VIDEO_DIR}`);
   }
 }
 
