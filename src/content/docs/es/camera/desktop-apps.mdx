@@ -1,73 +1,108 @@
 ---
-title: "Picstome Sync, Rater y Photo Stats"
-description: "Qué hacen las apps de escritorio, cuál instalar y cómo se conectan a tu panel."
+title: "Picstome Rater y Photo Stats"
+description: "Dos apps de escritorio que trabajan sobre los archivos de tu ordenador: una escribe tus favoritas como estrellas, la otra te dice qué equipo usas de verdad."
 help:
   section: camera.desktop-apps
-  summary: Sync descarga y sube galerías sin ZIP, Rater hace la selección con el teclado y Photo Stats lee tus metadatos.
-  appRoutes: [settings.apps, galleries, tools.calculator]
+  summary: Rater escribe tus favoritas como estrellas en tus propios archivos. Photo Stats lee sus metadatos. Sin cuenta y sin subir nada.
+  appRoutes: [galleries.show]
 ---
 
 import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="camera.desktop-apps"
-  summary="Sync descarga y sube galerías sin ZIP, Rater hace la selección con el teclado y Photo Stats lee tus metadatos."
-  routes={['settings.apps', 'galleries', 'tools.calculator']}
+  summary="Rater escribe tus favoritas como estrellas en tus propios archivos. Photo Stats lee sus metadatos. Sin cuenta y sin subir nada."
+  routes={['galleries.show']}
 />
 
 import screenshot from '@assets/screens/camera-desktop-apps-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="La pantalla de ajustes donde se listan las apps conectadas y sus tokens de acceso" caption="Las apps de escritorio usan un token, no tu contraseña. Revocarlo las desconecta." />
+<Screenshot src={screenshot} alt="El diálogo de exportar favoritos con la pestaña App seleccionada y el botón Calificar mis imágenes" caption="Picstome le pasa las favoritas al Rater desde aquí: un botón y sin iniciar sesión." />
 {/* media:end */}
 
-## Tres apps, tres trabajos
+Dos apps, las dos instaladas en tu ordenador y las dos trabajando directamente
+sobre tus archivos. Ninguna te pide iniciar sesión en Picstome y ninguna sube una
+foto.
 
 | App | Qué hace | Dónde conseguirla |
 | --- | --- | --- |
-| **Picstome Sync** | Mantiene una galería sincronizada con una carpeta del ordenador: descargar, editar y subir sin ZIP | Releases de GitHub |
-| **Picstome Rater** | Abre tus favoritas y las valora con el teclado | Releases de GitHub |
-| **Photo Stats** | Lee los metadatos de un grupo de fotos y enseña qué equipo y ajustes usas de verdad | picstome.com |
+| **Picstome Rater** | Escribe las favoritas que marcaste en el panel como estrellas en tus propios archivos | [Releases de GitHub](https://github.com/picstome/picstome-rater/releases/latest) |
+| **Photo Stats** | Lee los metadatos de una carpeta y enseña el equipo y los ajustes que usas de verdad | [picstome.com/photostats](https://picstome.com/photostats/) |
 
-Ninguna sustituye al panel. Quitan la parte aburrida: descomprimir un ZIP, abrir una carpeta, subir archivo a archivo.
+## Para qué las quieres
 
-## Cómo se conectan
+Picstome sabe **qué** fotos ha elegido tu cliente (o tú), pero la selección vive
+en la web. Tu programa de edición trabaja sobre los archivos de tu disco. Estas
+dos apps son el puente entre los dos mundos, sin exportar hojas de cálculo.
 
-Las apps de escritorio usan un **token de acceso personal**, no tu contraseña.
+## Picstome Rater
 
-1. Abre *Ajustes → Contraseña*: la sección **Apps conectadas** está al final de esa página.
-2. Crea un token y cópialo una vez (no se vuelve a mostrar).
-3. Pégalo en la app cuando te pida el servidor y el token.
+El flujo empieza en la galería, no en la app:
 
-Puedes revocar un token en cualquier momento desde la misma página. Revocarlo desconecta la app al instante; no se borra nada.
+1. Abre la galería y ve a la pestaña **Favoritos**.
+2. Pulsa **Exportar favoritos**.
+3. En la pestaña **App**, pulsa **Calificar mis imágenes**.
 
-## Picstome Sync
+Ese último botón abre el Rater con la lista de favoritas ya dentro. En la app
+eliges cuántas estrellas quieres, confirmas la carpeta donde viven esas fotos y
+pulsas **Aplicar valoración**. La app escribe la valoración en los archivos.
 
-Asocia una galería a una carpeta local:
+Qué escribe exactamente:
 
-- **Descargar:** baja la versión actual de cada foto y se salta las que ya tienes.
-- **Subir:** suelta un archivo corregido con el mismo nombre y se convierte en una [versión nueva](/es/galleries/file-versions/), no en un duplicado.
-- **Sin ZIP:** la app baja los archivos uno a uno, así una galería de 40 GB se puede reanudar después de una interrupción.
+- la valoración en los **metadatos EXIF/XMP**, no en un archivo aparte;
+- busca cada foto por su nombre de archivo, sin distinguir mayúsculas, así que la
+  carpeta tiene que contener los originales que subiste;
+- la guarda en la escala 0–100 % que Lightroom y Capture One leen como estrellas.
 
-Es el camino recomendado para un retocador o para una entrega que vas a editar durante varios días.
+Así, cuando abres esa carpeta en Lightroom o Capture One, las favoritas ya están
+valoradas y puedes filtrarlas sin tocar el ratón.
 
-## Rater
+Cosas que conviene saber:
 
-Una ventana de selección: tus favoritas a un lado y el teclado al otro. Escribe la misma [valoración](/es/culling/rating/) del 1 al 5 que escribe el panel, así que los resultados aparecen en la galería de inmediato.
-
-Es más rápido que el navegador en sesiones largas porque precarga las imágenes y no dibuja el resto del panel.
+- **Necesita exiftool** instalado en el ordenador. En macOS, `brew install
+  exiftool`; en Windows, pon `exiftool.exe` en el PATH. Si la app no lo
+  encuentra, te lo dice con un mensaje.
+- **Recuerda la última carpeta.** La próxima vez que exportes favoritas del mismo
+  reportaje, solo confirmas.
+- **Nunca borra ni mueve una foto.** Solo escribe metadatos.
+- **Es de un solo sentido.** Valorar en el ordenador no manda nada de vuelta a
+  Picstome; las estrellas viven en tus archivos, que es donde las lee tu
+  programa.
 
 ## Photo Stats
 
-Apúntalo a una carpeta y produce un resumen de tus metadatos: distancias focales, diafragmas, ISO, distribución de cámaras y objetivos. Útil para revisar el portfolio o para responder "¿qué objetivo uso de verdad?".
+Apúntala a una carpeta de fotos y contesta preguntas sobre tu propio trabajo:
 
-Lee los archivos en local; no sube tus fotos a ningún sitio.
+- qué cámara y qué objetivo usas más;
+- el ISO, el diafragma, la velocidad y la distancia focal con los que disparas de
+  verdad;
+- cuántas fotos van en vertical y cuántas en horizontal;
+- cómo cambian tus costumbres con el tiempo.
+
+Cada gráfico filtra el resto: pulsa la barra de 35 mm y el gráfico de ISO se
+actualiza para enseñar solo tus fotos de 35 mm.
+
+Funciona entera en tu máquina. Sin cuenta, sin subir nada y sin nube, y guarda su
+índice en un archivo `photo_stats.db` dentro de la carpeta que abres. La
+siguiente pasada solo lee lo nuevo o lo que ha cambiado.
+
+También necesita **exiftool** para leer los metadatos, con la misma instalación
+que el Rater.
 
 ## ¿Cuál necesito?
 
-- Entregas galerías y editas después: **Sync**.
-- Haces la selección de los clientes cada semana: **Rater**.
-- Tienes curiosidad por tus propias costumbres al disparar: **Photo Stats**.
+- Entregas galerías y quieres las favoritas de tu cliente como estrellas en
+  Lightroom o Capture One: **Rater**.
+- Tienes curiosidad por tu equipo, tus ajustes o tu evolución como fotógrafo:
+  **Photo Stats**.
 
-Instalar las tres no molesta; comparten el mismo token y ninguna modifica tus fotos sin preguntar.
+Instalar las dos no molesta. Son pequeñas, no se quedan en segundo plano y nunca
+tocan una foto más allá de la valoración que les pides.
+
+## Relacionado
+
+- [Favoritos y el límite de selección](/es/sharing/selection/): de dónde salen las
+  favoritas.
+- [Valorar y marcar](/es/culling/rating/): las mismas estrellas, dentro del panel.

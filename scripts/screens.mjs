@@ -188,12 +188,12 @@ const MEDIA = {
   },
   'camera/desktop-apps': {
     en: {
-      alt: 'The settings screen where the connected apps and their access tokens are listed',
-      caption: 'The desktop apps use a token, not your password. Revoking it disconnects them.',
+      alt: 'The export favorites dialog with the App tab selected and the Rate my images button',
+      caption: 'Picstome hands the favorites to the Rater from here: one button, no login.',
     },
     es: {
-      alt: 'La pantalla de ajustes donde se listan las apps conectadas y sus tokens de acceso',
-      caption: 'Las apps de escritorio usan un token, no tu contraseña. Revocarlo las desconecta.',
+      alt: 'El diálogo de exportar favoritos con la pestaña App seleccionada y el botón Calificar mis imágenes',
+      caption: 'Picstome le pasa las favoritas al Rater desde aquí: un botón y sin iniciar sesión.',
     },
   },
   'business/clients': {

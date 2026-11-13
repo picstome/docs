@@ -111,7 +111,7 @@ export default defineConfig({
           translations: { 'es-ES': 'Cámara y apps de escritorio' },
           items: [
             { label: 'Shoot straight to a gallery', translations: { 'es-ES': 'Dispara directo a una galería' }, slug: 'camera/direct-upload' },
-            { label: 'Picstome Sync, Rater and Photo Stats', translations: { 'es-ES': 'Picstome Sync, Rater y Photo Stats' }, slug: 'camera/desktop-apps' },
+            { label: 'Picstome Rater and Photo Stats', translations: { 'es-ES': 'Picstome Rater y Photo Stats' }, slug: 'camera/desktop-apps' },
           ],
         },
         {

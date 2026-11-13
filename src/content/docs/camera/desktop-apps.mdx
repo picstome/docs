@@ -1,73 +1,107 @@
 ---
-title: "Picstome Sync, Rater and Photo Stats"
-description: "What the desktop apps do, which one to install and how they connect to your panel."
+title: "Picstome Rater and Photo Stats"
+description: "Two desktop apps that work on the files on your computer: one writes your favorites as star ratings, the other tells you what gear you really use."
 help:
   section: camera.desktop-apps
-  summary: Sync downloads and uploads galleries without ZIPs, Rater culls with keyboard, Photo Stats reads your metadata.
-  appRoutes: [settings.apps, galleries, tools.calculator]
+  summary: Rater writes your favorites as star ratings into your own files. Photo Stats reads their metadata. No account and no upload.
+  appRoutes: [galleries.show]
 ---
 
 import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="camera.desktop-apps"
-  summary="Sync downloads and uploads galleries without ZIPs, Rater culls with keyboard, Photo Stats reads your metadata."
-  routes={['settings.apps', 'galleries', 'tools.calculator']}
+  summary="Rater writes your favorites as star ratings into your own files. Photo Stats reads their metadata. No account and no upload."
+  routes={['galleries.show']}
 />
 
 import screenshot from '@assets/screens/camera-desktop-apps.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}
-<Screenshot src={screenshot} alt="The settings screen where the connected apps and their access tokens are listed" caption="The desktop apps use a token, not your password. Revoking it disconnects them." />
+<Screenshot src={screenshot} alt="The export favorites dialog with the App tab selected and the Rate my images button" caption="Picstome hands the favorites to the Rater from here: one button, no login." />
 {/* media:end */}
 
-## Three apps, three jobs
+Two apps, both installed on your computer and both working directly on your
+files. Neither one asks you to sign in to Picstome, and neither one uploads a
+photo.
 
 | App | What it does | Where to get it |
 | --- | --- | --- |
-| **Picstome Sync** | Keeps a gallery synchronized with a folder on your computer: download, edit, upload without ZIPs | GitHub releases |
-| **Picstome Rater** | Opens your favorites and lets you rate them with the keyboard | GitHub releases |
-| **Photo Stats** | Reads the metadata of a set of photos and shows what gear and settings you actually used | picstome.com |
+| **Picstome Rater** | Writes the favorites you marked in the panel as star ratings into your own files | [GitHub releases](https://github.com/picstome/picstome-rater/releases/latest) |
+| **Photo Stats** | Reads the metadata of a folder and shows the gear and settings you really use | [picstome.com/photostats](https://picstome.com/photostats/) |
 
-None of them replaces the panel. They remove the boring part: unpacking a ZIP, opening a folder, uploading one file at a time.
+## Why you want them
 
-## Connecting them
+Picstome knows **which** photos your client (or you) selected, but the selection
+lives on the web. Your editor works on the files on your disk. These two apps are
+the bridge between the two worlds, without exporting spreadsheets.
 
-The desktop apps use a **personal access token**, not your password.
+## Picstome Rater
 
-1. Open *Settings → Password*: the **Connected apps** section is at the bottom of that page.
-2. Create a token and copy it once (it is never shown again).
-3. Paste it into the app when it asks for the server and the token.
+The flow starts in the gallery, not in the app:
 
-You can revoke a token at any time from the same page. Revoking it disconnects the app immediately; nothing is deleted.
+1. Open the gallery and go to the **Favorites** tab.
+2. Press **Export favorites**.
+3. In the **App** tab, press **Rate my images**.
 
-## Picstome Sync
+That last button opens the Rater with the list of favorites already inside. In
+the app you pick how many stars you want, confirm the folder where those photos
+live, and press **Apply rating**. The app writes the rating into the files.
 
-It maps a gallery to a local folder:
+What it actually writes:
 
-- **Download:** the current version of every photo comes down, skipping the ones you already have.
-- **Upload:** drop a corrected file with the same name and it becomes a [new version](/galleries/file-versions/), not a duplicate.
-- **No ZIP:** the app fetches files one by one, so a 40 GB gallery can be resumed after an interruption.
+- the star rating in the **EXIF/XMP metadata**, not in a sidecar file;
+- it looks for each photo by its file name, ignoring upper/lower case, so the
+  folder has to contain the originals you uploaded;
+- the rating is stored as the usual 0–100 % scale that Lightroom and Capture One
+  read as stars.
 
-This is the recommended path for a retoucher or for a delivery you will edit over several days.
+So when you open that folder in Lightroom or Capture One, the favorites are
+already rated and you can filter them without touching a mouse.
 
-## Rater
+Things worth knowing:
 
-A culling window: your favorites on one side, the keyboard on the other. It writes the same 1–5 [rating](/culling/rating/) the panel writes, so results show up in the gallery immediately.
-
-It is faster than the browser for long sessions because it preloads the images and does not render the rest of the panel.
+- **It needs exiftool** installed on your computer. On macOS,
+  `brew install exiftool`; on Windows, put `exiftool.exe` on your PATH. If the
+  app cannot find it, it shows a setup message.
+- **It remembers the last folder.** The next time you export favorites from the
+  same shoot, you only confirm.
+- **It never deletes or moves a photo.** It only writes metadata.
+- **It is one-way.** Rating on the computer does not send anything back to
+  Picstome; the stars live in your files, which is where your editor reads them.
 
 ## Photo Stats
 
-Point it at a folder and it produces a summary of your metadata: focal lengths, apertures, ISO, camera and lens distribution. Useful for a portfolio review or to answer "what lens do I actually use".
+Point it at a folder of photos and it answers questions about your own work:
 
-It reads files locally; it does not upload your photos anywhere.
+- which camera and which lens you use most;
+- the ISO, aperture, shutter speed and focal length you actually shoot at;
+- how many frames are portrait or landscape;
+- how your habits change over time.
 
-## Which do I need?
+Every chart filters the rest: click the 35 mm bar and the ISO chart updates to
+show only your 35 mm photos.
 
-- You deliver galleries and edit later: **Sync**.
-- You cull client selections every week: **Rater**.
-- You are curious about your own shooting habits: **Photo Stats**.
+It runs entirely on your machine. No account, no upload, no cloud, and it keeps
+its index in a `photo_stats.db` file inside the folder you opened. The next scan
+only reads what is new or changed.
 
-Installing all three is fine; they share the same token and none of them modifies your photos without asking.
+It also needs **exiftool** to read the metadata, with the same install as the
+Rater.
+
+## Which one do I need?
+
+- You deliver galleries and want your client's favorites as stars in Lightroom or
+  Capture One: **Rater**.
+- You are curious about your gear, your settings or your evolution as a
+  photographer: **Photo Stats**.
+
+Installing both is fine. They are small, they do not run in the background and
+they never modify a photo beyond the star rating you ask for.
+
+## Related
+
+- [Favorites and the selection limit](/sharing/selection/): where the favorites
+  come from.
+- [Rate and heart](/culling/rating/): the same stars, inside the panel.

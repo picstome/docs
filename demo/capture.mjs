@@ -101,7 +101,15 @@ const SECTIONS = [
 
   // --- Camera and apps -----------------------------------------------------
   { article: 'camera/direct-upload', path: '/galleries', wait: 1200, open: { name: /connect camera|conectar cámara/i }, waitAfter: 1600 },
-  { article: 'camera/desktop-apps', path: '/settings/password', wait: 1400 },
+  {
+    // The apps article is about the export favorites modal: that is where the
+    // "Rate my images" button hands the favorites to the desktop app.
+    article: 'camera/desktop-apps',
+    path: '/galleries/{gallery}',
+    wait: 2400,
+    tab: /favorit/i,
+    open: { selector: '[data-test="export-favorites"], button[aria-label*="favorit" i] ~ *, [x-on\\:click*="favorite-list"]' },
+  },
 
   // --- Business ------------------------------------------------------------
   { article: 'business/clients', path: '/customers', wait: 1200 },
