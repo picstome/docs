@@ -30,9 +30,11 @@ export default defineConfig({
       title: 'Picstome',
       description:
         'Guides for photographers using Picstome: galleries, sharing, client selection, contracts, invoices, payments and branding.',
+      // White wordmark for both themes. The coloured version is still in
+      // src/assets/logo-light.png if we go back to the sage-friendly logo.
       logo: {
-        light: './src/assets/logo-light.png',
-        dark: './src/assets/logo-dark.png',
+        src: './src/assets/logo-white.png',
+        alt: 'Picstome',
         replacesTitle: true,
       },
       favicon: '/favicon.svg',
