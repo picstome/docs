@@ -90,6 +90,14 @@
   color: #c6d8af;
 }
 
+/* A 40px logo plus two buttons and the menu would not fit on a phone, so the
+   logo keeps a little more air there while still being twice its old size. */
+@media (max-width: 49.99rem) {
+  .site-title img {
+    max-height: 1.875rem;
+  }
+}
+
 /* Theme and language pickers. They live at the bottom of the sidebar on
    article pages and at the end of the content on splash pages, which have no
    sidebar. The controls themselves are Starlight's, so keyboard and screen
