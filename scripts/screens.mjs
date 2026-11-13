@@ -246,14 +246,24 @@ const MEDIA = {
       caption: 'Stripe Connect indica qué falta antes de poder aceptar pagos con tarjeta.',
     },
   },
-  'brand/public-pages': {
+  'brand/public-profile': {
+    en: {
+      alt: 'The Public Profile screen with the username, bio, bio links and social links',
+      caption: 'The profile is edited here: handle, bio, links and socials.',
+    },
+    es: {
+      alt: 'La pantalla de Perfil Público con el usuario, la biografía, los enlaces bio y los enlaces sociales',
+      caption: 'El perfil se edita aquí: handle, bio, enlaces y redes.',
+    },
+  },
+  'brand/portfolio': {
     en: {
       alt: 'The Portfolio screen with the galleries published on the public page',
       caption: 'The portfolio is curated: only the galleries you add appear publicly.',
     },
     es: {
-      alt: 'La pantalla de Portfolio con las galerías publicadas en la página pública',
-      caption: 'El portfolio es curado: solo aparecen públicamente las galerías que añades.',
+      alt: 'La pantalla de Porfolio con las galerías publicadas en la página pública',
+      caption: 'El porfolio es curado: solo aparecen públicamente las galerías que añades.',
     },
   },
   'brand/watermark': {
@@ -266,14 +276,28 @@ const MEDIA = {
       caption: 'La marca de agua se graba en la copia entregada, nunca en tus originales.',
     },
   },
-  'apps/tools': {
+  'apps/calculator': {
     en: {
       alt: 'The session price calculator with fixed costs, session costs and the resulting hourly rate',
       caption: 'The calculator shows the effective hourly rate behind every price.',
+      detailAlt: 'The recommended price panel with the client price, the cost breakdown and the effective hourly rate',
+      detailCaption: 'The result separates what the client pays, what the session costs and what you earn per hour.',
     },
     es: {
       alt: 'La calculadora de precios de sesión con costes fijos, costes por sesión y la tarifa horaria resultante',
       caption: 'La calculadora enseña la tarifa horaria real detrás de cada precio.',
+      detailAlt: 'El panel de precio recomendado con lo que paga el cliente, el desglose de costes y la tarifa horaria efectiva',
+      detailCaption: 'El resultado separa lo que paga el cliente, lo que cuesta la sesión y lo que ganas por hora.',
+    },
+  },
+  'apps/black-screen': {
+    en: {
+      alt: 'The Black Screen page with the Go Black button and the keyboard shortcut',
+      caption: 'The button turns the screen black; the shortcut works from any page in the panel.',
+    },
+    es: {
+      alt: 'La página Pantalla Negra con el botón Poner en negro y el atajo de teclado',
+      caption: 'El botón pone la pantalla en negro; el atajo funciona desde cualquier página del panel.',
     },
   },
 };

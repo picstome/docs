@@ -60,6 +60,11 @@ const log = (message) => process.stdout.write(`${message}\n`);
  * - `tab` clicks one of the gallery tabs before shooting.
  * - `open` clicks a button by its accessible name (the Share dialog, the
  *   download panel) so the screenshot shows the thing the article explains.
+ * - `clicks` runs a short sequence of clicks before shooting (the invoice
+ *   wizard, for example).
+ * - `crop` crops the main shot around a selector instead of the whole panel.
+ * - `client` captures the viewport as a visitor sees it, for public pages.
+ * - `file` overrides the output name for a second shot of the same article.
  * - `detail` names a selector that is cropped around, stored as `{slug}.detail`.
  * - `wait` is the settle time for Livewire.
  */
@@ -117,13 +122,49 @@ const SECTIONS = [
 
   // --- Money ---------------------------------------------------------------
   { article: 'money/invoices', path: '/invoices', wait: 1200 },
+  {
+    // The draft opens on step 2 because it already has a client; Continue takes
+    // it to the review step, where the number and the Issue button live.
+    article: 'money/invoices',
+    file: 'money-invoices-create',
+    path: '/invoices/create?invoice={draft_invoice}',
+    wait: 2000,
+    height: 1500,
+    clicks: [{ name: /continue|continuar/i }],
+  },
+  {
+    article: 'money/invoices',
+    file: 'money-invoices-show',
+    path: '/invoices/{issued_invoice}',
+    wait: 1800,
+    height: 1500,
+    maskHost: 'https://app.picstome.com',
+  },
   { article: 'money/vat', path: '/invoices/settings', wait: 1600 },
   { article: 'money/stripe', path: '/payments', wait: 1400 },
 
   // --- Brand ---------------------------------------------------------------
-  { article: 'brand/public-pages', path: '/portfolio', wait: 1400 },
+  { article: 'brand/public-profile', path: '/public-profile', wait: 1400, height: 1600, crop: 'main section' },
+  {
+    article: 'brand/public-profile',
+    file: 'brand-public-profile-public',
+    path: '/@{handle}',
+    wait: 1800,
+    client: true,
+  },
+  { article: 'brand/portfolio', path: '/portfolio', wait: 1400, height: 1200, crop: 'main > div' },
+  {
+    article: 'brand/portfolio',
+    file: 'brand-portfolio-public',
+    path: '/@{handle}/portfolio',
+    wait: 1800,
+    client: true,
+  },
   { article: 'brand/watermark', path: '/branding/watermark', wait: 1400 },
-  { article: 'apps/tools', path: '/tools/calculator', wait: 1400 },
+
+  // --- Tools ---------------------------------------------------------------
+  { article: 'apps/calculator', path: '/tools/calculator', wait: 1400, height: 1500, detail: 'main aside' },
+  { article: 'apps/black-screen', path: '/tools/black-screen', wait: 1400, crop: 'main > div' },
 ];
 
 /** Client-facing pages: captured whole, no sidebar. */
@@ -345,20 +386,54 @@ async function openShareSettings(page) {
 }
 
 async function capture(page, section, locale, gallery) {
-  const slug = section.article.replace(/\//g, '-');
+  const slug = section.file ?? section.article.replace(/\//g, '-');
   const suffix = locale === 'es' ? '-es' : '';
   const file = join(SHOT_DIR, `${slug}${suffix}.webp`);
   const detailFile = join(SHOT_DIR, `${slug}${suffix}.detail.webp`);
 
+  const studio = state?.studio ?? {};
+  const invoices = state?.invoices ?? {};
+  await page.setViewportSize({ width: 1440, height: section.height ?? 900 });
+
   const path = section.path
     .replace('{gallery}', gallery.id)
-    .replace('{photo}', gallery.photo ?? '');
+    .replace('{photo}', gallery.photo ?? '')
+    .replace('{handle}', studio.handle ?? '')
+    .replace('{draft_invoice}', invoices.draft?.ulid ?? '')
+    .replace('{issued_invoice}', invoices.issued?.ulid ?? '');
   await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(section.wait ?? 1600);
 
   if (section.tab) {
     await clickIfPresent(page, section.tab);
     await page.waitForTimeout(1200);
+  }
+
+  if (section.maskHost) {
+    await page.evaluate((host) => {
+      for (const input of document.querySelectorAll('input')) {
+        if (/https?:\/\/(127\.0\.0\.1|localhost)/.test(input.value)) {
+          input.value = input.value.replace(/^https?:\/\/[^/]+/, host);
+        }
+      }
+    }, section.maskHost);
+  }
+
+  for (const click of section.clicks ?? []) {
+    if (click.selector) {
+      await page.locator(click.selector).first().click().catch(() => {});
+    } else {
+      await clickIfPresent(page, click.name);
+    }
+    await page.waitForTimeout(click.wait ?? 1400);
+  }
+
+  if (section.client) {
+    await page.mouse.move(2, 2);
+    await page.waitForTimeout(250);
+    await page.screenshot({ path: file, type: 'webp', quality: 90 });
+    log(`  ${locale}: ${file.replace(ROOT + '/', '')} (client page)`);
+    return;
   }
 
   if (section.openShare) {
@@ -383,6 +458,12 @@ async function capture(page, section, locale, gallery) {
     // A dialog is open: crop to it so the article shows exactly the switches
     // it talks about, with the page dimmed behind.
     await shootDialog(page, file);
+  } else if (section.crop) {
+    const cropped = await shootDetail(page, section.crop, file);
+
+    if (! cropped) {
+      await shootPanel(page, file);
+    }
   } else {
     await shootPanel(page, file);
   }
@@ -507,20 +588,22 @@ async function main() {
   mkdirSync(SHOT_DIR, { recursive: true });
   mkdirSync(VIDEO_DIR, { recursive: true });
 
-  const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
-    deviceScaleFactor: 2,
-    timezoneId: 'Europe/Madrid',
-  });
-  const page = await context.newPage();
-
   const sections = ONLY
     ? SECTIONS.filter((section) => section.article === ONLY || section.article.startsWith(`${ONLY}/`))
     : SECTIONS;
 
   for (const locale of LOCALES) {
     log(`\n${locale.toUpperCase()}`);
+    const browser = await chromium.launch({
+      args: [`--lang=${locale === 'es' ? 'es-ES' : 'en-US'}`],
+    });
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 900 },
+      deviceScaleFactor: 2,
+      locale: locale === 'es' ? 'es-ES' : 'en-US',
+      timezoneId: 'Europe/Madrid',
+    });
+    const page = await context.newPage();
     await login(page, locale);
 
     const gallery = await demoGallery();
@@ -541,9 +624,10 @@ async function main() {
     if (RECORD_VIDEO && gallery.shareUrl) {
       await recordClip(browser, locale, gallery.shareUrl);
     }
-  }
 
-  await browser.close();
+    await context.close();
+    await browser.close();
+  }
   log('\nDone.');
   log(`Screens: ${SHOT_DIR}`);
   if (RECORD_VIDEO) {

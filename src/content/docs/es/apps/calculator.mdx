@@ -1,0 +1,88 @@
+---
+title: "Calculadora de precios de sesión"
+description: "Cómo convertir tus gastos, tu equipo y tus horas reales en un precio de sesión y una tarifa efectiva por hora."
+help:
+  section: apps.calculator
+  summary: La calculadora reparte tus gastos fijos y tu tiempo entre las sesiones del mes, suma los gastos de cada sesión y el equipo, y aplica IVA e IRPF.
+  appRoutes: [tools.calculator]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="apps.calculator"
+  summary="La calculadora reparte tus gastos fijos y tu tiempo entre las sesiones del mes, suma los gastos de cada sesión y el equipo, y aplica IVA e IRPF."
+  routes={['tools.calculator']}
+/>
+
+import screenshot from '@assets/screens/apps-calculator-es.webp';
+import detail from '@assets/screens/apps-calculator-es.detail.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La calculadora de precios de sesión con costes fijos, costes por sesión y la tarifa horaria resultante" caption="La calculadora enseña la tarifa horaria real detrás de cada precio." />
+<Screenshot src={detail} alt="El panel de precio recomendado con lo que paga el cliente, el desglose de costes y la tarifa horaria efectiva" caption="El resultado separa lo que paga el cliente, lo que cuesta la sesión y lo que ganas por hora." />
+{/* media:end */}
+
+## Qué responde
+
+Dos preguntas que casi nunca se contestan con números: **cuánto cobrar por una sesión** y **cuánto estás ganando de verdad por hora** después de contar gastos, equipo y tiempo.
+
+La calculadora no adivina un precio de mercado. Hace explícita la aritmética de tu estudio para que veas si el precio que tienes en la cabeza cubre lo que cuesta hacer la sesión.
+
+## Cómo se usa
+
+1. Ajusta la **tarifa por hora** que quieres ganar y cuántas **sesiones al mes** haces de verdad.
+2. Rellena los cuatro bloques: gastos fijos, gastos de sesión, equipo y tiempo.
+3. Lee el **precio recomendado** y la **tarifa efectiva** del panel derecho.
+4. Si el número no te cuadra, cambia una variable y mira cómo se mueve el resultado.
+
+Todo se guarda solo en cuanto lo escribes. No hay botón de guardar.
+
+## La configuración rápida
+
+- **Tarifa por hora:** el valor que le das a una hora de tu tiempo, antes de impuestos. No es lo que cobras: es lo que quieres que te quede por hora trabajada.
+- **Sesiones al mes:** se usa para repartir los gastos fijos y las horas mensuales entre las sesiones. Si haces diez sesiones, cada una carga con una décima parte del alquiler y de la administración.
+- **IVA:** se añade a la factura del cliente. Pon 0 si estás exento.
+- **IRPF:** se retiene del precio base y se compensa en tu declaración de la renta. El interruptor solo se activa cuando facturas a una empresa o profesional.
+
+## Los cuatro bloques
+
+### Gastos fijos
+
+Alquiler, cuota de autónomos, seguros, software, hosting, amortización general, tu sueldo. Son mensuales y no cambian de una sesión a otra; la calculadora los divide entre las sesiones del mes.
+
+### Gastos de sesión
+
+Lo que pagas solo cuando hay sesión: desplazamiento, ayudante, segundo fotógrafo, atrezo, alquiler de equipo puntual. No se reparten: se suman enteros a cada sesión.
+
+### Equipo
+
+Lo que compraste para ese tipo de sesión. La calculadora resta el valor de reventa, reparte el resto entre los años de vida útil y calcula cuánto se lleva cada sesión. Así una cámara de 3.000 € no desaparece de la cuenta.
+
+### Tiempo
+
+No solo el disparo. Incluye la edición, la selección, la administración de esa sesión y las tareas que haces cada mes (contabilidad, redes, comercial). Las horas mensuales se reparten entre las sesiones, igual que los gastos fijos.
+
+## El resultado
+
+El panel derecho separa cuatro cosas que suelen mezclarse:
+
+- **Lo que paga el cliente**, con IVA incluido o después de la retención de IRPF.
+- **Lo que cuesta la sesión**: gastos fijos por sesión, gastos de sesión, depreciación y coste del tiempo.
+- **El precio base sin impuestos** y el IVA.
+- **La tarifa efectiva por hora**: el precio base dividido entre el tiempo total que te lleva la sesión.
+
+Si la tarifa efectiva queda por debajo de la tarifa que pusiste, el precio no cubre tu tiempo. Ahora puedes ver qué parte pesa más y ajustarla.
+
+Puedes **copiar el resumen** para pegarlo en una propuesta o en una nota, y **reiniciar** la calculadora a los valores por defecto cuando quieras empezar de cero.
+
+## Se guarda por estudio
+
+Los valores son del equipo, no de tu usuario. Si otra persona del estudio abre la calculadora, ve los mismos números. Eso evita que cada miembro calcule con costes distintos.
+
+## Relacionado
+
+- [Planes y almacenamiento](/es/start/plans-and-storage/) — la calculadora y la pantalla negra están en todos los planes.
+- [Facturas en resumen](/es/money/invoices/) — cómo convertir el precio en una factura.
+- [Picstome Rater y Photo Stats](/es/apps/rater-and-photo-stats/) — las apps de escritorio.

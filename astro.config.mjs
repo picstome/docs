@@ -22,8 +22,12 @@ export default defineConfig({
     '/es/camera/direct-upload': '/es/galleries/direct-upload',
     '/camera/desktop-apps': '/apps/rater-and-photo-stats',
     '/es/camera/desktop-apps': '/es/apps/rater-and-photo-stats',
-    '/brand/tools': '/apps/tools',
-    '/es/brand/tools': '/es/apps/tools',
+    '/brand/tools': '/apps/calculator',
+    '/es/brand/tools': '/es/apps/calculator',
+    '/apps/tools': '/apps/calculator',
+    '/es/apps/tools': '/es/apps/calculator',
+    '/brand/public-pages': '/brand/public-profile',
+    '/es/brand/public-pages': '/es/brand/public-profile',
   },
   integrations: [
     starlight({
@@ -136,7 +140,8 @@ export default defineConfig({
           label: 'Your brand',
           translations: { 'es-ES': 'Tu marca' },
           items: [
-            { label: 'Public profile and portfolio', translations: { 'es-ES': 'Perfil público y porfolio' }, slug: 'brand/public-pages' },
+            { label: 'Public profile', translations: { 'es-ES': 'Perfil público' }, slug: 'brand/public-profile' },
+            { label: 'Portfolio', translations: { 'es-ES': 'Porfolio' }, slug: 'brand/portfolio' },
             { label: 'Watermark', translations: { 'es-ES': 'Marca de agua' }, slug: 'brand/watermark' },
           ],
         },
@@ -144,7 +149,8 @@ export default defineConfig({
           label: 'Tools and apps',
           translations: { 'es-ES': 'Herramientas y apps' },
           items: [
-            { label: 'Session calculator and black screen', translations: { 'es-ES': 'Calculadora y pantalla negra' }, slug: 'apps/tools' },
+            { label: 'Session price calculator', translations: { 'es-ES': 'Calculadora de precios' }, slug: 'apps/calculator' },
+            { label: 'Black screen', translations: { 'es-ES': 'Pantalla negra' }, slug: 'apps/black-screen' },
             { label: 'Rater and Photo Stats', translations: { 'es-ES': 'Rater y Photo Stats' }, slug: 'apps/rater-and-photo-stats' },
           ],
         },

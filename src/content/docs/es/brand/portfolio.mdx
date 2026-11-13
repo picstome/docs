@@ -1,0 +1,67 @@
+---
+title: "Porfolio"
+description: "Cómo elegir, ordenar y publicar las galerías que enseñan tu trabajo en /@tuusuario/portfolio."
+help:
+  section: brand.portfolio
+  summary: El porfolio es una selección curada de galerías públicas. Añadir una la publica, quitarla la vuelve privada y el orden se cambia arrastrando.
+  appRoutes: [portfolio, portfolio.index, portfolio.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="brand.portfolio"
+  summary="El porfolio es una selección curada de galerías públicas. Añadir una la publica, quitarla la vuelve privada y el orden se cambia arrastrando."
+  routes={['portfolio', 'portfolio.index', 'portfolio.show']}
+/>
+
+import publicPortfolio from '@assets/screens/brand-portfolio-public-es.webp';
+
+import screenshot from '@assets/screens/brand-portfolio-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pantalla de Porfolio con las galerías publicadas en la página pública" caption="El porfolio es curado: solo aparecen públicamente las galerías que añades." />
+{/* media:end */}
+
+## Una selección, no un volcado
+
+El porfolio no muestra todas tus galerías. Muestra **solo las que añades a propósito**. Es la diferencia entre entregar un reportaje y enseñar el trabajo que quieres que te encarguen.
+
+Añadir una galería la hace pública y la saca de la caducidad de las galerías compartidas. Quitarla la vuelve privada, deja de aparecer en la página y recupera una fecha de caducidad.
+
+## Añadir, quitar y ordenar
+
+- **Añadir:** el botón **Agregar galerías** abre una lista con las galerías privadas. Elige una y aparece en el porfolio.
+- **Ordenar:** arrastra por el asa de la izquierda. El orden es el que ve el visitante.
+- **Quitar:** la **×** de la derecha la saca del porfolio. No borra la galería ni las fotos.
+
+## Activar y desactivar
+
+El botón **Desactivar** oculta la página pública del porfolio sin borrar nada. Las galerías siguen en tu panel y el perfil público sigue funcionando con sus enlaces.
+
+Cuando quieras volver a enseñarlo, pulsa **Activar**. No hay que volver a añadir las galerías: siguen asociadas.
+
+## Galería compartida y galería del porfolio
+
+| | Galería compartida | Galería del porfolio |
+| --- | --- | --- |
+| Quién la ve | El cliente con el enlace | Cualquiera |
+| Contraseña | Posible | No aplica |
+| Para qué sirve | Entregar un reportaje | Mostrar tu trabajo |
+| Caducidad | Según el plan | Nunca caduca |
+| Descargas | Se pueden activar o desactivar | No se ofrecen |
+
+Una galería puede estar compartida y en el porfolio a la vez. Son dos cosas distintas: compartir crea un enlace privado; publicar la añade a la página abierta.
+
+## Lo que ve el visitante
+
+<Screenshot src={publicPortfolio} alt="La página pública del porfolio con la galería publicada, el nombre del estudio y los iconos sociales" caption="El porfolio público muestra las galerías en el orden que has elegido, sin contraseñas ni caducidad." />
+
+El porfolio vive en **`/@tuusuario/portfolio`**. El botón **Ver porfolio** de la pantalla de gestión lo abre en otra pestaña.
+
+## Relacionado
+
+- [Perfil público](/es/brand/public-profile/) — la página que lleva al porfolio.
+- [Compartir con clientes](/es/sharing/) — el enlace privado de una galería.
+- [Archivar una foto](/es/culling/archiving/) — cómo ocultar fotos sin borrarlas.

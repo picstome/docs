@@ -1,0 +1,88 @@
+---
+title: "Session price calculator"
+description: "How to turn your costs, gear and real hours into a session price and an effective hourly rate."
+help:
+  section: apps.calculator
+  summary: The calculator spreads fixed costs and monthly time across the sessions you do, adds the cost of each session and the gear, and applies VAT and IRPF.
+  appRoutes: [tools.calculator]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="apps.calculator"
+  summary="The calculator spreads fixed costs and monthly time across the sessions you do, adds the cost of each session and the gear, and applies VAT and IRPF."
+  routes={['tools.calculator']}
+/>
+
+import screenshot from '@assets/screens/apps-calculator.webp';
+import detail from '@assets/screens/apps-calculator.detail.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The session price calculator with fixed costs, session costs and the resulting hourly rate" caption="The calculator shows the effective hourly rate behind every price." />
+<Screenshot src={detail} alt="The recommended price panel with the client price, the cost breakdown and the effective hourly rate" caption="The result separates what the client pays, what the session costs and what you earn per hour." />
+{/* media:end */}
+
+## What it answers
+
+Two questions that are rarely answered with numbers: **how much to charge for a session** and **how much you are really earning per hour** once costs, gear and time are counted.
+
+The calculator does not guess a market price. It makes your studio's arithmetic explicit so you can see whether the price in your head covers what the session costs to make.
+
+## How to use it
+
+1. Set the **hourly rate** you want to earn and how many **sessions per month** you actually shoot.
+2. Fill in the four blocks: fixed expenses, session expenses, equipment and time.
+3. Read the **recommended price** and the **effective rate** in the right-hand panel.
+4. If the number does not work, change one variable and watch the result move.
+
+Everything saves as you type. There is no save button.
+
+## Quick settings
+
+- **Hourly rate:** the value you put on an hour of your time, before taxes. It is not what you charge: it is what you want to keep per hour worked.
+- **Sessions per month:** used to spread fixed costs and monthly hours across sessions. If you shoot ten sessions, each one carries a tenth of the rent and the admin work.
+- **VAT:** added to the client invoice. Set it to 0 when you are exempt.
+- **IRPF:** withheld from the base price and credited against your income tax. The switch only applies when you invoice a company or a professional.
+
+## The four blocks
+
+### Fixed expenses
+
+Rent, self-employment quota, insurance, software, hosting, general depreciation, your salary. They are monthly and do not change from one session to another; the calculator divides them across the sessions in the month.
+
+### Session expenses
+
+What you only pay when there is a session: travel, an assistant, a second shooter, props, a one-off gear rental. They are not spread out: they are added in full to each session.
+
+### Equipment
+
+What you bought for that kind of session. The calculator subtracts the resale value, spreads the rest over its useful life and works out how much each session carries. A €3,000 camera does not disappear from the maths.
+
+### Time
+
+Not just the shoot. It includes editing, culling, the admin for that session and the tasks you do every month (bookkeeping, social media, sales). Monthly hours are spread across sessions, just like fixed costs.
+
+## The result
+
+The right-hand panel separates four things that usually get mixed together:
+
+- **What the client pays**, VAT included or after IRPF withholding.
+- **What the session costs**: fixed costs per session, session expenses, depreciation and the cost of your time.
+- **The base price before taxes** and the VAT.
+- **The effective hourly rate**: the base price divided by the total time the session takes.
+
+If the effective rate falls below the rate you set, the price is not covering your time. Now you can see which part weighs the most and adjust it.
+
+You can **copy the summary** to paste it into a proposal or a note, and **reset** the calculator to its defaults whenever you want to start over.
+
+## Saved per studio
+
+The values belong to the team, not your user. If someone else in the studio opens the calculator, they see the same numbers. That keeps every member from calculating with different costs.
+
+## Related
+
+- [Plans and storage](/start/plans-and-storage/) — the calculator and the black screen are included in every plan.
+- [Invoices in a nutshell](/money/invoices/) — how to turn the price into an invoice.
+- [Picstome Rater and Photo Stats](/apps/rater-and-photo-stats/) — the desktop apps.

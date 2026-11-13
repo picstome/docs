@@ -17,7 +17,7 @@ What it creates, and refreshes on every run:
 
 | Section | Rows |
 | --- | --- |
-| Account | `docs@picstome.test` / `password`, studio `Estudio Norte`, handle `estudionorte` (or `estudionorte-docs` if taken) |
+| Account | `docs@picstome.test` / `password`, studio `Estudio Norte`, handle `estudionorte` (or `estudionorte2` if taken) |
 | Galleries | `Boda de Lucía y Marc` (shared, 40-photo selection limit, ratings, one pinned comment), `Retrato de estudio — Marta` (shared, watermarked, 5-photo limit), `Boda en la sierra` (public portfolio) |
 | Clients | Lucía Ferrer (individual), Marc Vidal (individual), Agencia Bruma (company) |
 | Photoshoots | One per delivered gallery |
@@ -53,8 +53,12 @@ Options:
 Outputs:
 
 - `src/assets/screens/{slug}.webp` and `{slug}-es.webp`
+- `{file}.webp` for extra shots of the same article (the invoice wizard and
+  detail, the public profile and portfolio pages)
 - `{slug}.detail.webp` when the article has a `detail` selector (a tighter crop
   of the one control it talks about)
+- public pages declared with `client: true` are captured as a visitor sees them,
+  without the panel crop
 
 ## 3. Wire the media into the articles
 

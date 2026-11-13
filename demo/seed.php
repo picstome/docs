@@ -16,8 +16,8 @@
  *   `docs-demo/`: a shared wedding with a selection limit, a private portrait
  *   gallery with watermarked previews, and a public portfolio gallery;
  * - two photoshoots, three clients, a contract template and two contracts;
- * - invoice settings with real fiscal data and three invoices: draft, issued
- *   and a corrective one.
+ * - invoice settings with real fiscal data and two invoices: one draft and one
+ *   issued.
  *
  * Photos: Unsplash, free for commercial use, already resized to 1400 px and
  * committed in `demo/photos/`, so the seed also works offline.
@@ -26,6 +26,7 @@
  * demo rows in the database and the objects in the S3 bucket.
  */
 
+use App\Models\BioLink;
 use App\Models\Contract;
 use App\Models\ContractTemplate;
 use App\Models\Customer;
@@ -72,7 +73,7 @@ if (! $user->personalTeam()) {
     $handle = $desiredHandle;
 
     if (Team::query()->where('handle', $handle)->exists()) {
-        $handle = $desiredHandle.'-docs';
+        $handle = $desiredHandle.'2';
     }
 
     $team = $user->ownedTeams()->create([
@@ -100,6 +101,16 @@ $team->forceFill([
     // and the percentage, and an unlimited account has no bar to show.
     'custom_storage_limit' => 1073741824,
 ])->save();
+
+BioLink::query()->updateOrCreate(
+    ['team_id' => $team->id, 'url' => 'https://estudionorte.example/reservar'],
+    ['title' => 'Reserva una sesión', 'order' => 0],
+);
+
+BioLink::query()->updateOrCreate(
+    ['team_id' => $team->id, 'url' => 'https://estudionorte.example/tarifas'],
+    ['title' => 'Tarifas y packs', 'order' => 1],
+);
 
 echo "✅ Estudio: {$team->name} ({$team->handle}) · disco {$disk}\n";
 
@@ -224,7 +235,7 @@ if (count($photos) < 12) {
     echo '⚠️ Solo hay '.count($photos)." fotos en {$photoDir}\n";
 }
 
-$state = ['galleries' => [], 'login' => ['email' => $email, 'password' => $password]];
+$state = ['galleries' => [], 'login' => ['email' => $email, 'password' => $password], 'studio' => ['handle' => $team->handle, 'name' => $team->name], 'invoices' => []];
 
 $galleryRows = [
     [
@@ -556,11 +567,16 @@ $invoiceBase = [
 
 $year = (int) now()->year;
 
+// Older versions of this seed used 9002 for the issued invoice; remove it so
+// the demo list does not show the same invoice twice.
+Invoice::query()->where('team_id', $team->id)->where('number', 9002)->delete();
+
 $draft = Invoice::query()->updateOrCreate(
     ['team_id' => $team->id, 'series' => 'F', 'year' => $year, 'number' => 9001],
     array_merge($invoiceBase, [
         'status' => Invoice::STATUS_DRAFT,
         'issue_date' => now()->toDateString(),
+        'due_date' => now()->addDays(30)->toDateString(),
         'issued_at' => null,
         'full_number' => null,
     ]),
@@ -568,15 +584,20 @@ $draft = Invoice::query()->updateOrCreate(
 
 // An issued invoice is immutable, so it is created once and then left alone.
 $issued = Invoice::query()->firstOrCreate(
-    ['team_id' => $team->id, 'series' => 'F', 'year' => $year, 'number' => 9002],
+    ['team_id' => $team->id, 'series' => 'F', 'year' => $year, 'number' => 2],
     array_merge($invoiceBase, [
         'status' => Invoice::STATUS_ISSUED,
         'issue_date' => now()->subDays(20)->toDateString(),
         'issued_at' => now()->subDays(20),
-        'full_number' => "F-{$year}-9002",
+        'full_number' => "F-{$year}-0002",
         'public_token' => Str::random(40),
     ]),
 );
+
+$state['invoices'] = [
+    'draft' => ['ulid' => $draft->ulid, 'number' => $draft->full_number],
+    'issued' => ['ulid' => $issued->ulid, 'number' => $issued->full_number],
+];
 
 echo "✅ Facturas: borrador y emitida ({$issued->full_number})\n";
 

@@ -1,9 +1,9 @@
 ---
 title: "Facturas en resumen"
-description: "Cómo funciona la numeración, cuándo una factura pasa a ser oficial y qué recibe el cliente cuando la envías."
+description: "Cómo se crea una factura paso a paso, cuándo pasa a ser oficial y qué puedes hacer con ella después de emitirla."
 help:
   section: money.invoices
-  summary: Una factura es un borrador hasta que la emites. Al emitirla recibe número y PDF; el cliente recibe un enlace público.
+  summary: Una factura se prepara en tres pasos y es un borrador hasta que la emites. Al emitirla recibe número y PDF, y el cliente recibe un enlace público.
   appRoutes: [invoices, invoices.create, invoices.show]
 ---
 
@@ -12,9 +12,12 @@ import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
   section="money.invoices"
-  summary="Una factura es un borrador hasta que la emites. Al emitirla recibe número y PDF; el cliente recibe un enlace público."
+  summary="Una factura se prepara en tres pasos y es un borrador hasta que la emites. Al emitirla recibe número y PDF, y el cliente recibe un enlace público."
   routes={['invoices', 'invoices.create', 'invoices.show']}
 />
+
+import createInvoice from '@assets/screens/money-invoices-create-es.webp';
+import issuedInvoice from '@assets/screens/money-invoices-show-es.webp';
 
 import screenshot from '@assets/screens/money-invoices-es.webp';
 import Screenshot from '@components/Screenshot.astro';
@@ -22,6 +25,39 @@ import Screenshot from '@components/Screenshot.astro';
 {/* media:start */}
 <Screenshot src={screenshot} alt="La lista de Facturas con la numeración, el estado y los totales" caption="Los borradores no consumen número; al emitir se asigna uno y se genera el PDF." />
 {/* media:end */}
+
+## Cómo se hace una factura
+
+Tres pasos. Hasta el último, lo que tienes es un borrador y no consume número.
+
+<Steps>
+
+1. **Cliente.** Busca una ficha por nombre o NIF, o crea una nueva. Si al cliente le faltan datos fiscales, la app te avisa antes de dejarte avanzar.
+
+2. **Líneas.** Añade concepto, cantidad y precio. Puedes añadir o quitar líneas; el total se recalcula solo.
+
+3. **Revisar y emitir.** Elige el tipo de factura, las fechas, el IVA, la retención de IRPF, el descuento, las condiciones de pago y las notas. Revisa el número y pulsa **Emitir**.
+
+</Steps>
+
+<Screenshot src={createInvoice} alt="El paso 3 del asistente de facturas, con el número sugerido, el resumen de totales y el botón Emitir" caption="El paso 3 es el único que emite: hasta aquí todo sigue siendo un borrador." />
+
+El número del paso 3 es una sugerencia. Puedes cambiarlo una vez, al emitir, para que coincida con un formato que ya uses (`INV-0042`, `2026/0042`). Si queda por debajo del último número o deja un hueco, la app te avisa, pero no te bloquea.
+
+## Después de emitir
+
+<Screenshot src={issuedInvoice} alt="El detalle de una factura emitida con el estado de pago, los datos del emisor y del cliente, el enlace público y los botones para rectificar o duplicar" caption="La factura emitida ya es un documento: desde aquí se envía, se cobra o se rectifica." />
+
+Una factura emitida ya no se edita como un borrador. Desde su página puedes:
+
+- **Enviarla por email** al cliente, con el PDF adjunto y el enlace público.
+- **Abrir el enlace público** para verla como la ve el cliente, o desactivarlo si ya no debe estar disponible.
+- **Descargar el PDF**.
+- **Marcarla como pagada** (o volver a pendiente) cuando cobras fuera de Picstome. Si el pago llega por Stripe, se marca sola.
+- **Duplicarla** para preparar la factura del mes siguiente con el mismo cliente y las mismas líneas. La copia nace como borrador y no copia el número.
+- **Rectificarla** si el documento ya emitido tiene un error. No se modifica el original: se emite una [factura rectificativa](/es/money/vat/).
+
+Lo único editable después de emitir son las notas y el estado de pago. Si el cambio afecta a importes, datos fiscales o líneas, va por rectificativa.
 
 ## Borrador, emitida, pagada
 
@@ -57,12 +93,6 @@ Cada factura guarda una **copia** de tus datos fiscales y de los del cliente en 
 El PDF lleva un enlace de verificación a una página pública con una huella, para que cualquiera pueda confirmar que el documento no se ha alterado.
 
 Picstome no es un sistema de facturación homologado (no imprime VERI*FACTU ni el QR de la AEAT). Produce facturas correctas; no sustituye a un programa homologado si la ley te lo exige en tu caso.
-
-## Envío y recordatorios
-
-- La factura se puede enviar por email desde la página de la factura.
-- Lo que descarga el cliente es un PDF, sea cual sea el dispositivo.
-- El estado de pago es manual salvo que la factura se pague por Stripe, en cuyo caso se marca solo.
 
 ## Límite mensual
 

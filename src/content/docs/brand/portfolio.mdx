@@ -1,0 +1,67 @@
+---
+title: "Portfolio"
+description: "How to choose, order and publish the galleries that show your work at /@yourhandle/portfolio."
+help:
+  section: brand.portfolio
+  summary: The portfolio is a curated set of public galleries. Adding one publishes it, removing one makes it private, and the order changes by dragging.
+  appRoutes: [portfolio, portfolio.index, portfolio.show]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="brand.portfolio"
+  summary="The portfolio is a curated set of public galleries. Adding one publishes it, removing one makes it private, and the order changes by dragging."
+  routes={['portfolio', 'portfolio.index', 'portfolio.show']}
+/>
+
+import publicPortfolio from '@assets/screens/brand-portfolio-public.webp';
+
+import screenshot from '@assets/screens/brand-portfolio.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="The Portfolio screen with the galleries published on the public page" caption="The portfolio is curated: only the galleries you add appear publicly." />
+{/* media:end */}
+
+## A selection, not a dump
+
+The portfolio does not show every gallery you have. It shows **only the ones you add on purpose**. That is the difference between delivering a shoot and showing the work you want to be hired for.
+
+Adding a gallery makes it public and takes it out of the shared-gallery expiry. Removing it makes it private, hides it from the page and gives it an expiry date again.
+
+## Add, remove and reorder
+
+- **Add:** the **Add galleries** button opens a list of private galleries. Pick one and it appears in the portfolio.
+- **Reorder:** drag it by the handle on the left. That is the order visitors see.
+- **Remove:** the **×** on the right takes it out of the portfolio. It does not delete the gallery or the photos.
+
+## Enable and disable
+
+The **Disable** button hides the public portfolio page without deleting anything. The galleries stay in your panel and the public profile keeps working with its links.
+
+When you want to show it again, press **Enable**. You do not need to add the galleries again: they are still associated.
+
+## Shared gallery vs portfolio gallery
+
+| | Shared gallery | Portfolio gallery |
+| --- | --- | --- |
+| Who sees it | The client with the link | Anyone |
+| Password | Possible | Not applicable |
+| What it is for | Delivering a shoot | Showing your work |
+| Expiry | Depends on the plan | Never expires |
+| Downloads | Can be enabled or disabled | Not offered |
+
+A gallery can be shared and in the portfolio at the same time. They are two different things: sharing creates a private link; publishing adds it to the open page.
+
+## What the visitor sees
+
+<Screenshot src={publicPortfolio} alt="The public portfolio page with the published gallery, the studio name and the social icons" caption="The public portfolio shows the galleries in the order you chose, with no passwords or expiry." />
+
+The portfolio lives at **`/@yourhandle/portfolio`**. The **View portfolio** button on the management screen opens it in another tab.
+
+## Related
+
+- [Public profile](/brand/public-profile/) — the page that leads to the portfolio.
+- [Sharing with clients](/sharing/) — the private link for a gallery.
+- [Archiving a photo](/culling/archiving/) — how to hide photos without deleting them.

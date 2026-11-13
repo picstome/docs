@@ -1,0 +1,52 @@
+---
+title: "Pantalla negra"
+description: "Cómo dejar la pantalla completamente en negro para limpiar el monitor, usarla como fuente de luz o mantener el ordenador despierto."
+help:
+  section: apps.black-screen
+  summary: La pantalla negra cubre la app y pide pantalla completa para limpiar el monitor, usarla como fuente de luz o mantener el ordenador despierto. Se sale con Esc o un clic.
+  appRoutes: [tools.black-screen]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="apps.black-screen"
+  summary="La pantalla negra cubre la app y pide pantalla completa para limpiar el monitor, usarla como fuente de luz o mantener el ordenador despierto. Se sale con Esc o un clic."
+  routes={['tools.black-screen']}
+/>
+
+import screenshot from '@assets/screens/apps-black-screen-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La página Pantalla Negra con el botón Poner en negro y el atajo de teclado" caption="El botón pone la pantalla en negro; el atajo funciona desde cualquier página del panel." />
+{/* media:end */}
+
+## Para qué sirve
+
+Deja la pantalla completamente negra, sin paneles ni cursores. Sirve para tres cosas muy concretas:
+
+- **Limpiar el monitor** sin apagar el ordenador ni cerrar la sesión.
+- **Usar la pantalla como fuente de luz o reflector** en una sesión con poca luz.
+- **Mantener el ordenador despierto** sin tener la pantalla encendida.
+
+## Cómo se activa
+
+Desde su página, con el botón **Poner en negro**. O desde cualquier otra página del panel con `Ctrl+B` en Windows y Linux, o `⌘B` en Mac.
+
+Al activarla, la app pide pantalla completa y solicita al navegador que no apague la pantalla (wake lock). Si el navegador no permite una de las dos cosas, la capa negra sigue funcionando igual; solo se queda dentro de la ventana.
+
+## Cómo se sale
+
+Pulsa `Esc` o haz clic en cualquier parte de la pantalla. También se cierra si sales de pantalla completa con el navegador.
+
+No se cierra nada, no se duerme el ordenador y no se detiene ninguna subida. Solo desaparece la capa negra.
+
+## Un matiz sobre el ahorro
+
+En una pantalla OLED, el negro apaga los píxeles y sí ahorra energía. En un monitor LCD la retroiluminación sigue encendida, así que el ahorro es pequeño; lo que consigues sobre todo es no deslumbrarte y no dormir el equipo.
+
+## Relacionado
+
+- [Calculadora de precios](/es/apps/calculator/) — la otra herramienta de sesión.
+- [Planes y almacenamiento](/es/start/plans-and-storage/) — ambas están en todos los planes.

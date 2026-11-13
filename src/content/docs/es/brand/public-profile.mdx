@@ -1,0 +1,70 @@
+---
+title: "Perfil público"
+description: "Qué es la página /@tuusuario, qué poner en ella y cómo se ve cuando la abre un cliente."
+help:
+  section: brand.public-profile
+  summary: Tu handle es la dirección pública del estudio. En esa página van tu logo, tu nombre, tu bio, tus enlaces y, si lo activas, el botón de pago.
+  appRoutes: [public-profile, handle.show, branding.general, branding.styling]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="brand.public-profile"
+  summary="Tu handle es la dirección pública del estudio. En esa página van tu logo, tu nombre, tu bio, tus enlaces y, si lo activas, el botón de pago."
+  routes={['public-profile', 'handle.show', 'branding.general', 'branding.styling']}
+/>
+
+import publicProfile from '@assets/screens/brand-public-profile-public-es.webp';
+
+import screenshot from '@assets/screens/brand-public-profile-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+{/* media:start */}
+<Screenshot src={screenshot} alt="La pantalla de Perfil Público con el usuario, la biografía, los enlaces bio y los enlaces sociales" caption="El perfil se edita aquí: handle, bio, enlaces y redes." />
+{/* media:end */}
+
+## La dirección pública
+
+Tu perfil vive en **`/@tuusuario`**. Ese handle es la dirección que pones en una bio de Instagram, en una tarjeta o en la firma de un email. Es única dentro de Picstome.
+
+Si cambias el handle, la dirección antigua deja de funcionar. Si ya lo habías compartido, avisa o vuelve a repartir el enlace nuevo.
+
+## Qué poner
+
+- **Biografía.** Una o dos frases sobre qué haces y para quién. No es un currículum; es lo que alguien necesita para decidir si te escribe.
+- **Enlaces bio.** Botones debajo de la bio: reservas, tarifas, WhatsApp, un PDF con el dossier. Se pueden ordenar arrastrando.
+- **Enlaces sociales.** Instagram, web y email. Se convierten en los iconos que aparecen al pie del perfil.
+
+El botón **Ver perfil** abre la página pública en otra pestaña. **Estilo** lleva a los ajustes de color de las páginas públicas.
+
+## La marca
+
+Los ajustes de *Marca* cambian solo las **páginas públicas**, no el panel:
+
+- **General:** nombre del estudio, handle, contacto y redes.
+- **Logos:** el logo de la cabecera y el icono que se usa como favicon.
+- **Estilo:** el color de acento de las páginas públicas.
+- **Marca de agua:** la que se aplica a las fotos de galerías compartidas. Tiene su propio artículo.
+
+El panel mantiene la paleta de Picstome a propósito: así un miembro del equipo nunca confunde la herramienta interna con una página de cliente.
+
+## Lo que ve el visitante
+
+<Screenshot src={publicProfile} alt="La página pública del estudio con el nombre, la bio, el botón Ver Portfolio, los enlaces bio y los iconos sociales" caption="El perfil público es una página de aterrizaje: una dirección, tus enlaces y el acceso al portfolio." />
+
+Si tienes galerías públicas, aparece el botón **Ver Portfolio**. Si no, el perfil sigue funcionando como página de enlaces.
+
+## El botón de pago
+
+Si lo activas, el visitante puede enviarte un pago desde la propia página. El cobro se hace con Stripe; si no lo tienes conectado, el botón no aparece. La configuración está en [Cobrar con Stripe](/es/money/stripe/).
+
+## Marca blanca
+
+Con la suscripción desaparece el pie `Funciona con Picstome` de las páginas públicas. Es la única diferencia de marca entre planes; el resto del perfil es igual.
+
+## Relacionado
+
+- [Porfolio](/es/brand/portfolio/) — las galerías que se muestran en la página pública.
+- [Marca de agua](/es/brand/watermark/) — la marca que se graba en las fotos compartidas.
+- [Cobrar con Stripe](/es/money/stripe/) — el botón de pago del perfil.

@@ -1,9 +1,9 @@
 ---
 title: "Invoices in a nutshell"
-description: "How numbering works, when an invoice becomes official, and what the client gets when you send it."
+description: "How to create an invoice step by step, when it becomes official, and what you can do with it after issuing it."
 help:
   section: money.invoices
-  summary: An invoice is a draft until you issue it. Issue it to get a number and a PDF; the client gets a public link.
+  summary: An invoice is prepared in three steps and stays a draft until you issue it. Issuing assigns a number and a PDF, and the client gets a public link.
   appRoutes: [invoices, invoices.create, invoices.show]
 ---
 
@@ -12,9 +12,12 @@ import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
   section="money.invoices"
-  summary="An invoice is a draft until you issue it. Issue it to get a number and a PDF; the client gets a public link."
+  summary="An invoice is prepared in three steps and stays a draft until you issue it. Issuing assigns a number and a PDF, and the client gets a public link."
   routes={['invoices', 'invoices.create', 'invoices.show']}
 />
+
+import createInvoice from '@assets/screens/money-invoices-create.webp';
+import issuedInvoice from '@assets/screens/money-invoices-show.webp';
 
 import screenshot from '@assets/screens/money-invoices.webp';
 import Screenshot from '@components/Screenshot.astro';
@@ -22,6 +25,39 @@ import Screenshot from '@components/Screenshot.astro';
 {/* media:start */}
 <Screenshot src={screenshot} alt="The Invoices list with the numbering, status and totals per invoice" caption="Drafts take no number; issuing assigns one and produces the PDF." />
 {/* media:end */}
+
+## How to create an invoice
+
+Three steps. Until the last one, what you have is a draft and it consumes no number.
+
+<Steps>
+
+1. **Client.** Search a record by name or tax ID, or create a new one. If the client is missing fiscal data, the app warns you before letting you continue.
+
+2. **Line items.** Add a description, quantity and price. You can add or remove lines; the total recalculates by itself.
+
+3. **Review and issue.** Choose the invoice type, dates, VAT, IRPF withholding, discount, payment terms and notes. Check the number and press **Issue**.
+
+</Steps>
+
+<Screenshot src={createInvoice} alt="Step 3 of the invoice wizard with the suggested number, the totals summary and the Issue button" caption="Step 3 is the only one that issues: until then everything is still a draft." />
+
+The number on step 3 is a suggestion. You can change it once, when issuing, to match a format you already use (`INV-0042`, `2026/0042`). If it is lower than the last number or leaves a gap, the app warns you but does not block you.
+
+## After issuing
+
+<Screenshot src={issuedInvoice} alt="An issued invoice detail with the payment state, issuer and client details, the public link and the buttons to rectify or duplicate" caption="An issued invoice is a document: from here you send it, get paid or rectify it." />
+
+An issued invoice is no longer edited like a draft. From its page you can:
+
+- **Send it by email** to the client, with the PDF attached and the public link.
+- **Open the public link** to see it the way the client does, or deactivate it when it should no longer be available.
+- **Download the PDF**.
+- **Mark it as paid** (or back to pending) when you get paid outside Picstome. If the payment comes through Stripe, it is marked automatically.
+- **Duplicate it** to prepare next month's invoice with the same client and lines. The copy starts as a draft and does not copy the number.
+- **Rectify it** if an issued document has a mistake. The original is not modified: you issue a [corrective invoice](/money/vat/).
+
+The only things editable after issuing are the notes and the payment state. If the change affects amounts, fiscal data or line items, it goes through a corrective invoice.
 
 ## Draft, issued, paid
 
@@ -57,12 +93,6 @@ Every invoice keeps a **snapshot** of your fiscal data and the client's at the m
 The PDF carries a verification link to a public page with a fingerprint, so anyone can confirm the document has not been altered.
 
 Picstome is not a certified invoicing system (it does not print VERI*FACTU or the AEAT QR). It produces correct invoices; it is not a substitute for a homologated program if the law requires one in your case.
-
-## Sending and reminders
-
-- The invoice can be sent by email from the invoice page.
-- The client download is a PDF regardless of the device.
-- The payment state is manual unless the invoice is paid through Stripe, in which case it is marked automatically.
 
 ## Monthly limit
 
