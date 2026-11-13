@@ -176,7 +176,7 @@ const MEDIA = {
       caption: 'Las descargas son un interruptor: si está apagado, el cliente no tiene botón de descarga.',
     },
   },
-  'camera/direct-upload': {
+  'galleries/direct-upload': {
     en: {
       alt: 'The Connect camera dialog with the FTP and SFTP host, user and password',
       caption: 'Copy these values into the camera once; the gallery fills up as you shoot.',
@@ -186,7 +186,7 @@ const MEDIA = {
       caption: 'Copia estos datos en la cámara una vez; la galería se llena mientras disparas.',
     },
   },
-  'camera/desktop-apps': {
+  'apps/rater-and-photo-stats': {
     en: {
       alt: 'The export favorites dialog with the App tab selected and the Rate my images button',
       caption: 'Picstome hands the favorites to the Rater from here: one button, no login.',
@@ -266,7 +266,7 @@ const MEDIA = {
       caption: 'La marca de agua se graba en la copia entregada, nunca en tus originales.',
     },
   },
-  'brand/tools': {
+  'apps/tools': {
     en: {
       alt: 'The session price calculator with fixed costs, session costs and the resulting hourly rate',
       caption: 'The calculator shows the effective hourly rate behind every price.',

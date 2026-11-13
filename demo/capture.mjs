@@ -100,11 +100,11 @@ const SECTIONS = [
   },
 
   // --- Camera and apps -----------------------------------------------------
-  { article: 'camera/direct-upload', path: '/galleries', wait: 1200, open: { name: /connect camera|conectar cámara/i }, waitAfter: 1600 },
+  { article: 'galleries/direct-upload', path: '/galleries', wait: 1200, open: { name: /connect camera|conectar cámara/i }, waitAfter: 1600 },
   {
     // The apps article is about the export favorites modal: that is where the
     // "Rate my images" button hands the favorites to the desktop app.
-    article: 'camera/desktop-apps',
+    article: 'apps/rater-and-photo-stats',
     path: '/galleries/{gallery}',
     wait: 2400,
     tab: /favorit/i,
@@ -123,7 +123,7 @@ const SECTIONS = [
   // --- Brand ---------------------------------------------------------------
   { article: 'brand/public-pages', path: '/portfolio', wait: 1400 },
   { article: 'brand/watermark', path: '/branding/watermark', wait: 1400 },
-  { article: 'brand/tools', path: '/tools/calculator', wait: 1400 },
+  { article: 'apps/tools', path: '/tools/calculator', wait: 1400 },
 ];
 
 /** Client-facing pages: captured whole, no sidebar. */

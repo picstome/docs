@@ -2,7 +2,7 @@
 title: "Shoot straight to a gallery"
 description: "How cameras and tethering software upload over FTP or SFTP, what the \"live shoot\" mode does and what happens when storage runs out."
 help:
-  section: camera.direct-upload
+  section: galleries.direct-upload
   summary: Your camera uploads over FTP/SFTP to a gallery that updates live. If storage fills up, uploads pause and you get an email.
   appRoutes: [galleries, galleries.show]
 ---
@@ -11,12 +11,12 @@ import HelpMeta from '@components/HelpMeta.astro';
 import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
-  section="camera.direct-upload"
+  section="galleries.direct-upload"
   summary="Your camera uploads over FTP/SFTP to a gallery that updates live. If storage fills up, uploads pause and you get an email."
   routes={['galleries', 'galleries.show']}
 />
 
-import screenshot from '@assets/screens/camera-direct-upload.webp';
+import screenshot from '@assets/screens/galleries-direct-upload.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}

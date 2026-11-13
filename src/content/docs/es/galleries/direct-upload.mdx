@@ -2,7 +2,7 @@
 title: "Dispara directo a una galería"
 description: "Cómo suben las cámaras y el software de tethering por FTP o SFTP, qué hace el modo de sesión en directo y qué pasa si se llena el almacenamiento."
 help:
-  section: camera.direct-upload
+  section: galleries.direct-upload
   summary: Tu cámara sube por FTP/SFTP a una galería que se actualiza en directo. Si se llena el almacenamiento, las subidas se pausan y te llega un email.
   appRoutes: [galleries, galleries.show]
 ---
@@ -11,12 +11,12 @@ import HelpMeta from '@components/HelpMeta.astro';
 import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
-  section="camera.direct-upload"
+  section="galleries.direct-upload"
   summary="Tu cámara sube por FTP/SFTP a una galería que se actualiza en directo. Si se llena el almacenamiento, las subidas se pausan y te llega un email."
   routes={['galleries', 'galleries.show']}
 />
 
-import screenshot from '@assets/screens/camera-direct-upload-es.webp';
+import screenshot from '@assets/screens/galleries-direct-upload-es.webp';
 import Screenshot from '@components/Screenshot.astro';
 
 {/* media:start */}

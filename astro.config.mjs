@@ -16,6 +16,15 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'ignore',
+  // The old paths were live for a few hours; keep them working.
+  redirects: {
+    '/camera/direct-upload': '/galleries/direct-upload',
+    '/es/camera/direct-upload': '/es/galleries/direct-upload',
+    '/camera/desktop-apps': '/apps/rater-and-photo-stats',
+    '/es/camera/desktop-apps': '/es/apps/rater-and-photo-stats',
+    '/brand/tools': '/apps/tools',
+    '/es/brand/tools': '/es/apps/tools',
+  },
   integrations: [
     starlight({
       title: 'Picstome',
@@ -78,6 +87,7 @@ export default defineConfig({
             { label: 'Uploading photos', translations: { 'es-ES': 'Subir fotos' }, slug: 'galleries/uploading' },
             { label: 'Original size or optimized', translations: { 'es-ES': 'Tamaño original u optimizado' }, slug: 'galleries/original-size' },
             { label: 'File versions', translations: { 'es-ES': 'Versiones de archivo' }, slug: 'galleries/file-versions' },
+            { label: 'Shoot straight to a gallery', translations: { 'es-ES': 'Disparar directo a una galería' }, slug: 'galleries/direct-upload' },
           ],
         },
         {
@@ -98,14 +108,6 @@ export default defineConfig({
             { label: 'Favorites and the selection limit', translations: { 'es-ES': 'Favoritos y el límite de selección' }, slug: 'sharing/selection' },
             { label: 'Comments and annotations', translations: { 'es-ES': 'Comentarios y anotaciones' }, slug: 'sharing/comments' },
             { label: 'Downloads', translations: { 'es-ES': 'Descargas' }, slug: 'sharing/downloads' },
-          ],
-        },
-        {
-          label: 'Camera and desktop apps',
-          translations: { 'es-ES': 'Cámara y apps de escritorio' },
-          items: [
-            { label: 'Shoot straight to a gallery', translations: { 'es-ES': 'Dispara directo a una galería' }, slug: 'camera/direct-upload' },
-            { label: 'Picstome Rater and Photo Stats', translations: { 'es-ES': 'Picstome Rater y Photo Stats' }, slug: 'camera/desktop-apps' },
           ],
         },
         {
@@ -131,7 +133,14 @@ export default defineConfig({
           items: [
             { label: 'Public profile and portfolio', translations: { 'es-ES': 'Perfil público y porfolio' }, slug: 'brand/public-pages' },
             { label: 'Watermark', translations: { 'es-ES': 'Marca de agua' }, slug: 'brand/watermark' },
-            { label: 'Tools', translations: { 'es-ES': 'Herramientas' }, slug: 'brand/tools' },
+          ],
+        },
+        {
+          label: 'Tools and apps',
+          translations: { 'es-ES': 'Herramientas y apps' },
+          items: [
+            { label: 'Session calculator and black screen', translations: { 'es-ES': 'Calculadora y pantalla negra' }, slug: 'apps/tools' },
+            { label: 'Rater and Photo Stats', translations: { 'es-ES': 'Rater y Photo Stats' }, slug: 'apps/rater-and-photo-stats' },
           ],
         },
         {
