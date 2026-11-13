@@ -4,7 +4,6 @@ description: "Cómo marca fotos tu cliente con el corazón, qué bloquea el lím
 help:
   section: sharing.selection
   summary: El cliente marca fotos con el corazón y tú lees esa lista en la pestaña Favoritos. El límite lo frena en el número que elijas.
-  video: selection-es
   appRoutes: [galleries.show, shares.show]
 ---
 
@@ -18,15 +17,9 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 import screenshot from '@assets/screens/sharing-selection-es.webp';
 import Screenshot from '@components/Screenshot.astro';
-import Video from '@components/Video.astro';
 
 {/* media:start */}
 <Screenshot src={screenshot} alt="La pestaña Favoritos mostrando 4 de 40 fotos seleccionadas y el botón de Exportar favoritos" caption="La pestaña Favoritos es donde la selección del cliente se convierte en una lista de archivos." />
-<Video
-  slug="selection-es"
-  alt="El cliente abre el enlace, marca dos fotos con el corazón y el contador pasa de 4 a 6 de 40."
-  caption="El cliente abre el enlace, marca dos fotos con el corazón y el contador pasa de 4 a 6 de 40."
-/>
 {/* media:end */}
 
 ## Cómo selecciona el cliente

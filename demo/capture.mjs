@@ -67,7 +67,7 @@ const SECTIONS = [
   // --- Getting started -----------------------------------------------------
   { article: 'start/what-picstome-does', path: '/dashboard', wait: 1400 },
   { article: 'start/first-gallery', path: '/galleries', wait: 1200 },
-  { article: 'start/plans-and-storage', path: '/dashboard', wait: 1400, detail: 'main [class*="mt-auto"]' },
+  { article: 'start/plans-and-storage', path: '/dashboard', wait: 1400 },
 
   // --- Galleries -----------------------------------------------------------
   { article: 'galleries/uploading', path: '/galleries', wait: 1200, open: { name: /create gallery|crear galería/i }, detail: null },
@@ -85,7 +85,7 @@ const SECTIONS = [
   // --- Culling -------------------------------------------------------------
   { article: 'culling', path: '/galleries/{gallery}', wait: 2600 },
   { article: 'culling/rating', path: '/galleries/{gallery}', wait: 2600, detail: '[data-gallery-filter-bar]' },
-  { article: 'culling/archiving', path: '/galleries/{gallery}', wait: 2600, detail: '[data-archived-tab]' },
+  { article: 'culling/archiving', path: '/galleries/{gallery}', wait: 2600 },
 
   // --- Sharing -------------------------------------------------------------
   { article: 'sharing', path: '/galleries/{gallery}', wait: 2400, openShare: true },

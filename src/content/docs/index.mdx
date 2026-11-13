@@ -3,7 +3,7 @@ title: "Picstome Help Center"
 description: "Practical guides for photographers using Picstome. Galleries, client sharing, contracts, invoices, payments and branding, explained in plain language."
 template: splash
 hero:
-  tagline: How Picstome works, in plain language. Only the parts that are not obvious, with screenshots and short videos.
+  tagline: How Picstome works, in plain language. Only the parts that are not obvious, with real screenshots.
   actions:
     - text: Start here
       link: /start/what-picstome-does/
@@ -16,6 +16,7 @@ hero:
 ---
 
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import SectionCard from '@components/SectionCard.astro';
 
 ## The essentials
 
@@ -45,46 +46,14 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## Every section
 
 <CardGrid>
-  <LinkCard
-    title="Galleries"
-    description="Uploading, original size, file versions."
-    href="/galleries/uploading/"
-  />
-  <LinkCard
-    title="Culling"
-    description="Rate, filter and archive your own selection."
-    href="/culling/"
-  />
-  <LinkCard
-    title="Sharing with clients"
-    description="The client link, the selection limit, comments and downloads."
-    href="/sharing/"
-  />
-  <LinkCard
-    title="Camera and desktop apps"
-    description="Shoot straight to a gallery, plus Sync and Rater."
-    href="/camera/direct-upload/"
-  />
-  <LinkCard
-    title="Clients and contracts"
-    description="Client records, templates and online signatures."
-    href="/business/clients/"
-  />
-  <LinkCard
-    title="Invoices and payments"
-    description="Numbering, VAT, corrective invoices and Stripe."
-    href="/money/invoices/"
-  />
-  <LinkCard
-    title="Your brand"
-    description="Public profile, portfolio, watermark and tools."
-    href="/brand/public-pages/"
-  />
-  <LinkCard
-    title="Self-hosting"
-    description="Run Picstome on your own server, step by step."
-    href="/self-hosting/"
-  />
+  <SectionCard title="Galleries" description="Uploading, original size, file versions." href="/galleries/uploading/" icon="pencil" />
+  <SectionCard title="Culling" description="Rate, filter and archive your own selection." href="/culling/" icon="heart" />
+  <SectionCard title="Sharing with clients" description="The client link, the selection limit, comments and downloads." href="/sharing/" icon="comment" />
+  <SectionCard title="Camera and desktop apps" description="Shoot straight to a gallery, plus Sync and Rater." href="/camera/direct-upload/" icon="laptop" />
+  <SectionCard title="Clients and contracts" description="Client records, templates and online signatures." href="/business/clients/" icon="document" />
+  <SectionCard title="Invoices and payments" description="Numbering, VAT, corrective invoices and Stripe." href="/money/invoices/" icon="approve-check" />
+  <SectionCard title="Your brand" description="Public profile, portfolio, watermark and tools." href="/brand/public-pages/" icon="star" />
+  <SectionCard title="Self-hosting" description="Run Picstome on your own server, step by step." href="/self-hosting/" icon="setting" />
 </CardGrid>
 
 ## Need help right now?

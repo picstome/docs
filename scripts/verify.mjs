@@ -27,7 +27,7 @@ function walk(dir) {
   return files;
 }
 
-/** Minimal frontmatter reader: we only need title, help.section and help.video. */
+/** Minimal frontmatter reader: we only need title and help.section. */
 function frontmatter(file) {
   const raw = readFileSync(file, 'utf8');
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -37,9 +37,8 @@ function frontmatter(file) {
   const body = match[1];
   const title = body.match(/^title:\s*(.+)$/m)?.[1]?.replace(/^['"]|['"]$/g, '');
   const section = body.match(/^\s{2}section:\s*(\S+)/m)?.[1];
-  const video = body.match(/^\s{2}video:\s*(\S+)/m)?.[1];
   const hasHelp = /^help:/m.test(body);
-  return { title, section, video, hasHelp, raw };
+  return { title, section, hasHelp, raw };
 }
 
 const articles = walk(CONTENT);
@@ -119,20 +118,6 @@ if (existsSync(routesFile)) {
         if (!known.has(route)) {
           fail(`${article.rel}: appRoutes references unknown route "${route}"`);
         }
-      }
-    }
-  }
-}
-
-// 4. Video assets: every declared slug must have a webm and a poster.
-for (const locale of LOCALES) {
-  for (const article of byLocale[locale]) {
-    if (!article.video) {
-      continue;
-    }
-    for (const extension of ['webm', 'webp']) {
-      if (!existsSync(join('public/videos', `${article.video}.${extension}`))) {
-        fail(`${article.rel}: missing public/videos/${article.video}.${extension}`);
       }
     }
   }

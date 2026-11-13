@@ -48,7 +48,7 @@ function absolutize($, root, locale, slug) {
     }
   });
 
-  root.find('img[src], video[src], source[src]').each((_, el) => {
+  root.find('img[src], source[src]').each((_, el) => {
     const src = $(el).attr('src');
     if (!src || /^https?:/.test(src)) {
       return;
@@ -80,23 +80,6 @@ function absolutize($, root, locale, slug) {
       .filter(Boolean)
       .join(', ');
     $(el).attr('srcset', absolute);
-  });
-
-  // The flyout cannot play a WebM clip (the app sanitises with an HTML 4
-  // doctype), so a clip is replaced by its poster and a link to the article,
-  // where the video does play.
-  root.find('video').each((_, el) => {
-    const poster = $(el).attr('poster');
-    const label = locale === 'es' ? 'Ver el vídeo en la guía completa' : 'Watch the clip on the full guide';
-
-    if (poster) {
-      $(el).replaceWith(
-        `<p><img src="${poster}" alt="" loading="lazy" /><br /><a href="${base}">${label}</a></p>`
-      );
-      return;
-    }
-
-    $(el).replaceWith(`<p><a href="${base}">${label}</a></p>`);
   });
 
   // Remaining media is lazy by default inside the modal.
@@ -176,7 +159,6 @@ export function helpExport() {
             .split(',')
             .map((route) => route.trim())
             .filter(Boolean);
-          const video = $('[data-help-video]').first().attr('data-help-video') ?? null;
 
           const article = extractArticle($);
           if (!article) {
@@ -196,8 +178,6 @@ export function helpExport() {
             html: article.html()?.trim() ?? '',
             url: localeUrl(locale, slug),
             locale,
-            video: video ? `${SITE}/videos/${video}.webm` : null,
-            poster: video ? `${SITE}/videos/${video}.webp` : null,
             appRoutes,
             updated: new Date().toISOString().slice(0, 10),
           };

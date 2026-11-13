@@ -14,7 +14,6 @@ src/assets/screens/        Screenshots used by the articles (generated).
 src/components/            HelpMeta, Screenshot, Video, StatusBoard.
 src/integrations/          help-export.mjs: emits api/help-{en,es}.json.
 src/styles/                Picstome brand layer on top of Starlight.
-public/videos/             Short silent clips (WebM + WebP poster).
 demo/                      Demo dataset, photo sources and the capture script.
 scripts/                   verify.mjs (CI checks) and screens.mjs (media wiring).
 ```
@@ -61,7 +60,7 @@ npm run verify     # checks only
    article.
 4. Add the sidebar entry in `astro.config.mjs` (label + Spanish translation).
 
-## Screenshots and videos
+## Screenshots
 
 Captures come from the application, never from a hand-made screenshot:
 
@@ -69,15 +68,15 @@ Captures come from the application, never from a hand-made screenshot:
 # 1. Seed the demo studio (needs a running Picstome)
 php artisan tinker /workspace/projects/picstome-docs/demo/seed.php
 
-# 2. Capture everything (or --lang es, --only selection, --video)
-node demo/capture.mjs --video
+# 2. Capture everything (or --lang es, --only selection)
+node demo/capture.mjs
 
 # 3. Wire the new files into the articles
 node scripts/screens.mjs
 ```
 
-- Captures land in `src/assets/screens/`; the Spanish ones get an `-es` suffix.
-- Clips land in `public/videos/` as WebM (VP9, no audio) with a `.webp` poster.
+- Captures land in `src/assets/screens/`; the Spanish ones get an `-es` suffix,
+  and a tighter crop of one control gets a `.detail` suffix.
 - `demo/photos/` holds the free-licence photos used by the demo; see
   `demo/photos/SOURCES.md`.
 - `demo/state.json` is generated and git-ignored: it tells the capture script

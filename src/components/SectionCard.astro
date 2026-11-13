@@ -1,0 +1,75 @@
+---
+/**
+ * A section card for the home page: icon, title, description and a real link.
+ *
+ * Starlight's `Card` supports an icon but is not clickable, and its `LinkCard`
+ * is clickable but has no icon. The home page needs both, so this wraps the
+ * shared styles: the whole card is one link, and the icon lives next to the
+ * title the same way `Card` renders it.
+ */
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  icon: string;
+}
+
+const { title, description, href, icon } = Astro.props;
+---
+
+<a class="ps-section-card" href={href}>
+  <span class="ps-section-card-head">
+    <Icon name={icon} class="ps-section-card-icon" />
+    <span class="ps-section-card-title">{title}</span>
+  </span>
+  <span class="ps-section-card-description">{description}</span>
+</a>
+
+<style>
+  .ps-section-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: var(--sl-shadow-sm);
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease,
+      transform 150ms ease;
+  }
+
+  .ps-section-card:hover {
+    border-color: var(--sl-color-accent);
+    box-shadow: var(--sl-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .ps-section-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .ps-section-card-icon {
+    color: var(--sl-color-accent);
+    flex: none;
+    font-size: 1.35rem;
+  }
+
+  .ps-section-card-title {
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sl-color-gray-1);
+  }
+
+  .ps-section-card-description {
+    font-size: var(--sl-text-sm);
+    line-height: 1.5;
+  }
+</style>

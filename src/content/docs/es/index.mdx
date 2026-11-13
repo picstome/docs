@@ -3,7 +3,7 @@ title: "Centro de ayuda de Picstome"
 description: "Guías prácticas para fotógrafos que usan Picstome. Galerías, compartir con clientes, contratos, facturas, pagos y marca, explicado en lenguaje claro."
 template: splash
 hero:
-  tagline: Cómo funciona Picstome, explicado claro. Solo lo que no es evidente, con capturas y vídeos cortos.
+  tagline: Cómo funciona Picstome, explicado claro. Solo lo que no es evidente, con capturas reales.
   actions:
     - text: Empieza aquí
       link: /es/start/what-picstome-does/
@@ -16,6 +16,7 @@ hero:
 ---
 
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import SectionCard from '@components/SectionCard.astro';
 
 ## Lo esencial
 
@@ -45,46 +46,14 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## Todas las secciones
 
 <CardGrid>
-  <LinkCard
-    title="Galerías"
-    description="Subidas, tamaño original y versiones de archivo."
-    href="/es/galleries/uploading/"
-  />
-  <LinkCard
-    title="Selección (culling)"
-    description="Valora, filtra y archiva tu propia selección."
-    href="/es/culling/"
-  />
-  <LinkCard
-    title="Compartir con clientes"
-    description="El enlace, el límite de selección, comentarios y descargas."
-    href="/es/sharing/"
-  />
-  <LinkCard
-    title="Cámara y apps de escritorio"
-    description="Dispara directo a una galería, y Sync y Rater."
-    href="/es/camera/direct-upload/"
-  />
-  <LinkCard
-    title="Clientes y contratos"
-    description="Fichas de cliente, plantillas y firma online."
-    href="/es/business/clients/"
-  />
-  <LinkCard
-    title="Facturas y pagos"
-    description="Numeración, IVA, rectificativas y Stripe."
-    href="/es/money/invoices/"
-  />
-  <LinkCard
-    title="Tu marca"
-    description="Perfil público, portfolio, marca de agua y herramientas."
-    href="/es/brand/public-pages/"
-  />
-  <LinkCard
-    title="Instalación propia"
-    description="Ten Picstome en tu servidor, paso a paso."
-    href="/es/self-hosting/"
-  />
+  <SectionCard title="Galerías" description="Subidas, tamaño original y versiones de archivo." href="/es/galleries/uploading/" icon="pencil" />
+  <SectionCard title="Selección (culling)" description="Valora, filtra y archiva tu propia selección." href="/es/culling/" icon="heart" />
+  <SectionCard title="Compartir con clientes" description="El enlace, el límite de selección, comentarios y descargas." href="/es/sharing/" icon="comment" />
+  <SectionCard title="Cámara y apps de escritorio" description="Dispara directo a una galería, y Sync y Rater." href="/es/camera/direct-upload/" icon="laptop" />
+  <SectionCard title="Clientes y contratos" description="Fichas de cliente, plantillas y firma online." href="/es/business/clients/" icon="document" />
+  <SectionCard title="Facturas y pagos" description="Numeración, IVA, rectificativas y Stripe." href="/es/money/invoices/" icon="approve-check" />
+  <SectionCard title="Tu marca" description="Perfil público, portfolio, marca de agua y herramientas." href="/es/brand/public-pages/" icon="star" />
+  <SectionCard title="Instalación propia" description="Ten Picstome en tu servidor, paso a paso." href="/es/self-hosting/" icon="setting" />
 </CardGrid>
 
 ## ¿Necesitas ayuda ahora?

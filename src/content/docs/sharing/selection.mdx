@@ -4,7 +4,6 @@ description: "How the client marks photos with a heart, what the limit blocks an
 help:
   section: sharing.selection
   summary: The client hearts photos and you read that list in the Favorites tab. The limit stops them at a number you choose.
-  video: selection
   appRoutes: [galleries.show, shares.show]
 ---
 
@@ -18,15 +17,9 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 import screenshot from '@assets/screens/sharing-selection.webp';
 import Screenshot from '@components/Screenshot.astro';
-import Video from '@components/Video.astro';
 
 {/* media:start */}
 <Screenshot src={screenshot} alt="The Favorites tab showing 4 of 40 selected photos and the Export favorites button" caption="The Favorites tab is where the client selection becomes a list of file names." />
-<Video
-  slug="selection"
-  alt="The client opens the link, hearts two photos and the counter moves from 4 to 6 out of 40."
-  caption="The client opens the link, hearts two photos and the counter moves from 4 to 6 out of 40."
-/>
 {/* media:end */}
 
 ## How the client selects

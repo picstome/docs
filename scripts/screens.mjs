@@ -7,7 +7,6 @@
  * - English article -> `src/assets/screens/{slug}.webp`
  * - Spanish article -> `src/assets/screens/{slug}-es.webp`
  * - Optional detail -> `{slug}.detail.webp`, cropped around one control
- * - Video           -> `public/videos/{id}.webm` + `.webp` poster
  *
  * Two markers delimit the generated block, so re-running after a regeneration
  * is safe:
@@ -151,14 +150,10 @@ const MEDIA = {
     en: {
       alt: 'The Favorites tab showing 4 of 40 selected photos and the Export favorites button',
       caption: 'The Favorites tab is where the client selection becomes a list of file names.',
-      video: 'selection',
-      videoCaption: 'The client opens the link, hearts two photos and the counter moves from 4 to 6 out of 40.',
     },
     es: {
       alt: 'La pestaña Favoritos mostrando 4 de 40 fotos seleccionadas y el botón de Exportar favoritos',
       caption: 'La pestaña Favoritos es donde la selección del cliente se convierte en una lista de archivos.',
-      video: 'selection-es',
-      videoCaption: 'El cliente abre el enlace, marca dos fotos con el corazón y el contador pasa de 4 a 6 de 40.',
     },
   },
   'sharing/comments': {
@@ -336,18 +331,6 @@ for (const { file, isSpanish } of articles('src/content/docs')) {
     );
   }
 
-  if (media.video) {
-    parts.push(
-      [
-        `<Video`,
-        `  slug="${media.video}"`,
-        `  alt="${media.videoCaption}"`,
-        `  caption="${media.videoCaption}"`,
-        `/>`,
-      ].join('\n'),
-    );
-  }
-
   const block = [START, ...parts, END].join('\n');
   const imports = [
     `import screenshot from '@assets/screens/${asset}';`,
@@ -355,7 +338,6 @@ for (const { file, isSpanish } of articles('src/content/docs')) {
       ? [`import detail from '@assets/screens/${detailAsset}';`]
       : []),
     `import Screenshot from '@components/Screenshot.astro';`,
-    ...(media.video ? [`import Video from '@components/Video.astro';`] : []),
   ].join('\n');
 
   // The imports this script owns are exactly the ones it may add: the screens

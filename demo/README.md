@@ -32,14 +32,13 @@ production.
 It also writes `demo/state.json` with the ids and public links the capture script
 needs. That file is git-ignored: the ids belong to your local database.
 
-## 2. Capture screenshots and the clip
+## 2. Capture screenshots
 
 ```bash
 cd /workspace/projects/picstome-docs
 node demo/capture.mjs                  # both languages, all sections
 node demo/capture.mjs --lang es        # one language
 node demo/capture.mjs --only selection # one article
-node demo/capture.mjs --video          # also record the clip
 ```
 
 Options:
@@ -49,21 +48,13 @@ Options:
 | `--url` | `http://127.0.0.1:8123` | Base URL of the running app |
 | `--lang` | `en,es` | Comma-separated locales |
 | `--only` | all | Section id or article slug |
-| `--video` | off | Record the WebM clips |
 | `--docs` | repo root | Unused placeholder for future export |
 
 Outputs:
 
 - `src/assets/screens/{slug}.webp` and `{slug}-es.webp`
-- `public/videos/{slug}.webm` and `{slug}-es.webm`
-
-The clip is WebM/VP9 with no audio. The poster frame is generated with the
-ffmpeg that ships with Playwright:
-
-```bash
-~/.cache/ms-playwright/ffmpeg-*-linux -y -ss 2 -i public/videos/selection-es.webm -frames:v 1 /tmp/p.png
-php -r '$i=imagecreatefrompng("/tmp/p.png"); imagewebp($i,"public/videos/selection-es.webp",88);'
-```
+- `{slug}.detail.webp` when the article has a `detail` selector (a tighter crop
+  of the one control it talks about)
 
 ## 3. Wire the media into the articles
 

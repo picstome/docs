@@ -11,11 +11,10 @@ interface Props {
   section: string;
   summary: string;
   routes?: string[];
-  video?: string;
   hidden?: boolean;
 }
 
-const { section, summary, routes = [], video, hidden = false } = Astro.props;
+const { section, summary, routes = [], hidden = false } = Astro.props;
 const label = (Astro.currentLocale ?? 'en').startsWith('es') ? 'En el panel' : 'In the panel';
 ---
 
@@ -25,7 +24,6 @@ const label = (Astro.currentLocale ?? 'en').startsWith('es') ? 'En el panel' : '
   data-help-section={section}
   data-help-summary={summary}
   data-help-routes={routes.join(',')}
-  data-help-video={video}
   data-help-hidden={hidden ? 'true' : 'false'}
 >
   <p><strong>{label}:</strong> {summary}</p>

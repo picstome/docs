@@ -131,21 +131,6 @@
   margin: 0;
 }
 
-/* Video slot: always letterboxed 16:9 so the poster never jumps on load. */
-.ps-video {
-  border-radius: 0.75rem;
-  border: 1px solid var(--sl-color-hairline-light);
-  overflow: hidden;
-  background-color: #101614;
-}
-
-.ps-video video {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
-}
-
 /* Status board */
 .ps-status-grid {
   display: grid;
@@ -190,11 +175,6 @@
 }
 
 /* Print: drop the chrome, keep the article readable. */
-@media print {
-  .ps-video {
-    display: none;
-  }
-}
 
 /* Status board: the headline answer must be impossible to miss. */
 .ps-status-hero {
