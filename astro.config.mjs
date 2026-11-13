@@ -31,9 +31,6 @@ export default defineConfig({
         './src/styles/tailwind.css',
         './src/styles/picstome.css',
       ],
-      social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/picstome/picstome' },
-      ],
       defaultLocale: 'root',
       locales: {
         root: {
@@ -44,9 +41,6 @@ export default defineConfig({
           label: 'Español',
           lang: 'es-ES',
         },
-      },
-      editLink: {
-        baseUrl: 'https://github.com/picstome/docs/edit/main/',
       },
       lastUpdated: true,
       pagination: true,
