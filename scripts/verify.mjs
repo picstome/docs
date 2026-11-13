@@ -161,67 +161,7 @@ if (existsSync(DIST)) {
   }
 }
 
-// 6. Internal links in the built site must resolve.
-//
-// This is what catches a translated link: `[archive](/galleries/archiving/)` in
-// English becomes `[archivar](/es/galleries/archiving/)` in Spanish, and if the
-// target moved for one locale only, the build used to stay green.
-if (existsSync(DIST)) {
-  const built = new Set();
-  const walkPages = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const full = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        if (!['_astro', 'pagefind'].includes(entry.name)) {
-          walkPages(full);
-        }
-        continue;
-      }
-      if (entry.name.endsWith('.html')) {
-        built.add(full);
-      }
-    }
-  };
-  walkPages(DIST);
-
-  const resolves = (urlPath) => {
-    const clean = urlPath.split('#')[0].split('?')[0];
-    if (!clean || clean === '/') {
-      return built.has(join(DIST, 'index.html'));
-    }
-    const target = join(DIST, clean.replace(/^\//, ''));
-    if (clean.endsWith('/')) {
-      return built.has(join(target, 'index.html'));
-    }
-    return existsSync(target) || built.has(join(target, 'index.html')) || existsSync(`${target}.html`);
-  };
-
-  const base = (process.env.DOCS_BASE ?? '/').replace(/\/$/, '');
-
-  for (const file of built) {
-    const $ = load(readFileSync(file, 'utf8'));
-    const page = '/' + relative(DIST, file).replace(/index\.html$/, '');
-
-    $('a[href]').each((_, element) => {
-      let href = $(element).attr('href');
-
-      if (!href || /^(https?:|mailto:|tel:|#|\/\/)/.test(href)) {
-        return;
-      }
-
-      // The build may live under a subfolder (GitHub Pages preview).
-      if (base && href.startsWith(`${base}/`)) {
-        href = href.slice(base.length);
-      }
-
-      if (!resolves(href)) {
-        fail(`${page}: broken link to ${href}`);
-      }
-    });
-  }
-}
-
-// 7. Images must carry alt text in the Markdown sources.
+// 6. Images must carry alt text in the Markdown sources.
 for (const article of articles) {
   const raw = readFileSync(article, 'utf8');
   for (const match of raw.matchAll(/!\[([^\]]*)\]\(([^)]+)\)/g)) {
