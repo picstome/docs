@@ -1,9 +1,9 @@
 ---
 title: "Templates and signatures"
-description: "The difference between a template and a sent contract, how the client signs and what happens to the PDF."
+description: "The difference between a template and a sent contract, the four Picstome base templates, how the client signs and what happens to the PDF."
 help:
   section: business.contracts
-  summary: A template is reusable text. A contract is a copy sent to one client, signed in the browser and stored as a PDF.
+  summary: A template is reusable text. Picstome ships four base templates (model release, property release, TFP and brand license) you can copy and adapt.
   appRoutes: [contracts, contracts.show, contract-templates]
 ---
 
@@ -12,9 +12,11 @@ import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
   section="business.contracts"
-  summary="A template is reusable text. A contract is a copy sent to one client, signed in the browser and stored as a PDF."
+  summary="A template is reusable text. Picstome ships four base templates (model release, property release, TFP and brand license) you can copy and adapt."
   routes={['contracts', 'contracts.show', 'contract-templates']}
 />
+
+import templatesPicker from '@assets/screens/business-contracts-templates.webp';
 
 import screenshot from '@assets/screens/business-contracts.webp';
 import Screenshot from '@components/Screenshot.astro';
@@ -35,6 +37,27 @@ This is the concept that trips people up:
 | Has a PDF | No | Yes |
 
 Edit the template whenever you want; new contracts pick up the new text. Contracts already sent keep the text they had.
+
+## The four included templates
+
+Picstome ships four base templates, in English and Spanish. They are not in your *Contract templates* list (that list is for your own templates): they appear under **Use template**, in the *Picstome contract templates* group, when you create a contract or one of your own templates.
+
+<Screenshot src={templatesPicker} alt="The template picker with the Picstome contract templates group and the legal warning" caption="The four base templates appear in your language when you create a contract or a template." />
+
+| Template | What it does | When to use it |
+| --- | --- | --- |
+| **Model Release** | The person photographed, or their guardian if they are a minor, authorizes the use of their image and data. It includes a waiver of privacy and publicity claims and a data protection consent. | Portraits, models, identifiable people in campaigns or portfolios. It does not replace the service contract. |
+| **Property Release** | The owner or person responsible for the location authorizes photographing the property and using the images. It confirms there are no restrictions and excludes third-party trademarks. | Private locations, venues, estates, a client's interiors. |
+| **TFP Agreement** | A trade-for-portfolio collaboration with no fee. Both parties get a usage license, with credit, and the agreement covers what happens if someone cancels. | Test shoots, collaborations with models or creators, a session exchanged for images. |
+| **Brand Usage License** | The client gets a non-exclusive, worldwide, one-year license to use the images in its marketing. The photographer keeps the copyright and portfolio use; there is no sublicensing. | Campaigns and commercial work for brands, products or agencies. |
+
+When you pick one, the text is copied into the contract. You can edit it there; the base template does not change. If you use it from *Contract templates*, it is copied into one of your own templates, which you can save and reuse.
+
+:::caution[Not legal advice]
+The templates are a starting point, not legal advice. Picstome is not a law firm and is not responsible for the content. Every country has different laws: review and adapt them before use, especially with minors, sensitive data, restricted properties or third-party trademarks. For real client work, combine the template with your own service contract.
+:::
+
+The base templates do not count against the monthly limit: the limit counts contracts **sent**. Use them as often as you like.
 
 ## Sending one
 
@@ -66,5 +89,5 @@ The free plan includes one contract per month. The limit counts contracts **sent
 ## Where to find things
 
 - *Contracts* lists everything you sent, with its state (draft, sent, signed).
-- *Contract templates* is where the reusable text lives.
+- *Contract templates* is where the reusable text lives. The four Picstome templates are picked with **Use template** from a contract or from one of your templates.
 - The customer page shows the contracts linked to that client.

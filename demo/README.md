@@ -93,3 +93,5 @@ Once the app translates those, regenerate with `node demo/capture.mjs`.
 - Photo Stats is a desktop app and is not part of the browser capture pipeline.
   Its screenshot comes from the product page at picstome.com/photostats and is
   committed manually; the Rater screenshot is the export dialog inside Picstome.
+- The contract template picker screenshot is captured manually with the native
+  select expanded, because a browser dropdown cannot be screenshotted open.

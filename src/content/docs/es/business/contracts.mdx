@@ -3,7 +3,7 @@ title: "Plantillas y firmas"
 description: "La diferencia entre una plantilla y un contrato enviado, cómo firma el cliente y qué pasa con el PDF."
 help:
   section: business.contracts
-  summary: Una plantilla es texto reutilizable. Un contrato es una copia enviada a un cliente, firmada en el navegador y guardada como PDF.
+  summary: Una plantilla es texto reutilizable. Picstome incluye cuatro plantillas base (imagen, propiedad, TFP y licencia de marca) que puedes copiar y adaptar.
   appRoutes: [contracts, contracts.show, contract-templates]
 ---
 
@@ -12,9 +12,11 @@ import { Steps } from '@astrojs/starlight/components';
 
 <HelpMeta
   section="business.contracts"
-  summary="Una plantilla es texto reutilizable. Un contrato es una copia enviada a un cliente, firmada en el navegador y guardada como PDF."
+  summary="Una plantilla es texto reutilizable. Picstome incluye cuatro plantillas base (imagen, propiedad, TFP y licencia de marca) que puedes copiar y adaptar."
   routes={['contracts', 'contracts.show', 'contract-templates']}
 />
+
+import templatesPicker from '@assets/screens/business-contracts-templates-es.webp';
 
 import screenshot from '@assets/screens/business-contracts-es.webp';
 import Screenshot from '@components/Screenshot.astro';
@@ -35,6 +37,27 @@ Este es el concepto que más confusiones crea:
 | Tiene PDF | No | Sí |
 
 Edita la plantilla cuando quieras; los contratos nuevos toman el texto nuevo. Los contratos ya enviados conservan el texto que tenían.
+
+## Las 4 plantillas incluidas
+
+Picstome trae cuatro plantillas base, en español e inglés. No están en tu lista de *Plantillas de contrato* (esa lista es para las tuyas): aparecen en **Usar plantilla**, dentro del grupo *Plantillas de contrato de Picstome*, cuando creas un contrato o una plantilla propia.
+
+<Screenshot src={templatesPicker} alt="El selector de plantillas con el grupo Plantillas de contrato de Picstome y el aviso legal" caption="Las cuatro plantillas base aparecen en tu idioma al crear un contrato o una plantilla." />
+
+| Plantilla | Qué hace | Cuándo usarla |
+| --- | --- | --- |
+| **Autorización de imagen del modelo** (Model Release) | La persona retratada, o su tutor si es menor, autoriza el uso de su imagen y de sus datos. Incluye la renuncia a reclamaciones de privacidad y publicidad y el consentimiento de protección de datos. | Retratos, modelos, personas identificables en campañas o portfolios. No sustituye el contrato de encargo. |
+| **Autorización de propiedad** (Property Release) | El propietario o responsable del lugar autoriza fotografiar la propiedad y usar las imágenes. Confirma que no hay restricciones y deja fuera las marcas de terceros. | Localizaciones privadas, venues, fincas, interiores de un cliente. |
+| **Acuerdo TFP** (TFP Agreement) | Colaboración por portfolio, sin pago. Las dos partes reciben una licencia de uso, con crédito, y se reparten las obligaciones si alguien cancela. | Test shoots, colaboraciones con modelos o creadores, intercambio de sesión por imágenes. |
+| **Licencia de uso para marcas** (Brand Usage License) | El cliente recibe una licencia no exclusiva, mundial y de un año para usar las imágenes en su marketing. El fotógrafo conserva el copyright y el uso de portfolio; no hay sublicencia. | Campañas y trabajos comerciales para marcas, productos o agencias. |
+
+Al elegir una, el texto se copia al contrato. Puedes editarlo ahí; la plantilla base no cambia. Si la usas desde *Plantillas de contrato*, se copia a una plantilla tuya, que sí puedes guardar y reutilizar.
+
+:::caution[No es asesoramiento legal]
+Las plantillas son un punto de partida, no asesoramiento jurídico. Picstome no es un despacho de abogados y no responde del contenido. Cada país tiene sus leyes: revísalas y adáptalas antes de usarlas, sobre todo si hay menores, datos sensibles, propiedades con restricciones o marcas de terceros. Para un encargo real, combina la plantilla con tu propio contrato de servicios.
+:::
+
+Las plantillas base no cuentan para el límite mensual: el límite cuenta contratos **enviados**. Puedes usarlas tantas veces como quieras.
 
 ## Enviar uno
 
@@ -66,5 +89,5 @@ El plan gratuito incluye un contrato al mes. El límite cuenta contratos **envia
 ## Dónde encontrar cada cosa
 
 - *Contratos* lista todo lo que has enviado, con su estado (borrador, enviado, firmado).
-- *Plantillas de contrato* es donde vive el texto reutilizable.
+- *Plantillas de contrato* es donde vive el texto reutilizable. Las cuatro plantillas de Picstome se eligen con **Usar plantilla** desde un contrato o desde una plantilla tuya.
 - La ficha del cliente muestra los contratos vinculados a ese cliente.
