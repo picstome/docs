@@ -1,0 +1,54 @@
+---
+title: "Iniciar sesión y tu cuenta"
+description: "Cómo funcionan los enlaces de acceso, cuándo merece la pena poner contraseña y qué se borra al eliminar la cuenta."
+help:
+  section: start.account
+  summary: Entras con un enlace que te llega al email. La contraseña es opcional. Eliminar la cuenta lo borra todo y no se puede deshacer.
+  appRoutes: [login, settings.profile, settings.password]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="start.account"
+  summary="Entras con un enlace que te llega al email. La contraseña es opcional. Eliminar la cuenta lo borra todo y no se puede deshacer."
+  routes={['login', 'settings.profile', 'settings.password']}
+/>
+
+import loginScreenshot from '@assets/screens/start-account-es.webp';
+import deleteScreenshot from '@assets/screens/start-account-delete-es.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Entrar sin contraseña
+
+<Screenshot src={loginScreenshot} alt="La página de acceso con el campo de email, el botón Iniciar sesión y el enlace Iniciar sesión con contraseña" caption="Escribe tu email y pulsa Iniciar sesión: el enlace te llega por correo. La opción con contraseña está justo debajo." />
+
+Picstome no te pide contraseña para crear la cuenta. Para entrar, escribe tu email en la página de acceso y Picstome te envía un **enlace de acceso**. Ábrelo y ya estás dentro, en la página a la que querías ir.
+
+- El enlace sirve **una sola vez** y caduca a los **15 minutos**. Si ha caducado, pide otro desde la página de acceso.
+- Si no te llega el email, revisa la carpeta de spam. La página de acceso muestra la dirección a la que se ha enviado, así detectas si te has equivocado al escribirla.
+- Los emails que te envía Picstome (un comentario de un cliente, un contrato firmado, una galería a punto de caducar…) llevan su propio botón para entrar directamente. Esos enlaces duran 24 horas.
+
+## Poner una contraseña (opcional)
+
+Si prefieres no esperar a un email, crea una contraseña en **Configuraciones → Contraseña**. A partir de ahí, la página de acceso te deja elegir: *Iniciar sesión con contraseña* o *Usar un enlace de acceso*. Las dos opciones siguen funcionando.
+
+Puedes cambiar la contraseña desde la misma pantalla cuando quieras.
+
+## Eliminar tu cuenta
+
+<Screenshot src={deleteScreenshot} alt="El diálogo Eliminar cuenta con el inventario de galerías, fotos, almacenamiento, contratos, facturas y clientes" caption="El diálogo enumera lo que se va a borrar y avisa de las facturas emitidas antes de confirmar." />
+
+El botón **Eliminar cuenta** está al final de **Configuraciones → Perfil** (y en la zona de peligro de **Configuraciones → Contraseña**). Antes de confirmar, Picstome te enseña lo que va a desaparecer: galerías, fotos y vídeos, almacenamiento usado, contratos, facturas y clientes.
+
+Para confirmar escribes tu email y, si tienes, tu contraseña actual.
+
+Qué pasa después:
+
+- **Se borra todo**, de la base de datos y del almacenamiento: galerías, fotos, versiones, contratos y firmas, clientes, facturas y pagos, tu perfil público y tu portfolio. No se puede deshacer.
+- **Las facturas emitidas son documentos fiscales.** Descárgalas antes: después no se pueden recuperar ni volver a descargar.
+- **Una suscripción activa se cancela al momento**, sin reembolso del tiempo que quede. Un plan de por vida también se elimina.
+- **La subida desde cámara deja de funcionar** y las credenciales guardadas en la cámara dejan de valer.
+- **Las apps conectadas pierden el acceso** en ese mismo instante.
+
+Se cierra tu sesión en cuanto confirmas; la limpieza se hace en segundo plano y puede tardar unos minutos en una cuenta grande.

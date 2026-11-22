@@ -181,6 +181,13 @@ async function login(page, locale) {
   await page.goto(`${BASE}/login`, { waitUntil: 'networkidle' });
 
   if (page.url().includes('/login')) {
+    // Login defaults to the emailed link; switch to the password form first.
+    const passwordMode = page.getByText(/log in with password|iniciar sesión con contraseña/i).first();
+    if (await passwordMode.count()) {
+      await passwordMode.click();
+      await page.locator('input[type=password]').waitFor({ timeout: 10_000 });
+    }
+
     await page.fill('input[type=email]', EMAIL);
     await page.fill('input[type=password]', PASSWORD);
     await Promise.all([

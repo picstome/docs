@@ -105,8 +105,8 @@ longer used: GitHub redirects it to the custom domain.
 
 - **Spanish from Spain**, **English from the US**. Both are written, not
   translated word by word.
-- No technical jargon in the customer articles. `self-hosting` is the only
-  technical page and it is explicitly labelled.
+- No technical jargon in the customer articles. `self-hosting` and the `developers/`
+  section are the only technical pages, and both are explicitly labelled.
 - Every image needs a real `alt`; the verify script warns when one is missing.
 - `npm run build` must pass before opening a pull request: it is the same check
   Cloudflare runs.

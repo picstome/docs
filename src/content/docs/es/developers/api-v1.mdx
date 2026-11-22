@@ -1,0 +1,289 @@
+---
+title: "Referencia de la API v1"
+description: "Referencia técnica de la API externa de Picstome: flujo de autorización, tokens, endpoints, respuestas y códigos de error."
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Página técnica">
+Esta página es para desarrolladores que crean una app o un script que habla con Picstome. No la necesitas para usar Picstome.
+</Aside>
+
+La API externa permite a un cliente listar las galerías de una cuenta, leer la lista completa de fotos de una galería, subir fotos y borrarlas. Es una API JSON sobre HTTPS, versionada bajo `/api/v1`.
+
+| | |
+| --- | --- |
+| URL base | `https://app.picstome.com/api/v1` (en una instalación propia, tu dominio) |
+| Formato | JSON. Envía `Accept: application/json` en todas las peticiones. |
+| Autenticación | `Authorization: Bearer <token>`, obtenido con el flujo de autorización en el navegador descrito abajo |
+| Permiso del token | `sync` (todos los endpoints autenticados lo exigen) |
+| Duración del token | 365 días |
+
+## Flujo de autorización
+
+El usuario nunca escribe su contraseña en tu cliente. Aprueba el cliente en su navegador y Picstome entrega un código de un solo uso al cliente mediante un enlace profundo (*deep link*). El cliente cambia ese código por un token.
+
+<Steps>
+
+1. **Genera un nonce.** Una cadena aleatoria de 43 a 128 caracteres de `A-Z a-z 0-9 _ -` (por ejemplo, 32 bytes aleatorios en base64url). Guárdalo: vuelve como `state`.
+
+2. **Abre la página de consentimiento en el navegador del usuario.**
+
+   ```
+   GET https://app.picstome.com/authorize?nonce=<nonce>&client_name=<client_name>
+   ```
+
+   `client_name` tiene de 1 a 64 caracteres de `A-Z a-z 0-9 espacio _ -`. Si el usuario no ha iniciado sesión, Picstome se lo pide primero y luego vuelve a esta página. La pantalla de consentimiento muestra la cuenta, el nombre del cliente, el permiso y los 8 primeros caracteres del nonce. Si los parámetros no son válidos, se muestra una página de error con estado 422.
+
+3. **Recibe el enlace profundo.** Cuando el usuario aprueba, el navegador se redirige a:
+
+   ```
+   picstome://auth?code=<code>&state=<nonce>
+   ```
+
+   Tu cliente tiene que gestionar el esquema de URL `picstome://`. Comprueba que `state` coincide con el nonce que generaste y descarta el código si no. Si el usuario cancela, no hay redirección.
+
+4. **Canjea el código** en menos de **5 minutos**. El código sirve una vez; autorizar de nuevo el mismo nonce invalida el código anterior.
+
+   ```http
+   POST /api/v1/tokens/exchange
+   Content-Type: application/json
+   Accept: application/json
+
+   { "code": "<code>", "client_name": "<client_name>" }
+   ```
+
+   `client_name` tiene que ser el mismo del paso 2.
+
+   ```json
+   {
+     "token": "12|q8Hc…",
+     "authkey": "12|q8Hc…",
+     "email": "estudio@example.com",
+     "expires_at": "2027-11-22T10:15:00+00:00"
+   }
+   ```
+
+   `authkey` es un alias heredado de `token`; los clientes nuevos deben leer `token`. Este endpoint es público y admite **10 peticiones por minuto**.
+
+</Steps>
+
+| Error al canjear | Estado | `code` |
+| --- | --- | --- |
+| Código desconocido, `client_name` distinto o código ya usado | 400 | `invalid_code` |
+| Código con más de 5 minutos | 410 | `expired_code` |
+| Campos ausentes o mal formados | 422 | `validation_error` |
+
+### Revocar el token
+
+Cuando el usuario cierra sesión en tu cliente, revoca el token en lugar de limitarte a olvidarlo.
+
+```http
+POST /api/v1/tokens/revoke
+Authorization: Bearer <token>
+```
+
+```json
+{ "ok": true }
+```
+
+Los tokens también se revocan cuando el usuario elimina su cuenta de Picstome.
+
+## Endpoints
+
+Todos los endpoints siguientes exigen `Authorization: Bearer <token>` con el permiso `sync`. Trabajan sobre el **equipo actual** del dueño del token.
+
+### `GET /me`
+
+La cuenta a la que pertenece el token.
+
+```json
+{
+  "email": "estudio@example.com",
+  "display_name": "Lumen Studio",
+  "avatar_url": "https://…/avatar.jpg"
+}
+```
+
+`avatar_url` es `null` cuando el usuario no ha subido foto de perfil. El avatar de iniciales que genera Picstome no se envía, así que pinta tu propio sustituto.
+
+### `GET /galleries`
+
+Las galerías del equipo actual, de la más reciente a la más antigua según su última modificación.
+
+| Parámetro | Tipo | Notas |
+| --- | --- | --- |
+| `search` | texto, opcional | Coincidencia en el nombre de la galería, sin distinguir mayúsculas, máx. 255 |
+| `per_page` | entero, opcional | De 1 a 100, 25 por defecto |
+| `page` | entero, opcional | 1 o más |
+
+```json
+{
+  "data": [
+    {
+      "id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
+      "name": "Boda de Ana y Luis",
+      "cover_url": "https://…/thumb.jpg",
+      "updated_at": "2026-11-20T18:02:11+00:00"
+    }
+  ],
+  "links": { "first": "…", "last": "…", "prev": null, "next": "…" },
+  "meta": { "current_page": 1, "per_page": 25, "total": 42, "last_page": 2 }
+}
+```
+
+Las galerías se identifican por su **ULID** (`id`). `cover_url` es la portada de la galería, o la primera imagen si no tiene portada, y puede ser `null`.
+
+### `GET /manifest`
+
+La lista completa de fotos de una galería. Es la llamada que usa un cliente para comparar su copia local con Picstome.
+
+| Parámetro | Tipo | Notas |
+| --- | --- | --- |
+| `gallery` | ULID, obligatorio | `id` de la galería |
+| `since` | texto, opcional | Se acepta por compatibilidad futura. En v1 se ignora: siempre se devuelve la lista entera. |
+
+```json
+{
+  "gallery_id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
+  "name": "Boda de Ana y Luis",
+  "web_url": "https://app.picstome.com/galleries/123",
+  "rev": "5f0c2a9be41d7c3a8e10",
+  "photos": [
+    {
+      "id": "8812",
+      "filename": "IMG_0001.jpg",
+      "size": 8421337,
+      "hash": "3b5d…",
+      "download_hash": "a91f…",
+      "hash_algo": "sha256",
+      "url": "https://…firmada…",
+      "updated_at": "2026-11-20T18:02:11+00:00",
+      "width": 6000,
+      "height": 4000,
+      "identity_key": "img_0001",
+      "version_count": 2,
+      "version_number": 2,
+      "favorited_at": "2026-11-21T09:12:00+00:00",
+      "is_favorite": true,
+      "rating": 4,
+      "archived_at": null
+    }
+  ]
+}
+```
+
+| Campo | Significado |
+| --- | --- |
+| `rev` | Revisión opaca de la galería. Cambia cada vez que se añade, modifica o borra una foto. Compárala, no la interpretes. |
+| `id` | Id de la foto, como texto. Se mantiene entre versiones de la misma foto. |
+| `hash` | SHA-256 del archivo tal como se subió. Puede ser `null` si el servidor todavía no lo ha calculado. |
+| `download_hash` | SHA-256 del archivo procesado que sirve `url`, o `null` mientras se procesa. |
+| `url` | URL firmada de descarga del archivo procesado. Vale **15 minutos**: pide un manifiesto nuevo en lugar de guardarla. |
+| `identity_key` | La identidad por nombre que agrupa las versiones. `IMG_0001.CR2` e `IMG_0001.JPG` comparten la misma. |
+| `version_count`, `version_number` | Cuántas versiones tiene la foto y cuál es la actual. Mira [Versiones de archivo](/es/galleries/file-versions/). |
+| `is_favorite`, `favorited_at` | El corazón, puesto por el fotógrafo o por el cliente. |
+| `rating` | Las estrellas privadas del fotógrafo (1 a 5) o `null`. Los clientes nunca las ven. Mira [Valorar y marcar](/es/culling/rating/). |
+| `archived_at` | Tiene fecha cuando la foto está [archivada](/es/culling/archiving/). Las fotos archivadas siguen apareciendo; este campo es la única señal. |
+
+Las fotos vienen ordenadas por nombre de archivo en orden natural.
+
+### `POST /photos`
+
+Sube un archivo a una galería, como `multipart/form-data`.
+
+| Campo | Tipo | Notas |
+| --- | --- | --- |
+| `gallery_id` | ULID, obligatorio | Galería de destino |
+| `filename` | texto, obligatorio | Nombre con el que se guarda, máx. 255. Se eliminan las rutas. |
+| `file` | archivo, obligatorio | Hasta **500 MB**. Extensiones permitidas: `jpg jpeg png tiff mp4 webm ogg cr2 cr3 nef arw dng orf rw2 pef srw mos mrw 3fr pdf` |
+| `hash` | texto, opcional | SHA-256 de tu archivo local (64 hex). Si lo envías, el servidor rechaza la subida cuando su propio hash no coincide. |
+| `size` | entero, opcional | Tamaño en bytes de tu archivo local. Si lo envías, tiene que coincidir. |
+
+Se recomienda enviar `hash` y `size`: así se detectan subidas cortadas y archivos que cambiaron mientras se leían.
+
+Qué hace el servidor con el nombre:
+
+- **Nombre nuevo:** se crea una foto nueva. Estado `201`.
+- **Nombre existente con contenido distinto:** el archivo pasa a ser una versión nueva de esa foto. Estado `201`.
+- **Nombre existente con el mismo contenido:** no cambia nada. Estado `200`.
+
+```json
+{
+  "id": "8812",
+  "filename": "IMG_0001.jpg",
+  "rev": "77ab1c0e93f2d4a5b6c7",
+  "hash": "3b5d…",
+  "size": 8421337,
+  "version_count": 2,
+  "version_number": 2
+}
+```
+
+Después, la foto pasa por el procesado habitual (miniaturas, conversión de RAW), así que `download_hash` puede tardar unos segundos en aparecer en el manifiesto.
+
+| Error de subida | Estado | `code` |
+| --- | --- | --- |
+| Archivo vacío o imagen que no se puede leer | 422 | `invalid_image` |
+| Un archivo de vídeo cuyo contenido no es un vídeo legible | 422 | `invalid_video` |
+| `hash` o `size` no coinciden con lo que ha llegado | 422 | `upload_integrity_error` |
+| Extensión no admitida, archivo demasiado grande, campos ausentes | 422 | `validation_error` |
+| A la cuenta no le queda almacenamiento | 413 | `storage_quota_exceeded` |
+| Fallo temporal del almacenamiento, reintenta más tarde | 503 | `storage_error` |
+
+### `DELETE /photos`
+
+Borra fotos de forma permanente, con todas sus versiones y archivos. No hay papelera: llámalo solo cuando el usuario lo haya confirmado.
+
+```http
+DELETE /api/v1/photos
+Content-Type: application/json
+
+{ "gallery_id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C", "photo_ids": [8812, 8813] }
+```
+
+`photo_ids` lleva de 1 a 500 ids enteros distintos. Este endpoint admite **30 peticiones por minuto**.
+
+```json
+{ "deleted": ["8812"], "not_found": ["8813"], "rev": "c2d9e1f04a7b3c5d6e8f" }
+```
+
+Los ids que no están en esa galería, o que el usuario no puede borrar, aparecen en `not_found` en lugar de revelar si existen en otra parte. Cada borrado queda registrado para auditoría.
+
+## Errores
+
+Todos los errores de la API usan el mismo formato. Decide según `code`, no según `message`: el mensaje está pensado para personas y puede venir traducido.
+
+```json
+{
+  "message": "The gallery does not exist.",
+  "errors": {},
+  "code": "unknown_gallery"
+}
+```
+
+En `validation_error`, `errors` lista los mensajes por campo, como `{ "per_page": ["The per page field must not be greater than 100."] }`.
+
+| `code` | Estado | Cuándo |
+| --- | --- | --- |
+| `unauthenticated` | 401 | Token ausente, caducado o revocado. Vuelve a empezar el flujo de autorización. |
+| `validation_error` | 422 | Faltan campos o no son válidos |
+| `unknown_gallery` | 404 | No hay ninguna galería con ese ULID |
+| `not_member` | 403 | La galería pertenece a un equipo al que el usuario no tiene acceso |
+| `invalid_code`, `expired_code` | 400, 410 | Canje del token, ver arriba |
+| `invalid_image`, `invalid_video`, `upload_integrity_error`, `storage_quota_exceeded`, `storage_error` | 413–503 | Subida, ver arriba |
+
+Dos respuestas no llevan `code`: un token sin el permiso `sync` recibe `403` solo con `message`, y un cliente que supera un límite de peticiones recibe `429` con una cabecera `Retry-After`. Espera esos segundos antes de reintentar.
+
+## Bucle de sincronización recomendado
+
+<Steps>
+
+1. Llama a `GET /galleries` para que el usuario elija una galería y guarda su `id`.
+2. Llama a `GET /manifest` y guarda `rev`.
+3. Compara cada archivo local con el manifiesto por `filename` (o `identity_key` para parejas RAW + JPEG) y `hash`.
+4. Sube lo que falta o ha cambiado con `POST /photos`, enviando `hash` y `size`. Descarga desde `url` lo que falta en local.
+5. Borra en remoto solo lo que el usuario haya confirmado expresamente, con `DELETE /photos`.
+6. La próxima vez, vuelve a pedir el manifiesto y no hagas nada si `rev` no ha cambiado.
+
+</Steps>
