@@ -1,0 +1,54 @@
+---
+title: "Signing in and your account"
+description: "How login links work, when a password is worth setting, and what deleting your account removes."
+help:
+  section: start.account
+  summary: You sign in with a link sent to your email. A password is optional. Deleting the account removes everything and cannot be undone.
+  appRoutes: [login, settings.profile, settings.password]
+---
+
+import HelpMeta from '@components/HelpMeta.astro';
+
+<HelpMeta
+  section="start.account"
+  summary="You sign in with a link sent to your email. A password is optional. Deleting the account removes everything and cannot be undone."
+  routes={['login', 'settings.profile', 'settings.password']}
+/>
+
+import loginScreenshot from '@assets/screens/start-account.webp';
+import deleteScreenshot from '@assets/screens/start-account-delete.webp';
+import Screenshot from '@components/Screenshot.astro';
+
+## Signing in without a password
+
+<Screenshot src={loginScreenshot} alt="The login page with the email field, the Log in button and the Log in with password link" caption="Type your email and press Log in: the link arrives by email. The password option is right below." />
+
+Picstome does not ask you for a password to create an account. To sign in, type your email on the login page and Picstome sends you a **login link**. Open it and you are in, on the page you were trying to reach.
+
+- The link works **once** and expires after **15 minutes**. If it has expired, request a new one from the login page.
+- If the email does not arrive, check the spam folder. The login page shows the address it was sent to, so you can spot a typo.
+- Emails Picstome sends you (a client comment, a contract signed, a gallery about to expire…) include their own button to sign in directly. Those links last 24 hours.
+
+## Setting a password (optional)
+
+If you prefer not to wait for an email, create a password in **Settings → Password**. From then on the login page lets you choose: *Log in with password* or *Use a login link instead*. Both keep working.
+
+You can change the password from the same screen at any time.
+
+## Deleting your account
+
+<Screenshot src={deleteScreenshot} alt="The Delete account dialog with the inventory of galleries, photos, storage, contracts, invoices and clients" caption="The dialog lists what will be deleted and warns about issued invoices before you confirm." />
+
+The **Delete account** button is at the bottom of **Settings → Profile** (and in the danger zone of **Settings → Password**). Before confirming, Picstome shows you what is about to disappear: galleries, photos and videos, storage in use, contracts, invoices and clients.
+
+To confirm you type your email, and your current password if you have one.
+
+What happens next:
+
+- **Everything is removed**, from the database and from storage: galleries, photos, versions, contracts and signatures, clients, invoices and payments, your public profile and portfolio. It cannot be undone.
+- **Issued invoices are fiscal records.** Download them first: after deletion they cannot be recovered or downloaded again.
+- **An active subscription is cancelled immediately**, without a refund for the remaining time. A lifetime plan is removed as well.
+- **Camera upload stops working**, and the credentials saved in your camera become invalid.
+- **Connected apps lose access** straight away.
+
+You are signed out as soon as you confirm; the cleanup itself runs in the background and can take a few minutes for a large account.

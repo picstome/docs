@@ -1,9 +1,9 @@
 ---
 title: "Uploading photos"
-description: "Which formats are accepted, how large a file can be, and what happens while an upload is processing."
+description: "Which formats are accepted, how large a file can be, how the upload panel works and what happens while an upload is processing."
 help:
   section: galleries.uploading
-  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running if you close the tab.
+  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running while you move around Picstome.
   appRoutes: [galleries.show]
 ---
 
@@ -11,12 +11,13 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="galleries.uploading"
-  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running if you close the tab."
+  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF and RAW up to 5 GB per file. Uploads keep running while you move around Picstome."
   routes={['galleries.show']}
 />
 
 import screenshot from '@assets/screens/galleries-uploading.webp';
 import Screenshot from '@components/Screenshot.astro';
+import dockScreenshot from '@assets/screens/galleries-uploading-dock.webp';
 
 {/* media:start */}
 <Screenshot src={screenshot} alt="The Galleries screen with the create gallery dialog and the upload buttons" caption="Upload from the gallery itself or from the camera. Both end up in the same place." />
@@ -49,9 +50,27 @@ If you upload a file whose name already exists in the gallery, Picstome does **n
 
 For RAW files, the versioning is automatic: `IMG_0001.CR2` and a later `IMG_0001.JPG` share the same identity.
 
-## Upload does not depend on the tab
+## The upload panel
 
-You can navigate away from the gallery while files are uploading. The transfer continues on the server side and the gallery shows the result when you come back. Closing the whole browser is different: the upload queue lives in the page, so an unfinished batch stops.
+Drop files anywhere on the gallery page, or use the upload button. A panel opens in the bottom corner and stays there until the batch is done:
+
+<Screenshot src={dockScreenshot} alt="The upload panel with the overall progress, the time left and each file's progress" caption="Three files are finishing, the rest are still uploading. The panel stays while you move around Picstome." />
+
+- **Overall progress** in bytes, with an estimate of the time left.
+- **Each file** with its own progress bar. A file that fails can be retried from the panel without starting the batch again.
+- **Files that already exist** are listed together, so you can choose *new version*, *replace* or *skip* once and apply it to all of them.
+- **Minimize** shrinks the panel to a small chip; the upload keeps running and you can expand it again at any time.
+- When everything has finished, a summary tells you how many photos landed in which gallery, with a link back to it.
+
+Files travel **straight to storage** from your browser, not through the Picstome server, which is why large videos up to the 5 GB limit upload without problems.
+
+## You can keep working while it uploads
+
+The panel belongs to Picstome, not to the gallery page. You can open another gallery, write an invoice or check a contract and the upload keeps going in the corner.
+
+What stops it is leaving Picstome: closing the tab, reloading the page or closing the browser. If there are uploads in progress, the browser warns you first. Files that had already finished stay in the gallery; only the pending ones stop.
+
+To stop a batch on purpose, press the **X** in the panel. Picstome asks for confirmation and tells you how many files are left. The ones already uploaded are kept.
 
 For very large shoots, [camera upload](/galleries/direct-upload/) is a better path than dragging files into the browser.
 

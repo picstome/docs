@@ -1,0 +1,289 @@
+---
+title: "API v1 reference"
+description: "Technical reference for the Picstome external API: authorization flow, tokens, endpoints, payloads and error codes."
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Technical page">
+This page is for developers building an app or script that talks to Picstome. You do not need it to use Picstome.
+</Aside>
+
+The external API lets a client list the galleries of an account, read the full photo list of a gallery, upload photos and delete them. It is a JSON API over HTTPS, versioned under `/api/v1`.
+
+| | |
+| --- | --- |
+| Base URL | `https://app.picstome.com/api/v1` (on a self-hosted install, your own domain) |
+| Format | JSON. Send `Accept: application/json` on every request. |
+| Authentication | `Authorization: Bearer <token>`, obtained through the browser authorization flow below |
+| Token scope | `sync` (every authenticated endpoint requires it) |
+| Token lifetime | 365 days |
+
+## Authorization flow
+
+The user never types their password into your client. They approve the client in their browser, and Picstome hands a one-time code to the client through a deep link. The client exchanges that code for a token.
+
+<Steps>
+
+1. **Generate a nonce.** A random string of 43–128 characters from `A-Z a-z 0-9 _ -` (for example 32 random bytes, base64url-encoded). Keep it: it comes back as `state`.
+
+2. **Open the consent page in the user's browser.**
+
+   ```
+   GET https://app.picstome.com/authorize?nonce=<nonce>&client_name=<client_name>
+   ```
+
+   `client_name` is 1–64 characters from `A-Z a-z 0-9 space _ -`. If the user is not signed in, Picstome asks them to sign in first and then returns to this page. The consent screen shows the account, the client name, the scope and the first 8 characters of the nonce. Invalid parameters render an error page with status 422.
+
+3. **Receive the deep link.** When the user approves, the browser is redirected to:
+
+   ```
+   picstome://auth?code=<code>&state=<nonce>
+   ```
+
+   Your client must handle the `picstome://` URL scheme. Check that `state` equals the nonce you generated and discard the code otherwise. If the user cancels, no redirect happens.
+
+4. **Exchange the code** within **5 minutes**. The code works once; authorizing the same nonce again invalidates the previous code.
+
+   ```http
+   POST /api/v1/tokens/exchange
+   Content-Type: application/json
+   Accept: application/json
+
+   { "code": "<code>", "client_name": "<client_name>" }
+   ```
+
+   `client_name` must be the same one used in step 2.
+
+   ```json
+   {
+     "token": "12|q8Hc…",
+     "authkey": "12|q8Hc…",
+     "email": "studio@example.com",
+     "expires_at": "2027-11-22T10:15:00+00:00"
+   }
+   ```
+
+   `authkey` is a legacy alias of `token`; new clients should read `token`. This endpoint is public and limited to **10 requests per minute**.
+
+</Steps>
+
+| Exchange error | Status | `code` |
+| --- | --- | --- |
+| Unknown code, wrong `client_name` or code already used | 400 | `invalid_code` |
+| Code older than 5 minutes | 410 | `expired_code` |
+| Missing or malformed fields | 422 | `validation_error` |
+
+### Revoking the token
+
+When the user signs out of your client, revoke the token instead of just forgetting it.
+
+```http
+POST /api/v1/tokens/revoke
+Authorization: Bearer <token>
+```
+
+```json
+{ "ok": true }
+```
+
+Tokens are also revoked when the user deletes their Picstome account.
+
+## Endpoints
+
+All endpoints below require `Authorization: Bearer <token>` with the `sync` scope. They act on the **current team** of the token owner.
+
+### `GET /me`
+
+The account the token belongs to.
+
+```json
+{
+  "email": "studio@example.com",
+  "display_name": "Lumen Studio",
+  "avatar_url": "https://…/avatar.jpg"
+}
+```
+
+`avatar_url` is `null` when the user has not uploaded a profile photo. Picstome's own initials avatar is not sent, so render your own fallback.
+
+### `GET /galleries`
+
+The galleries of the current team, most recently updated first.
+
+| Query | Type | Notes |
+| --- | --- | --- |
+| `search` | string, optional | Case-insensitive match on the gallery name, max 255 |
+| `per_page` | integer, optional | 1–100, default 25 |
+| `page` | integer, optional | 1 or more |
+
+```json
+{
+  "data": [
+    {
+      "id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
+      "name": "Ana & Luis wedding",
+      "cover_url": "https://…/thumb.jpg",
+      "updated_at": "2026-11-20T18:02:11+00:00"
+    }
+  ],
+  "links": { "first": "…", "last": "…", "prev": null, "next": "…" },
+  "meta": { "current_page": 1, "per_page": 25, "total": 42, "last_page": 2 }
+}
+```
+
+Galleries are identified by their **ULID** (`id`). `cover_url` is the gallery cover, or the first image when no cover is set, and may be `null`.
+
+### `GET /manifest`
+
+The complete list of photos in one gallery. This is the call a client uses to compare its local copy with Picstome.
+
+| Query | Type | Notes |
+| --- | --- | --- |
+| `gallery` | ULID, required | Gallery `id` |
+| `since` | string, optional | Accepted for forward compatibility. Ignored in v1: the whole list is always returned. |
+
+```json
+{
+  "gallery_id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
+  "name": "Ana & Luis wedding",
+  "web_url": "https://app.picstome.com/galleries/123",
+  "rev": "5f0c2a9be41d7c3a8e10",
+  "photos": [
+    {
+      "id": "8812",
+      "filename": "IMG_0001.jpg",
+      "size": 8421337,
+      "hash": "3b5d…",
+      "download_hash": "a91f…",
+      "hash_algo": "sha256",
+      "url": "https://…signed…",
+      "updated_at": "2026-11-20T18:02:11+00:00",
+      "width": 6000,
+      "height": 4000,
+      "identity_key": "img_0001",
+      "version_count": 2,
+      "version_number": 2,
+      "favorited_at": "2026-11-21T09:12:00+00:00",
+      "is_favorite": true,
+      "rating": 4,
+      "archived_at": null
+    }
+  ]
+}
+```
+
+| Field | Meaning |
+| --- | --- |
+| `rev` | Opaque revision of the gallery. It changes whenever a photo is added, changed or deleted. Compare it, never parse it. |
+| `id` | Photo id, as a string. Stable across versions of the same photo. |
+| `hash` | SHA-256 of the file as it was uploaded. May be `null` for photos the server has not hashed yet. |
+| `download_hash` | SHA-256 of the processed file served at `url`, or `null` while it is processing. |
+| `url` | Signed download URL of the processed file. Valid for **15 minutes**: fetch a new manifest instead of storing it. |
+| `identity_key` | The name-based identity that groups versions. `IMG_0001.CR2` and `IMG_0001.JPG` share one. |
+| `version_count`, `version_number` | How many versions the photo has and which one is current. See [File versions](/galleries/file-versions/). |
+| `is_favorite`, `favorited_at` | The heart, set by the photographer or the client. |
+| `rating` | The photographer's private 1–5 stars, or `null`. Never shown to clients. See [Rate and heart](/culling/rating/). |
+| `archived_at` | Set when the photo is [archived](/culling/archiving/). Archived photos are still listed; this field is the only signal. |
+
+Photos are sorted by filename in natural order.
+
+### `POST /photos`
+
+Upload one file to a gallery, as `multipart/form-data`.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `gallery_id` | ULID, required | Target gallery |
+| `filename` | string, required | Name to store, max 255. Path segments are stripped. |
+| `file` | file, required | Up to **500 MB**. Allowed extensions: `jpg jpeg png tiff mp4 webm ogg cr2 cr3 nef arw dng orf rw2 pef srw mos mrw 3fr pdf` |
+| `hash` | string, optional | SHA-256 of your local file (64 hex). If sent, the server rejects the upload when its own hash differs. |
+| `size` | integer, optional | Size in bytes of your local file. If sent, it must match. |
+
+Sending `hash` and `size` is recommended: it catches truncated uploads and files that changed while they were being read.
+
+What the server does with the name:
+
+- **New name:** a new photo is created. Status `201`.
+- **Existing name, different content:** the file becomes a new version of that photo. Status `201`.
+- **Existing name, same content:** nothing changes. Status `200`.
+
+```json
+{
+  "id": "8812",
+  "filename": "IMG_0001.jpg",
+  "rev": "77ab1c0e93f2d4a5b6c7",
+  "hash": "3b5d…",
+  "size": 8421337,
+  "version_count": 2,
+  "version_number": 2
+}
+```
+
+The photo goes through the usual processing afterwards (thumbnails, RAW conversion), so it can take a few seconds before `download_hash` appears in the manifest.
+
+| Upload error | Status | `code` |
+| --- | --- | --- |
+| Empty file, or an image that cannot be read | 422 | `invalid_image` |
+| A video file whose content is not a readable video | 422 | `invalid_video` |
+| `hash` or `size` do not match what arrived | 422 | `upload_integrity_error` |
+| Unsupported extension, file too large, missing fields | 422 | `validation_error` |
+| The account has no storage left | 413 | `storage_quota_exceeded` |
+| Temporary storage failure, retry later | 503 | `storage_error` |
+
+### `DELETE /photos`
+
+Delete photos permanently, with all their versions and files. There is no trash: only call it after the user has confirmed.
+
+```http
+DELETE /api/v1/photos
+Content-Type: application/json
+
+{ "gallery_id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C", "photo_ids": [8812, 8813] }
+```
+
+`photo_ids` holds 1–500 distinct integer ids. This endpoint is limited to **30 requests per minute**.
+
+```json
+{ "deleted": ["8812"], "not_found": ["8813"], "rev": "c2d9e1f04a7b3c5d6e8f" }
+```
+
+Ids that are not in that gallery, or that the user cannot delete, are reported in `not_found` rather than revealing whether they exist elsewhere. Every deletion is logged for audit.
+
+## Errors
+
+Every error from the API uses the same envelope. Branch on `code`, not on `message`: the message is meant for people and may be translated.
+
+```json
+{
+  "message": "The gallery does not exist.",
+  "errors": {},
+  "code": "unknown_gallery"
+}
+```
+
+For `validation_error`, `errors` lists the messages per field, as in `{ "per_page": ["The per page field must not be greater than 100."] }`.
+
+| `code` | Status | When |
+| --- | --- | --- |
+| `unauthenticated` | 401 | Missing, expired or revoked token. Start the authorization flow again. |
+| `validation_error` | 422 | Request fields are missing or invalid |
+| `unknown_gallery` | 404 | No gallery with that ULID |
+| `not_member` | 403 | The gallery belongs to a team the user cannot access |
+| `invalid_code`, `expired_code` | 400, 410 | Token exchange, see above |
+| `invalid_image`, `invalid_video`, `upload_integrity_error`, `storage_quota_exceeded`, `storage_error` | 413–503 | Upload, see above |
+
+Two responses do not carry a `code`: a token without the `sync` scope gets `403` with only a `message`, and a client over a rate limit gets `429` with a `Retry-After` header. Wait that many seconds before retrying.
+
+## Recommended sync loop
+
+<Steps>
+
+1. Call `GET /galleries` to let the user pick a gallery, and keep its `id`.
+2. Call `GET /manifest` and store `rev`.
+3. Compare each local file with the manifest by `filename` (or `identity_key` for RAW + JPEG pairs) and `hash`.
+4. Upload what is missing or changed with `POST /photos`, sending `hash` and `size`. Download what is missing locally from `url`.
+5. Delete remotely only what the user explicitly confirmed, with `DELETE /photos`.
+6. Next time, fetch the manifest again and skip the work if `rev` has not changed.
+
+</Steps>

@@ -1,9 +1,9 @@
 ---
 title: "Subir fotos"
-description: "Qué formatos se aceptan, cuánto puede pesar un archivo y qué ocurre mientras una subida se está procesando."
+description: "Qué formatos se aceptan, cuánto puede pesar un archivo, cómo funciona el panel de subidas y qué ocurre mientras una subida se está procesando."
 help:
   section: galleries.uploading
-  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue si cierras la pestaña.
+  summary: JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue mientras te mueves por Picstome.
   appRoutes: [galleries.show]
 ---
 
@@ -11,12 +11,13 @@ import HelpMeta from '@components/HelpMeta.astro';
 
 <HelpMeta
   section="galleries.uploading"
-  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue si cierras la pestaña."
+  summary="JPG, PNG, TIFF, MP4, WEBM, OGG, PDF y RAW de hasta 5 GB por archivo. La subida sigue mientras te mueves por Picstome."
   routes={['galleries.show']}
 />
 
 import screenshot from '@assets/screens/galleries-uploading-es.webp';
 import Screenshot from '@components/Screenshot.astro';
+import dockScreenshot from '@assets/screens/galleries-uploading-dock-es.webp';
 
 {/* media:start */}
 <Screenshot src={screenshot} alt="La pantalla de Galerías con el diálogo de crear galería y los botones de subida" caption="Sube desde la galería o desde la cámara. Las dos vías acaban en el mismo sitio." />
@@ -49,9 +50,27 @@ Si subes un archivo cuyo nombre ya existe en la galería, Picstome **no** sustit
 
 En los RAW el versionado es automático: `IMG_0001.CR2` y un `IMG_0001.JPG` posterior comparten la misma identidad.
 
-## La subida no depende de la pestaña
+## El panel de subidas
 
-Puedes irte a otra sección mientras se suben archivos. La transferencia continúa en el servidor y la galería muestra el resultado cuando vuelves. Cerrar el navegador entero es distinto: la cola de subida vive en la página, así que un lote a medias se detiene.
+Suelta los archivos en cualquier parte de la página de la galería o usa el botón de subir. Se abre un panel en la esquina inferior que se queda ahí hasta que termina el lote:
+
+<Screenshot src={dockScreenshot} alt="El panel de subidas con el progreso total, el tiempo restante y el progreso de cada archivo" caption="Tres archivos están terminando y el resto se sigue subiendo. El panel se queda mientras te mueves por Picstome." />
+
+- **Progreso total** en bytes, con una estimación del tiempo restante.
+- **Cada archivo** con su propia barra de progreso. Si uno falla, puedes reintentarlo desde el panel sin volver a empezar el lote.
+- **Los archivos que ya existen** aparecen juntos, así que eliges una vez *versión nueva*, *reemplazar* u *omitir* y lo aplicas a todos.
+- **Minimizar** reduce el panel a una pequeña etiqueta; la subida sigue y puedes volver a abrirlo cuando quieras.
+- Cuando todo ha terminado, un resumen te dice cuántas fotos han llegado a qué galería, con un enlace para volver a ella.
+
+Los archivos viajan **directamente al almacenamiento** desde tu navegador, sin pasar por el servidor de Picstome. Por eso los vídeos grandes, hasta el límite de 5 GB, se suben sin problemas.
+
+## Puedes seguir trabajando mientras sube
+
+El panel es de Picstome, no de la página de la galería. Puedes abrir otra galería, hacer una factura o revisar un contrato y la subida sigue en la esquina.
+
+Lo que la detiene es salir de Picstome: cerrar la pestaña, recargar la página o cerrar el navegador. Si hay subidas en curso, el navegador te avisa antes. Los archivos que ya habían terminado se quedan en la galería; solo se detienen los pendientes.
+
+Para parar un lote a propósito, pulsa la **X** del panel. Picstome te pide confirmación y te dice cuántos archivos quedan. Los que ya se han subido se conservan.
 
 Para reportajes muy grandes, [la subida desde cámara](/es/galleries/direct-upload/) es mejor camino que arrastrar archivos al navegador.
 

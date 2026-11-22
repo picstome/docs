@@ -28,15 +28,15 @@ This is the part people usually get wrong. **Every feature works on every plan.*
 
 The plan only changes capacity:
 
-| | Free | Subscription |
-| --- | --- | --- |
-| Storage | 1 GB | 100 GB up to 1 TB |
-| Invoices per month | 1 | Unlimited |
-| Contracts per month | 1 | Unlimited |
-| Payments per month | 1 | Unlimited |
-| Private galleries expire | 1 year after creation | Never |
-| Public galleries (portfolio) expire | Never | Never |
-| White label (`Powered by Picstome`) | No | Yes |
+| | Free | Subscription | Lifetime (one-time payment) |
+| --- | --- | --- | --- |
+| Storage | 1 GB | 100 GB up to 1 TB | The amount you bought |
+| Invoices per month | 1 | Unlimited | Unlimited |
+| Contracts per month | 1 | Unlimited | Unlimited |
+| Payments per month | 1 | Unlimited | Unlimited |
+| Private galleries expire | 1 year after creation | Never | 1 year after creation |
+| Public galleries (portfolio) expire | Never | Never | Never |
+| White label (`Powered by Picstome`) | No | Yes | Yes |
 
 ## What "1 GB" means in practice
 
@@ -48,7 +48,7 @@ A typical wedding delivery of 600 web-sized JPEGs sits around 1–2 GB, so the f
 
 ## Why galleries expire
 
-On the free plan, a private gallery expires **one year after it was created**, not after the last visit. The date is a ceiling: you can move the expiration earlier or later, but never beyond one year from creation.
+On the free and lifetime plans, a private gallery expires **one year after it was created**, not after the last visit. The date is a ceiling: you can move the expiration earlier or later, but never beyond one year from creation.
 
 When the date is close, you get an email three days before. When it passes, the gallery and its files are deleted. Public galleries used for the portfolio never expire.
 
@@ -63,8 +63,10 @@ Only **completed** payments count. If a client opens a payment page and abandons
 ## Upgrading and downgrading
 
 - **Upgrade:** from *Subscribe*. Stripe handles the payment and the plan applies immediately.
+- **Monthly to annual:** a monthly subscription can schedule the switch to annual from *Subscribe*. Nothing is charged today; the annual plan starts at the next renewal.
+- **The new plan must fit what you store.** You cannot move to a plan with less storage than you are already using. The *Subscribe* page greys out those plans and shows how much you use next to their limit, so you know how much to free first.
 - **Downgrade or cancel:** from the billing portal. You keep the subscription until the end of the paid period.
-- **Storage over the new limit:** uploads are blocked until you free space or upgrade again. Nothing is deleted automatically.
+- **Storage over the limit after a subscription ends:** uploads are blocked until you free space or subscribe again. Nothing is deleted automatically.
 
 ## Where to check
 

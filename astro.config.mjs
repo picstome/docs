@@ -93,6 +93,7 @@ export default defineConfig({
             { label: 'What Picstome does', translations: { 'es-ES': 'Qué hace Picstome' }, slug: 'start/what-picstome-does' },
             { label: 'Your first gallery', translations: { 'es-ES': 'Tu primera galería' }, slug: 'start/first-gallery' },
             { label: 'Plans and storage', translations: { 'es-ES': 'Planes y almacenamiento' }, slug: 'start/plans-and-storage' },
+            { label: 'Signing in and your account', translations: { 'es-ES': 'Iniciar sesión y tu cuenta' }, slug: 'start/account' },
           ],
         },
         {
@@ -166,6 +167,13 @@ export default defineConfig({
           translations: { 'es-ES': 'Instalación propia' },
           items: [
             { label: 'Run Picstome on your own server', translations: { 'es-ES': 'Instala Picstome en tu servidor' }, slug: 'self-hosting' },
+          ],
+        },
+        {
+          label: 'Developers',
+          translations: { 'es-ES': 'Desarrolladores' },
+          items: [
+            { label: 'API v1 reference', translations: { 'es-ES': 'Referencia de la API v1' }, slug: 'developers/api-v1' },
           ],
         },
         {
