@@ -9,7 +9,7 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 Esta página es para desarrolladores que crean una app o un script que habla con Picstome. No la necesitas para usar Picstome.
 </Aside>
 
-La API externa permite a un cliente listar las galerías de una cuenta, leer la lista completa de fotos de una galería, subir fotos y borrarlas. Es una API JSON sobre HTTPS, versionada bajo `/api/v1`.
+La API externa permite a un cliente listar y crear las galerías de una cuenta, leer la lista completa de fotos de una galería, subir y borrar fotos, y consultar los límites del plan de la cuenta. Es una API JSON sobre HTTPS, versionada bajo `/api/v1`.
 
 | | |
 | --- | --- |
@@ -95,17 +95,59 @@ Todos los endpoints siguientes exigen `Authorization: Bearer <token>` con el per
 
 ### `GET /me`
 
-La cuenta a la que pertenece el token.
+La cuenta a la que pertenece el token, su equipo actual y los límites del plan.
 
 ```json
 {
   "email": "estudio@example.com",
   "display_name": "Lumen Studio",
-  "avatar_url": "https://…/avatar.jpg"
+  "avatar_url": "https://…/avatar.jpg",
+  "team": { "id": 42, "name": "Lumen Studio" },
+  "plan": {
+    "key": "250gb",
+    "name": "250 GB",
+    "is_free": false,
+    "is_lifetime": false,
+    "billing_interval": "month",
+    "renews_at": "2026-12-27T10:15:00+00:00"
+  },
+  "limits": {
+    "storage": {
+      "limit_bytes": 268435456000,
+      "used_bytes": 734003200,
+      "remaining_bytes": 267701452800,
+      "unlimited": false
+    },
+    "gallery_retention": {
+      "unlimited": true,
+      "max_years": 1,
+      "default_expiration_months": 1
+    },
+    "contracts_per_month": { "limit": null, "used": 4, "remaining": null, "unlimited": true },
+    "invoices_per_month": { "limit": null, "used": 12, "remaining": null, "unlimited": true },
+    "payments_per_month": { "limit": null, "used": 8, "remaining": null, "unlimited": true }
+  }
 }
 ```
 
 `avatar_url` es `null` cuando el usuario no ha subido foto de perfil. El avatar de iniciales que genera Picstome no se envía, así que pinta tu propio sustituto.
+
+| Campo | Significado |
+| --- | --- |
+| `plan.key` | `free`, `100gb`, `250gb`, `1tb`, o `null` si es un plan pagado cuyo límite de almacenamiento no coincide con ningún plan publicado |
+| `plan.name` | Nombre visible del plan, `Free`, o `null` |
+| `plan.is_free` | Ni suscripción ni plan de por vida |
+| `plan.is_lifetime` | Pago único |
+| `plan.billing_interval` | `month`, `year`, o `null` en los planes gratuito y de por vida |
+| `plan.renews_at` | Fin del periodo pagado actual, o `null` |
+| `limits.storage.limit_bytes` | Capacidad del plan. `null` significa ilimitado |
+| `limits.storage.remaining_bytes` | Nunca es negativo. Puede ser `0` aunque `used_bytes` supere el límite después de bajar de plan |
+| `limits.gallery_retention.unlimited` | `true` solo con una suscripción activa: la galería puede quedarse sin fecha de caducidad |
+| `limits.gallery_retention.max_years` | Fecha máxima al crear una galería con fecha: hoy más estos años |
+| `limits.gallery_retention.default_expiration_months` | Lo que aplica `POST /galleries` cuando no se envía `expiration_date` |
+| `limits.*_per_month` | Mes natural actual. `limit` y `remaining` son `null` cuando es ilimitado |
+
+El almacenamiento puede ir hasta diez minutos por detrás porque está en caché; se actualiza al subir o borrar fotos.
 
 ### `GET /galleries`
 
@@ -114,6 +156,7 @@ Las galerías del equipo actual, de la más reciente a la más antigua según su
 | Parámetro | Tipo | Notas |
 | --- | --- | --- |
 | `search` | texto, opcional | Coincidencia en el nombre de la galería, sin distinguir mayúsculas, máx. 255 |
+| `photoshoot_id` | entero, opcional | Solo las galerías vinculadas a ese photoshoot en el equipo actual |
 | `per_page` | entero, opcional | De 1 a 100, 25 por defecto |
 | `page` | entero, opcional | 1 o más |
 
@@ -123,6 +166,9 @@ Las galerías del equipo actual, de la más reciente a la más antigua según su
     {
       "id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
       "name": "Boda de Ana y Luis",
+      "photoshoot_id": 123,
+      "expiration_date": "2026-12-27",
+      "is_public": false,
       "cover_url": "https://…/thumb.jpg",
       "updated_at": "2026-11-20T18:02:11+00:00"
     }
@@ -133,6 +179,73 @@ Las galerías del equipo actual, de la más reciente a la más antigua según su
 ```
 
 Las galerías se identifican por su **ULID** (`id`). `cover_url` es la portada de la galería, o la primera imagen si no tiene portada, y puede ser `null`.
+
+| Campo | Significado |
+| --- | --- |
+| `photoshoot_id` | Id interno del photoshoot vinculado a la galería, o `null` |
+| `expiration_date` | Fecha civil (`YYYY-MM-DD`) o `null` cuando la galería no caduca |
+| `is_public` | Galería de portfolio. Las galerías públicas nunca caducan |
+
+Filtrar por un photoshoot de otro equipo devuelve una lista vacía, no un error.
+
+### `POST /galleries`
+
+Crea una galería privada en el equipo actual. La galería empieza vacía: añade las fotos con `POST /photos`.
+
+| Campo | Tipo | Obligatorio | Notas |
+| --- | --- | --- | --- |
+| `name` | texto, máx. 255 | No | Por defecto, `Untitled` |
+| `photoshoot_id` | entero | No | Tiene que pertenecer al equipo actual |
+| `expiration_date` | `YYYY-MM-DD` o `null` | No | Mira la tabla de caducidad de abajo |
+| `keep_original_size` | booleano | No | Por defecto, la preferencia guardada del dueño, normalmente `true` |
+
+`keep_original_size: true` guarda el archivo subido sin redimensionar y, en RAW, conserva el RAW original junto al JPEG extraído, así que ocupa más. `false` guarda una copia optimizada redimensionada a 2048 px y descarta el RAW.
+
+#### Caducidad
+
+| Valor | Gratuito / De por vida | Suscripción activa |
+| --- | --- | --- |
+| Omitido | Un mes desde ahora | Un mes desde ahora |
+| Una fecha | Entre hoy y dentro de un año | Igual |
+| `null` | `422`: el plan no puede mantener galerías para siempre | No caduca nunca |
+| Más de un año | `422` con `max_expiration_date` | Igual |
+| En el pasado | `422` | Igual |
+
+El valor por defecto de un mes también se aplica a las suscripciones: un cliente que quiera una galería sin fecha de caducidad tiene que enviar `"expiration_date": null`.
+
+```http
+POST /api/v1/galleries
+Authorization: Bearer <token>
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Boda de Ana y Luis",
+  "photoshoot_id": 123
+}
+```
+
+```json
+{
+  "data": {
+    "id": "01JE7K8M9N0P1Q2R3S4T5V6W7X",
+    "name": "Boda de Ana y Luis",
+    "photoshoot_id": 123,
+    "expiration_date": "2026-12-27",
+    "is_public": false,
+    "cover_url": null,
+    "updated_at": "2026-11-27T18:30:00+00:00"
+  }
+}
+```
+
+| Error | Estado | `code` |
+| --- | --- | --- |
+| Campo inválido, photoshoot desconocido, fecha pasada | 422 | `validation_error` |
+| Fecha posterior a un año, o `null` sin retención ilimitada | 422 | `validation_error` + `max_expiration_date` |
+| Más de 30 creaciones por minuto | 429 | – |
+
+Un photoshoot de otro equipo se informa como un `photoshoot_id` inválido, nunca como un error de permisos aparte. El endpoint está limitado a **30 peticiones por minuto**.
 
 ### `GET /manifest`
 
@@ -264,6 +377,17 @@ Todos los errores de la API usan el mismo formato. Decide según `code`, no seg�
 
 En `validation_error`, `errors` lista los mensajes por campo, como `{ "per_page": ["The per page field must not be greater than 100."] }`.
 
+Cuando `expiration_date` está fuera de rango, la respuesta incluye además `max_expiration_date` con la fecha máxima que acepta el plan, para que el cliente pueda corregirla sin otra petición:
+
+```json
+{
+  "message": "The expiration date may not be later than 2027-11-27.",
+  "errors": { "expiration_date": ["The expiration date may not be later than 2027-11-27."] },
+  "code": "validation_error",
+  "max_expiration_date": "2027-11-27"
+}
+```
+
 | `code` | Estado | Cuándo |
 | --- | --- | --- |
 | `unauthenticated` | 401 | Token ausente, caducado o revocado. Vuelve a empezar el flujo de autorización. |
@@ -279,7 +403,7 @@ Dos respuestas no llevan `code`: un token sin el permiso `sync` recibe `403` sol
 
 <Steps>
 
-1. Llama a `GET /galleries` para que el usuario elija una galería y guarda su `id`.
+1. Llama a `GET /me` para mostrar los límites del plan (almacenamiento y cuotas mensuales) antes de subir. Llama a `GET /galleries` para que el usuario elija una galería y guarda su `id`. Usa `POST /galleries` para crear la galería de un photoshoot.
 2. Llama a `GET /manifest` y guarda `rev`.
 3. Compara cada archivo local con el manifiesto por `filename` (o `identity_key` para parejas RAW + JPEG) y `hash`.
 4. Sube lo que falta o ha cambiado con `POST /photos`, enviando `hash` y `size`. Descarga desde `url` lo que falta en local.
