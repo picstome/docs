@@ -9,7 +9,7 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 This page is for developers building an app or script that talks to Picstome. You do not need it to use Picstome.
 </Aside>
 
-The external API lets a client list the galleries of an account, read the full photo list of a gallery, upload photos and delete them. It is a JSON API over HTTPS, versioned under `/api/v1`.
+The external API lets a client list and create the galleries of an account, read the full photo list of a gallery, upload and delete photos, and read the plan limits of the account. It is a JSON API over HTTPS, versioned under `/api/v1`.
 
 | | |
 | --- | --- |
@@ -95,17 +95,59 @@ All endpoints below require `Authorization: Bearer <token>` with the `sync` scop
 
 ### `GET /me`
 
-The account the token belongs to.
+The account the token belongs to, its current team and the plan limits.
 
 ```json
 {
   "email": "studio@example.com",
   "display_name": "Lumen Studio",
-  "avatar_url": "https://…/avatar.jpg"
+  "avatar_url": "https://…/avatar.jpg",
+  "team": { "id": 42, "name": "Lumen Studio" },
+  "plan": {
+    "key": "250gb",
+    "name": "250 GB",
+    "is_free": false,
+    "is_lifetime": false,
+    "billing_interval": "month",
+    "renews_at": "2026-12-27T10:15:00+00:00"
+  },
+  "limits": {
+    "storage": {
+      "limit_bytes": 268435456000,
+      "used_bytes": 734003200,
+      "remaining_bytes": 267701452800,
+      "unlimited": false
+    },
+    "gallery_retention": {
+      "unlimited": true,
+      "max_years": 1,
+      "default_expiration_months": 1
+    },
+    "contracts_per_month": { "limit": null, "used": 4, "remaining": null, "unlimited": true },
+    "invoices_per_month": { "limit": null, "used": 12, "remaining": null, "unlimited": true },
+    "payments_per_month": { "limit": null, "used": 8, "remaining": null, "unlimited": true }
+  }
 }
 ```
 
 `avatar_url` is `null` when the user has not uploaded a profile photo. Picstome's own initials avatar is not sent, so render your own fallback.
+
+| Field | Meaning |
+| --- | --- |
+| `plan.key` | `free`, `100gb`, `250gb`, `1tb`, or `null` for a paid plan whose storage limit does not match a published tier |
+| `plan.name` | Display name of the tier, `Free`, or `null` |
+| `plan.is_free` | Neither a subscription nor a lifetime plan |
+| `plan.is_lifetime` | One-time payment |
+| `plan.billing_interval` | `month`, `year`, or `null` on free and lifetime plans |
+| `plan.renews_at` | End of the current paid period, or `null` |
+| `limits.storage.limit_bytes` | Plan capacity. `null` means unlimited |
+| `limits.storage.remaining_bytes` | Never negative. It can be `0` while `used_bytes` is above the limit after a plan downgrade |
+| `limits.gallery_retention.unlimited` | `true` only with an active subscription: the gallery may stay without an expiration date |
+| `limits.gallery_retention.max_years` | Maximum date when creating a gallery with a date: today plus this many years |
+| `limits.gallery_retention.default_expiration_months` | What `POST /galleries` applies when `expiration_date` is omitted |
+| `limits.*_per_month` | Current calendar month. `limit` and `remaining` are `null` when unlimited |
+
+Storage may be up to ten minutes behind because it is cached; it is refreshed after an upload or a deletion.
 
 ### `GET /galleries`
 
@@ -114,6 +156,7 @@ The galleries of the current team, most recently updated first.
 | Query | Type | Notes |
 | --- | --- | --- |
 | `search` | string, optional | Case-insensitive match on the gallery name, max 255 |
+| `photoshoot_id` | integer, optional | Only the galleries linked to that photoshoot in the current team |
 | `per_page` | integer, optional | 1–100, default 25 |
 | `page` | integer, optional | 1 or more |
 
@@ -123,6 +166,9 @@ The galleries of the current team, most recently updated first.
     {
       "id": "01JD3Q8Y5V2N7K0R4XWZ6M1B9C",
       "name": "Ana & Luis wedding",
+      "photoshoot_id": 123,
+      "expiration_date": "2026-12-27",
+      "is_public": false,
       "cover_url": "https://…/thumb.jpg",
       "updated_at": "2026-11-20T18:02:11+00:00"
     }
@@ -133,6 +179,73 @@ The galleries of the current team, most recently updated first.
 ```
 
 Galleries are identified by their **ULID** (`id`). `cover_url` is the gallery cover, or the first image when no cover is set, and may be `null`.
+
+| Field | Meaning |
+| --- | --- |
+| `photoshoot_id` | Internal id of the photoshoot linked to the gallery, or `null` |
+| `expiration_date` | Civil date (`YYYY-MM-DD`) or `null` when the gallery never expires |
+| `is_public` | Portfolio gallery. Public galleries never expire |
+
+Filtering by a photoshoot from another team returns an empty list, not an error.
+
+### `POST /galleries`
+
+Create a private gallery in the current team. The gallery starts empty: add photos with `POST /photos`.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `name` | string, max 255 | No | Defaults to `Untitled` |
+| `photoshoot_id` | integer | No | Must belong to the current team |
+| `expiration_date` | `YYYY-MM-DD` or `null` | No | See the expiration table below |
+| `keep_original_size` | boolean | No | Defaults to the owner's saved preference, usually `true` |
+
+`keep_original_size: true` stores the uploaded file without resizing and, for RAW files, keeps the original RAW next to the extracted JPEG, so it uses more storage. `false` stores an optimized copy resized to 2048 px and discards the RAW.
+
+#### Expiration
+
+| Value | Free / Lifetime | Active subscription |
+| --- | --- | --- |
+| Omitted | One month from now | One month from now |
+| A date | Between today and one year from now | Same |
+| `null` | `422`: the plan cannot keep galleries forever | Never expires |
+| Later than one year | `422` with `max_expiration_date` | Same |
+| In the past | `422` | Same |
+
+The one-month default also applies to subscriptions: a client that wants a gallery without an expiration date must send `"expiration_date": null`.
+
+```http
+POST /api/v1/galleries
+Authorization: Bearer <token>
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Ana & Luis wedding",
+  "photoshoot_id": 123
+}
+```
+
+```json
+{
+  "data": {
+    "id": "01JE7K8M9N0P1Q2R3S4T5V6W7X",
+    "name": "Ana & Luis wedding",
+    "photoshoot_id": 123,
+    "expiration_date": "2026-12-27",
+    "is_public": false,
+    "cover_url": null,
+    "updated_at": "2026-11-27T18:30:00+00:00"
+  }
+}
+```
+
+| Error | Status | `code` |
+| --- | --- | --- |
+| Invalid field, unknown photoshoot, past date | 422 | `validation_error` |
+| Date later than one year, or `null` without unlimited retention | 422 | `validation_error` + `max_expiration_date` |
+| More than 30 creations per minute | 429 | – |
+
+A photoshoot from another team is reported as an invalid `photoshoot_id`, never as a separate permission error. The endpoint is limited to **30 requests per minute**.
 
 ### `GET /manifest`
 
@@ -264,6 +377,17 @@ Every error from the API uses the same envelope. Branch on `code`, not on `messa
 
 For `validation_error`, `errors` lists the messages per field, as in `{ "per_page": ["The per page field must not be greater than 100."] }`.
 
+When `expiration_date` is out of range, the response also includes `max_expiration_date` with the latest date the plan accepts, so the client can correct it without another request:
+
+```json
+{
+  "message": "The expiration date may not be later than 2027-11-27.",
+  "errors": { "expiration_date": ["The expiration date may not be later than 2027-11-27."] },
+  "code": "validation_error",
+  "max_expiration_date": "2027-11-27"
+}
+```
+
 | `code` | Status | When |
 | --- | --- | --- |
 | `unauthenticated` | 401 | Missing, expired or revoked token. Start the authorization flow again. |
@@ -279,7 +403,7 @@ Two responses do not carry a `code`: a token without the `sync` scope gets `403`
 
 <Steps>
 
-1. Call `GET /galleries` to let the user pick a gallery, and keep its `id`.
+1. Call `GET /me` to show the plan limits (storage and monthly quotas) before uploading. Call `GET /galleries` to let the user pick a gallery, and keep its `id`. Use `POST /galleries` to create the gallery of a photoshoot.
 2. Call `GET /manifest` and store `rev`.
 3. Compare each local file with the manifest by `filename` (or `identity_key` for RAW + JPEG pairs) and `hash`.
 4. Upload what is missing or changed with `POST /photos`, sending `hash` and `size`. Download what is missing locally from `url`.
